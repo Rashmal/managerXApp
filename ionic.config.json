@@ -1,0 +1,7 @@
+{
+  "name": "managerXApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
