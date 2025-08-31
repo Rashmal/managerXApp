@@ -1,0 +1,509 @@
+<!-- Main content section -->
+<ion-menu side="start" menuId="main-menu" contentId="main-content">
+    <ion-content>
+        <div class="wrapper">
+            <!-- Aside menu section -->
+            <aside id="sidebar" [style]="" class="">
+                <!-- content for sidebar -->
+                <div class="h-100 w-100">
+                    <!-- Side bar UL nav section -->
+                    <ul class="sidebar-nav">
+                        <!-- Client Address selection -->
+                        <li id="managerX_master-page_clientAddressDropdown_section" class="sidebar-header pb-3">
+                            <!-- Display the logged user name -->
+                            <div class="logged_username">
+                                <span>{{this.loggedUserName}}</span>
+                                <span *ngIf="overallCookieInterface.GetUserType() == 'AD'"> (Admin)</span>
+                                <span *ngIf="overallCookieInterface.GetUserType() == 'PM'"> (Project Manager)</span>
+                                <span *ngIf="overallCookieInterface.GetUserType() == 'SP'"> (Admin/Manager/Team
+                                    Member)</span>
+                                <span *ngIf="overallCookieInterface.GetUserType() == 'CL'"> (Client)</span>
+                            </div>
+                            <!-- End of Display the logged user name -->
+
+                            <!-- Dropdown section -->
+                            <p-dropdown id="managerX_master-page_display-address_dropdown" [appendTo]="'body'"
+                                [options]="displayAddressList" class="custom-main-dropdown client_address_dropdown"
+                                [(ngModel)]="selectedClientId" placeholder="There are no client"
+                                (onChange)="onChangeClientAddress()"></p-dropdown>
+                            <!-- End of Dropdown section -->
+                        </li>
+                        <!-- End of Client Address selection -->
+
+                        <!-- Customize template Settings menu item -->
+                        <li id="managerX_master-page_stage-Level-Settings_MenuItem"
+                            class="sidebar-item custom-sidebar-item" *ngIf="userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_stage-Level-Settings_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='CUSTOM$TEMP')?'active-custom':''"
+                                (click)="onClickSideMenu('CUSTOM$TEMP')">
+                                <i class="fa fa-cogs" aria-hidden="true"></i>
+                                <span>Custom template</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Customize template Settings menu item -->
+
+                        <!-- Overview menu item -->
+                        <li id="managerX_master-page_overviewMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_overview_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='OVERVIEW')?'active-custom':''"
+                                (click)="onClickSideMenu('OVERVIEW')">
+                                <i class="fa-solid fa-border-all"></i>
+                                <span>Overview</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Overview menu item -->
+
+                        <!-- Tasks menu item -->
+                        <li id="managerX_master-page_tasksMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='SP'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_tasks_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='TASKS')?'active-custom':''"
+                                (click)="onClickSideMenu('TASKS')">
+                                <i class="fa fa-file" aria-hidden="true"></i>
+                                <span>Tasks</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Tasks menu item -->
+
+                        <!-- Projects menu item -->
+                        <li id="managerX_master-page_projectsMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='PM' || userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_projects_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='PROJECTS')?'active-custom':''"
+                                (click)="onClickSideMenu('PROJECTS')">
+                                <i class="fa fa-user-circle"></i>
+                                <span *ngIf="userType=='PM'">Projects</span>
+                                <span *ngIf="userType=='AD'">{{'CL' | appUpdateUserType}}</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Projects menu item -->
+
+                        <!-- Contacts menu item -->
+                        <li id="managerX_master-page_contactsMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_contacts_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='CONTACTS')?'active-custom':''"
+                                (click)="onClickSideMenu('CONTACTS')">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                                <span>Contacts</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Contacts menu item -->
+
+                        <!-- Checklist menu item -->
+                        <li id="managerX_master-page_checklistMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD' || userType=='PM'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_checklist_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='CHECKLISTS')?'active-custom':''"
+                                (click)="onClickSideMenu('CHECKLISTS')">
+                                <i class="fa fa-list-ul" aria-hidden="true"></i>
+                                <span *ngIf="userType=='AD'">Stages</span>
+                                <span *ngIf="userType=='PM'">Task list</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Checklist menu item -->
+
+                        <!-- Tasks menu item -->
+                        <li id="managerX_master-page_tasksMenu_Item2" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_tasks_Link2"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='TASKS')?'active-custom':''"
+                                (click)="onClickSideMenu('TASKS')">
+                                <i class="fa fa-file" aria-hidden="true"></i>
+                                <span>Tasks</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Tasks menu item -->
+
+                        <!-- Contract menu item -->
+                        <li id="managerX_master-page_contractMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_contract_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='CONTRACT')?'active-custom':''"
+                                (click)="onClickSideMenu('CONTRACT')">
+                                <i class="fa fa-file-o" aria-hidden="true"></i>
+                                <span>Contract</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Contract menu item -->
+
+                        <!-- Calendar menu item -->
+                        <li id="managerX_master-page_calendarMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD' || userType=='PM' || userType=='SP'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_calendar_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='CALENDAR')?'active-custom':''"
+                                (click)="onClickSideMenu('CALENDAR')">
+                                <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                <span>Calendar</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Calendar menu item -->
+
+                        <!-- Notifications menu item -->
+                        <li id="managerX_master-page_notificationsMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD' || userType=='PM' || userType=='SP'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_notifications_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='NOTIFICATIONS')?'active-custom':''"
+                                (click)="onClickSideMenu('NOTIFICATIONS')">
+                                <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                                <span>Notifications</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Notifications menu item -->
+
+                        <!-- Notifications menu item -->
+                        <li id="managerX_master-page_chatMenu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='AD' || userType=='PM' || userType=='SP'">
+                            <a id="managerX_master-page_chat_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='CHAT')?'active-custom':''"
+                                (click)="onClickSideMenu('CHAT')">
+                                <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                <span>Chat</span>
+                                <div class="unread_count_master" *ngIf="unreadCount > 0">
+                                    <span>{{unreadCount}}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- End of Notifications menu item -->
+
+                        <!-- Contacts menu item -->
+                        <li id="managerX_master-page_contactsMenu_Item2" class="sidebar-item custom-sidebar-item"
+                            *ngIf="userType=='PM' || userType=='SP'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_contacts_Link2"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='CONTACTS')?'active-custom':''"
+                                (click)="onClickSideMenu('CONTACTS')">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                                <span>Contacts</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Contacts menu item -->
+
+                        <!-- Border section -->
+                        <li id="managerX_master-page_border_Section" class="sidebar-item custom-sidebar-item">
+                            <!-- Line section -->
+                            <div class="hr_line">
+                                <div class="div_line_fill"></div>
+                            </div>
+                            <!-- End of Line section -->
+                        </li>
+                        <!-- End of Border section -->
+
+                        <!-- Settings menu item -->
+                        <li id="managerX_master-page_settings-Menu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="this.overallCookieInterface.GetUserId() >0">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_settings_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='SETTINGS')?'active-custom':''"
+                                (click)="onClickSideMenu('SETTINGS')">
+                                <i class="fa fa-cog" aria-hidden="true"></i>
+                                <span>Settings</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Settings menu item -->
+
+                        <!-- Update password menu item -->
+                        <li id="managerX_master-page_settings-Menu_Item" class="sidebar-item custom-sidebar-item"
+                            *ngIf="this.overallCookieInterface.GetUserId() >0">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_settings_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='UPDATE$PASS')?'active-custom':''"
+                                (click)="onClickSideMenu('UPDATE$PASS')">
+                                <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                <span>Update Password</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Update password menu item -->
+
+                        <!-- Access level Settings menu item -->
+                        <li id="managerX_master-page_access-Level-SettingsMenu_Item"
+                            class="sidebar-item custom-sidebar-item" *ngIf="userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_access-Level-Settings_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='ACCESS$LEVEL')?'active-custom':''"
+                                (click)="onClickSideMenu('ACCESS$LEVEL')">
+                                <i class="fa fa-sliders" aria-hidden="true"></i>
+                                <span>Access level</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Access level Settings menu item -->
+
+                        <!-- Stage level Settings menu item -->
+                        <li id="managerX_master-page_stage-Level-Settings_MenuItem"
+                            class="sidebar-item custom-sidebar-item" *ngIf="userType=='PM' || userType=='AD'">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_stage-Level-Settings_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='STAGE$LEVEL')?'active-custom':''"
+                                (click)="onClickSideMenu('STAGE$LEVEL')">
+                                <i class="fa fa-cogs" aria-hidden="true"></i>
+                                <span>Stage level</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Access Stage Settings menu item -->
+
+                        <!-- Help and Support menu item -->
+                        <li id="managerX_master-page_help-Support-Menu_Item" class="sidebar-item custom-sidebar-item">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_help-Support_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                [ngClass]="(selectedMenuItem=='HELP')?'active-custom':''"
+                                (click)="onClickSideMenu('HELP')">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <span>Help & Support</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Help and Support menu item -->
+
+                        <!-- Logout menu item -->
+                        <li id="managerX_master-page_logout-Menu_Item" class="sidebar-item custom-sidebar-item">
+                            <!-- A tag section -->
+                            <a id="managerX_master-page_logout_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                (click)="onClickSideMenu('LOGOUT')">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                <span>Logout</span>
+                            </a>
+                            <!-- End of A tag section -->
+                        </li>
+                        <!-- End of Logout menu item -->
+
+
+
+                        <!-- Sidebar item for Cancel Subscription -->
+                        <li class="sidebar-item custom-sidebar-item"
+                            *ngIf="!trialExceeded  && overallCookieInterface.GetUserType() == 'AD' && overallCookieInterface.GetUserId() > 0">
+                            <!-- Using <a> tag container just for styling purposes, but a <div> would be more semantically correct here -->
+                            <a id="managerX_master-page_logout_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0">
+
+                                <!-- Cancel Subscription Button -->
+                                <button class="cancel-subscription-btn" (click)="onCancelSubscription()">
+                                    Cancel Subscription
+                                </button>
+
+                            </a>
+                        </li>
+
+                        <!-- Sidebar item showing Trial Expiry Date -->
+                        <li class="sidebar-item custom-sidebar-item"
+                            *ngIf="!trialExceeded && overallCookieInterface.GetUserType() == 'AD' && overallCookieInterface.GetUserId() > 0">
+                            <div id="managerX_master-page_logout_Link"
+                                class="sidebar-link link-underline link-underline-opacity-0"
+                                style="color:white; font-size: 12px; margin-left: 10px;">
+
+                                <!-- Displaying the Trial Expiration Date -->
+                                <span>( Trial expired on {{ TrialExpiredOn }} )</span>
+
+                            </div>
+                        </li>
+
+
+                    </ul>
+                    <!-- End of Side bar UL nav section -->
+                </div>
+                <!-- End of content for sidebar -->
+            </aside>
+            <!-- End of Aside menu section -->
+        </div>
+    </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+    <ion-header>
+        <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-menu-button menu="main-menu"></ion-menu-button>
+            </ion-buttons>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <div class="wrapper">
+            <!-- Display the content section -->
+            <div id="managerX_master-page_main_Content" class="col-12" class="main">
+                <!-- Main section -->
+                <main id="managerX_master-page_content_section" *ngIf="!tempHide">
+                    <!-- Help and support component -->
+                    <app-help-support [userType]="userType" *ngIf="selectedMenuItem=='HELP'"></app-help-support>
+                    <!-- End of Help and support component -->
+
+                    <!-- Display the admin overview component -->
+                    <app-admin-overview #adminOverviewComponent *ngIf="userType=='AD' && selectedMenuItem=='OVERVIEW'"
+                        [SelectedClientId]="selectedClientId"></app-admin-overview>
+                    <!-- End of Display the admin overview component -->
+
+                    <!-- Display the admin overview component -->
+                    <app-admin-checklist *ngIf="userType=='AD' && selectedMenuItem=='CHECKLISTS'"
+                        [SelectedClientId]="selectedClientId"></app-admin-checklist>
+                    <!-- End of Display the admin overview component -->
+
+
+                    <!-- Display the admin project contract component -->
+                    <app-admin-project-contract *ngIf="userType=='AD' && selectedMenuItem=='CONTRACT'"
+                        [SelectedClientId]="selectedClientId"></app-admin-project-contract>
+                    <!-- End of Display the admin project contract component -->
+
+                    <!-- Display the admin contacts component -->
+                    <app-admin-contacts *ngIf="userType=='AD' && selectedMenuItem=='CONTACTS'"
+                        [SelectedClientId]="selectedClientId"></app-admin-contacts>
+                    <!-- End of Display the admin contacts component -->
+
+                    <!-- Display the admin calendar component -->
+                    <app-admin-calendar *ngIf="userType=='AD' && selectedMenuItem=='CALENDAR'"
+                        [SelectedClientId]="selectedClientId"></app-admin-calendar>
+                    <!-- End of Display the admin calendar component -->
+
+                    <!-- Display the admin notifications component -->
+                    <app-admin-notifications *ngIf="userType=='AD' && selectedMenuItem=='NOTIFICATIONS'"
+                        [SelectedClientId]="selectedClientId"></app-admin-notifications>
+                    <!-- End of Display the admin notifications component -->
+
+                    <!-- Display the settings component -->
+                    <app-admin-settings *ngIf="userType=='AD' && selectedMenuItem=='SETTINGS' "></app-admin-settings>
+                    <!-- End of Display the settings component -->
+
+                    <!-- Display the access level settings component -->
+                    <app-access-level *ngIf="userType=='AD' && selectedMenuItem=='ACCESS$LEVEL'"></app-access-level>
+                    <!-- End of Display the access level settings component -->
+
+                    <!-- Display the admin projects component -->
+                    <app-admin-projects *ngIf="userType=='AD' && selectedMenuItem=='PROJECTS'"
+                        [SelectedClientId]="selectedClientId"
+                        (refreshAddressList)="refreshAddressList($event)"></app-admin-projects>
+                    <!-- End of Display the admin projects component -->
+
+                    <!-- Display the contractor tasks component -->
+                    <app-admin-tasks *ngIf="userType=='AD' && selectedMenuItem=='TASKS'"
+                        [SelectedClientId]="selectedClientId"></app-admin-tasks>
+                    <!-- End of Display the contractor tasks component -->
+
+                    <!-- Display the settings component -->
+                    <app-admin-settings *ngIf="userType=='SP' && selectedMenuItem=='SETTINGS'"></app-admin-settings>
+                    <!-- End of Display the settings component -->
+
+                    <!-- Display the settings component -->
+                    <app-project-manager-settings
+                        *ngIf="userType=='PM' && selectedMenuItem=='SETTINGS'"></app-project-manager-settings>
+                    <!-- End of Display the settings component -->
+
+                    <!-- Display the contractor tasks component -->
+                    <app-contractor-tasks *ngIf="userType=='SP' && selectedMenuItem=='TASKS'"
+                        [SelectedClientId]="selectedClientId"></app-contractor-tasks>
+                    <!-- End of Display the contractor tasks component -->
+
+                    <!-- Display the contractor calendar component -->
+                    <app-contractor-calendar *ngIf="userType=='SP' && selectedMenuItem=='CALENDAR'"
+                        [SelectedClientId]="selectedClientId"></app-contractor-calendar>
+                    <!-- End of Display the contractor calendar component -->
+
+                    <!-- Display the contractor contacts component -->
+                    <app-contractor-contacts *ngIf="userType=='SP' && selectedMenuItem=='CONTACTS'"
+                        [SelectedClientId]="selectedClientId"></app-contractor-contacts>
+                    <!-- End of Display the contractor contacts component -->
+
+                    <!-- Display the contractor notifications component -->
+                    <app-contractor-notifications *ngIf="userType=='SP' && selectedMenuItem=='NOTIFICATIONS'"
+                        [SelectedClientId]="selectedClientId"></app-contractor-notifications>
+                    <!-- End of Display the contractor notifications component -->
+
+                    <!-- Display the project manager contacts component -->
+                    <!-- <app-project-manager-contacts *ngIf="userType=='PM' && selectedMenuItem=='CONTACTS'"
+                [SelectedClientId]="selectedClientId"></app-project-manager-contacts> -->
+                    <app-admin-contacts *ngIf="userType=='PM' && selectedMenuItem=='CONTACTS'"
+                        [SelectedClientId]="selectedClientId" [userType]="userType"></app-admin-contacts>
+                    <!-- End of Display the project manager contacts component -->
+
+                    <!-- Display the project manager notifications component -->
+                    <app-project-manager-notifications *ngIf="userType=='PM' && selectedMenuItem=='NOTIFICATIONS'"
+                        [SelectedClientId]="selectedClientId"></app-project-manager-notifications>
+                    <!-- End of Display the project manager notifications component -->
+
+                    <!-- Display the project manager overview component -->
+                    <app-project-manager-checklist *ngIf="userType=='PM' && selectedMenuItem=='CHECKLISTS'"
+                        [SelectedClientId]="selectedClientId"></app-project-manager-checklist>
+                    <!-- End of Display the project manager overview component -->
+
+                    <!-- Display the project manager calendar component -->
+                    <app-project-manager-calendar *ngIf="userType=='PM' && selectedMenuItem=='CALENDAR'"
+                        [SelectedClientId]="selectedClientId"></app-project-manager-calendar>
+                    <!-- End of Display the project manager calendar component -->
+
+                    <!-- Display the project manager projects component -->
+                    <app-project-manager-projects *ngIf="userType=='PM' && selectedMenuItem=='PROJECTS'"
+                        [SelectedClientId]="selectedClientId"></app-project-manager-projects>
+                    <!-- End of Display the project manager projects component -->
+
+                    <!-- Display the stage level projects component -->
+                    <app-stage-level *ngIf="(userType=='PM' || userType=='AD') && selectedMenuItem=='STAGE$LEVEL'"
+                        [SelectedClientId]="selectedClientId"></app-stage-level>
+                    <!-- End of Display the stage level projects component -->
+
+                    <!-- Display the stage level projects component -->
+                    <app-custom-template
+                        *ngIf="(userType=='AD') && selectedMenuItem=='CUSTOM$TEMP'"></app-custom-template>
+                    <!-- End of Display the stage level projects component -->
+
+                    <!-- Display the update password component -->
+                    <app-update-password
+                        *ngIf="(userType=='AD' || userType=='PM' || userType=='SP') && selectedMenuItem=='UPDATE$PASS'"></app-update-password>
+                    <!-- End of Display the stage level projects component -->
+
+                    <!-- Display the chat component -->
+                    <app-chat-master [selectedClientId]="selectedClientId"
+                        *ngIf="(userType=='AD' || userType=='PM' || userType=='SP') && selectedMenuItem=='CHAT'"></app-chat-master>
+                    <!-- End of Display the chat component -->
+                </main>
+                <!-- End of Main section -->
+            </div>
+            <!-- End of Display the content section -->
+        </div>
+    </ion-content>
+</div>
+<!-- End of Main content section -->
+
+
+<simple-notifications></simple-notifications>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

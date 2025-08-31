@@ -1,0 +1,240 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div id="managerX_admin-tasks_main-content_section" class="container-lg-12 md-12 contacts">
+        <!-- Top bar section -->
+        <div id="managerX_admin-tasks_top-bar_section" class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_admin-tasks_page-title_label" class="page_title">Tasks assigned</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_admin-tasks_search-icon-box_input" class="custom-icon-field">
+                <div id="managerX_admin-tasks_search-icon-box_container" class="input-container">
+                    <p-inputIcon id="managerX_admin-tasks_search-icon_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_admin-tasks_search_input" type="text" pInputText placeholder="Search"
+                        class="custom-search-box" [(ngModel)]="currentFilter.SearchQuery"
+                        (input)="currentFilter.CurrentPage=1;GetAllAssignedTasksDetails();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Contacts table section -->
+        <div id="managerX_admin-tasks_contacts-table_section" class="col-12">
+            <!-- Current prime ng table section -->
+            <p-table id="managerX_admin-tasks_tasks-table_table" [value]="assignedTasksList">
+                <!-- Headers section -->
+                <ng-template pTemplate="header">
+                    <tr id="managerX_admin-tasks_table-header_row" class="table_header_section">
+                        <th id="managerX_admin-tasks_task-name_header-label" class="header_label_span person_col">
+                            <span>Task Name</span>
+                        </th>
+                        <th id="managerX_admin-tasks_state_header-label" class="header_label_span role_name_col">Status
+                        </th>
+                        <th id="managerX_admin-tasks_client-name_header-label"
+                            class="header_label_span contact_number_col">
+                            {{'CL' | appUpdateUserType}} Name</th>
+                        <th id="managerX_admin-tasks_address_header-label"
+                            class="header_label_span contact_address_col">
+                            Address</th>
+                        <th id="managerX_admin-tasks_person_header-label" class="header_label_span contact_address_col">
+                            Person</th>
+                        <th id="managerX_admin-tasks_due-date_header-label" class="header_label_span contact_email_col">
+                            Due
+                            Date</th>
+                    </tr>
+                </ng-template>
+                <!-- End of Headers section -->
+
+                <!-- Table body content section -->
+                <ng-template pTemplate="body" let-task>
+                    <tr id="managerX_admin-tasks_task-row_row" class="current-tr"
+                        (click)="editTaskOnCLick(task.Id, task.CreatorId)">
+                        <td id="managerX_admin-tasks_task-name_cell" class="person_col" pTooltip="Edit Task"
+                            tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId() || overallCookieInterface.GetUserId() <0)?'small-tooltip':'hide_tooltip'">
+                            <!-- Display the task name section -->
+                            <div id="managerX_admin-tasks_task-name_display_flex"
+                                class="display_flex_center value_content_lbl_table">
+                                <input id="managerX_admin-tasks_task-status_checkbox" type="checkbox"
+                                    class="custom-cursor"
+                                    [disabled]="task.CreatorId != overallCookieInterface.GetUserId()"
+                                    [(ngModel)]="getStatusCodeValue(task.StatusCode).value"
+                                    (change)="taskStatusCompleteOnChange($event, task.Id)"
+                                    (click)="$event.stopPropagation();">
+                                <!-- info icon -->
+                                <i id="managerX_admin-tasks_task-info_icon" class="fa fa-info-circle info_icon"
+                                    style="margin-right:-5px" aria-hidden="true"
+                                    (click)="$event.stopPropagation();opInfo.toggle($event)"></i>
+                                <!-- End of info icon -->
+                                <span id="managerX_admin-tasks_task-name_label"
+                                    class="content_lbl task_name_lbl">{{task.Name}}</span>
+                                <!-- Edit icon -->
+                                <i id="managerX_admin-tasks_task-edit_icon"
+                                    *ngIf="task.CreatorId == overallCookieInterface.GetUserId() || overallCookieInterface.GetUserId() < 0"
+                                    class="fa fa-pencil edit_icon" aria-hidden="true"></i>
+                                <!-- End of Edit icon -->
+                                <!-- View icon -->
+                                <i id="managerX_admin-tasks_task-edit_icon" class="fa fa-eye edit_icon"
+                                    aria-hidden="true"
+                                    (click)="$event.stopPropagation();setViewType('VIEW',task.Id, task.CreatorId);"></i>
+                                <!-- End of View icon -->
+                            </div>
+                            <!-- End of Display the task name section -->
+                        </td>
+
+                        <td id="managerX_admin-tasks_task-status_cell" class="role_name_col" pTooltip="Edit Task"
+                            tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-tasks_task-status_display"
+                                class="display_flex_center value_content_lbl_table padding_left_5">
+                                <!-- Status dropdown -->
+                                <div id="managerX_admin-tasks_status_dropdown" class="status_display"
+                                    [ngClass]="task.StatusCode">
+                                    <span id="managerX_admin-tasks_status-text_label">{{task.StatusName}}</span>
+                                </div>
+                                <!-- End of Status dropdown -->
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_admin-tasks_construction-company_cell" class="contact_number_col"
+                            pTooltip="Edit Task" tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-tasks_construction-company_display"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-tasks_construction-company_label" class="content_lbl">{{
+                                    task.ConstructionCompany}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_admin-tasks_address_cell" class="contact_address_col" pTooltip="Edit Task"
+                            tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-tasks_address_display"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-tasks_address_label" class="content_lbl">{{
+                                    task.FullAddress}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_admin-tasks_person_cell" class="contact_address_col" pTooltip="Edit Task"
+                            tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Display the user section -->
+                            <div id="managerX_admin-tasks_person_display"
+                                class="display_flex_center display_user_section">
+                                <!-- Avatar section -->
+                                <div id="managerX_admin-tasks_person-avatar_section" class="avatar_section">
+                                    <img id="managerX_admin-tasks_person-avatar-default_image"
+                                        *ngIf="!task.PersonList[0].Avatar"
+                                        src="../../../../assets/Images/default_avatar.png">
+                                    <img id="managerX_admin-tasks_person-avatar_image" *ngIf="task.PersonList[0].Avatar"
+                                        [src]="task.PersonList[0].Avatar">
+                                </div>
+                                <!-- End of Avatar section -->
+                                <!-- Name and role section -->
+                                <div id="managerX_admin-tasks_person-name_role_section" class="name_role_section">
+                                    <!-- Name section -->
+                                    <div id="managerX_admin-tasks_person-name_section" class="content_div">
+                                        <span id="managerX_admin-tasks_person-name_label"
+                                            class="content_val name_section"
+                                            *ngIf="task.PersonList.length > 0 && task.PersonList[0].FirstName && task.PersonList[0].FirstName != ''">{{task.PersonList[0].FirstName}}
+                                            {{task.PersonList[0].LastName}}</span>
+                                        <span id="managerX_admin-tasks_person-name-empty_label"
+                                            class="content_val name_section"
+                                            *ngIf="!(task.PersonList.length > 0 && task.PersonList[0].FirstName && task.PersonList[0].FirstName != '')">-</span>
+                                    </div>
+                                    <!-- End of Name section -->
+
+                                    <!-- Role name section -->
+                                    <div id="managerX_admin-tasks_person-role_name_section" class="content_div">
+                                        <span id="managerX_admin-tasks_person-role_name_label"
+                                            class="content_val role_name"
+                                            *ngIf="task.PersonList.length > 0 && task.PersonList[0].RoleName && task.PersonList[0].RoleName != ''">{{task.PersonList[0].RoleName}}</span>
+                                        <span id="managerX_admin-tasks_person-role_name-empty_label"
+                                            class="content_val role_name"
+                                            *ngIf="!(task.PersonList.length > 0 && task.PersonList[0].RoleName && task.PersonList[0].RoleName != '')">-</span>
+                                    </div>
+                                    <!-- End of Role name section -->
+                                </div>
+                                <!-- End of Name and role section -->
+                            </div>
+                            <!-- End of Display the user section -->
+                        </td>
+
+                        <td id="managerX_admin-tasks_dueDate_section" class="contact_email_col" pTooltip="Edit Task"
+                            tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-tasks_dueDateValue_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-tasks_dueDateValue_label" class="content_lbl">{{ task.DueDate |
+                                    date: 'dd MMM yyyy '}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+                    </tr>
+                </ng-template>
+                <!-- Table body content section -->
+            </p-table>
+            <!-- End of Current prime ng table section -->
+
+            <!--End of Client list table-->
+            <div *ngIf="assignedTasksList.length == 0">
+                <div id="managerX_admin-tasks_noRecords_text" colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+                <div colspan="9" class="empty_content" *ngIf="SelectedClientId == 0">
+                    You haven't created any clients yet. Go to the Client Menu to add a new
+                    client and start managing your options.
+                </div>
+            </div>
+            <!-- Pagination section -->
+            <p-paginator id="managerX_admin-tasks_pagiantor_section" class="paginator_sec" #modulePaginator
+                *ngIf="assignedTasksList && assignedTasksList.length > 0 && assignedTasksList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(assignedTasksList && assignedTasksList.length > 0 && assignedTasksList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                [totalRecords]="(assignedTasksList.length>0)? assignedTasksList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+
+            <!-- Add new task button -->
+            <div class="col-12" *ngIf="SelectedClientId" style="margin-top:5px">
+                <button class="add_note_btn" (click)="addNewTaskOnClick()">
+                    <span id="managerX_admin-tasks_addNewTask_label" class="icon_lbl">
+                        <i id="managerX_admin-tasks_addNewTask_icon" class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    <span>Add a new task</span>
+                </button>
+            </div>
+            <!-- End of Add new task button -->
+        </div>
+        <!-- End of Contacts table section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Display side panel -->
+    <p-sidebar id="managerX_admin-tasks_isAddNewTaskDetails_section" *ngIf="isAddNewTaskDetailsVisible"
+        class="projects_slide" [(visible)]="isAddNewTaskDetailsVisible" [position]="'right'" [modal]="true"
+        (onHide)="GetAllAssignedTasksDetails()">
+        <app-new-task id="managerX_admin-tasks_isAddNewTaskDetails_tasksection"
+            (closeSlideInPopup)="closeSlideInPopup($event)" [SelectedClientId]="SelectedClientId" [TaskId]="currentTask"
+            (refreshList)="refreshList($event)" [viewTaskState]="viewTaskState"></app-new-task>
+    </p-sidebar>
+    <!-- End of Display side panel -->
+
+    <!-- Overlay panel -->
+    <p-overlayPanel #opInfo>
+        <div class="col-12 info_section">
+            <span id="managerX_admin-tasks_opInfo_text">Only the creator can edit this contact.</span>
+        </div>
+    </p-overlayPanel>
+    <!-- End of Overlay panel -->
+</ion-content>

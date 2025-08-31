@@ -1,0 +1,1320 @@
+.contacts {
+    padding: 20px;
+    padding-top: 30px;
+
+    .padding_left_5 {
+        padding-left: 5px;
+    }
+
+    .task_name_lbl {
+        padding-left: 5px;
+    }
+
+    .sort_icon {
+        padding-left: 5px;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+
+    .clickable_lbl {
+        color: #4d86d8 !important;
+    }
+
+    .margin_right_0 {
+        margin-right: 0 !important;
+    }
+
+    .each_file_upload_stage {
+        margin-bottom: 65px;
+    }
+
+    .each_attachment {
+        margin-bottom: 15px;
+    }
+
+    .flex_wrap {
+        flex-wrap: wrap;
+    }
+
+    .uploaded_file {
+        border: solid 1px #a3a7ae;
+        font-size: 10pt;
+        color: #000000;
+        font-weight: 500;
+        border-radius: 5px;
+        width: 285px;
+        text-align: center;
+        height: 52px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        cursor: pointer;
+        margin-right: 15px;
+
+        .file_icon {
+            font-size: 14pt;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            color: #125dcb;
+        }
+
+        .file_title {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+        }
+
+        .content_label {
+            height: 100%;
+            width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    .upload_file {
+        border: dashed 1px #125dcb;
+        /* padding: 15px; */
+        font-size: 10pt;
+        color: #125dcb;
+        font-weight: 500;
+        border-radius: 8px;
+        width: 285px;
+        text-align: center;
+        height: 52px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        cursor: pointer;
+
+        .file_icon {
+            font-size: 14pt;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .file_title {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .content_label {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .attachment_top_row {
+        margin-bottom: 5px;
+    }
+
+    .task-table {
+        width: 100%;
+
+        margin-top: 10px;
+    }
+
+    .task-table th,
+    .task-table td {
+        padding: 8px;
+    }
+
+    .task-table th {
+        background-color: #ffffff;
+        text-align: left;
+    }
+
+    .task-table tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .task-table tr:hover {
+        background-color: #ffffff;
+    }
+
+    .task-table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .profile-pic {
+        width: 30px; /* Adjust the width and height as needed */
+        height: 30px;
+        border-radius: 50%; /* Makes the image round */
+        border: 0x solid #fff; /* Adds a white border around the image */
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
+    }
+
+    .box-pic {
+        width: 18px;
+        height: 18px;
+    }
+
+    .accordion {
+        width: 100%;
+    }
+
+    .accordion-item {
+        border: 1px solid #ccc;
+        margin-bottom: 5px;
+    }
+
+    .accordion-header {
+        cursor: pointer;
+        background-color: #f1f1f1;
+        padding: 10px;
+    }
+
+    .flex-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .tasks-completed {
+        margin-left: auto; /* Ensures it moves to the right */
+    }
+
+    /* ---------------------------------------start css dropdown --------------------------------*/
+    /* Custom styles for the dropdown label */
+
+    /* ============================end css accordion 2  ============================*/
+
+    .container {
+        white-space: nowrap; /* Prevents wrapping */
+    }
+
+    .profile-pic-container,
+    .client-info {
+        display: inline-block;
+        vertical-align: middle; /* Vertically align elements */
+    }
+
+    .profile-pic-container {
+        margin-right: 10px; /* Space between image and text */
+    }
+
+    .client-role {
+        color: rgb(129, 129, 129);
+        font-size: 10px;
+        margin: 0; /* Remove default margin */
+    }
+
+    /*  Start of the side div */
+
+    .sliding-div {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background-color: white;
+        box-shadow: -1px 0 5px rgba(0, 0, 0, 0.2);
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+    }
+
+    .sliding-div.show {
+        transform: translateX(0);
+    }
+
+    .sliding-div-content {
+        padding: 20px;
+    }
+
+    .task-details table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .task-details td {
+        padding: 5px 10px;
+        vertical-align: top;
+    }
+
+    .task-details strong {
+        display: inline-block;
+        width: 20px; /* Adjust width as needed */
+    }
+
+    .profile-pic {
+        width: 30; /* Adjust the width and height as needed */
+        height: 30;
+        border-radius: 50%; /* Makes the image round */
+        border: 0x solid #fff; /* Adds a white border around the image */
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
+    }
+
+    .file-upload-box {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        width: 100px; /* Adjust width as needed */
+        height: 100px; /* Adjust height as needed */
+        background-color: #eee;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .upload-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: white; /* Change background color */
+        color: rgb(153, 151, 151); /* Change text color */
+        font-size: 24px; /* Adjust font size as needed */
+        border: 1px dashed #bbbbbb;
+    }
+
+    .plus-icon {
+        margin-right: 5px; /* Adjust margin if needed */
+    }
+
+    .custom-search-box {
+        background-color: #ffffff;
+    }
+
+    td {
+        font-weight: 600;
+    }
+
+    .top_bar_section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 22px;
+    }
+
+    .page_title {
+        font-size: 17pt;
+        font-weight: 600;
+    }
+
+    .sub_stage_category_info {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .stage-name {
+            font-size: 6pt;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .sub-task-count {
+            font-size: 6pt;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+    }
+
+    .row_heading_section {
+        display: flex;
+        align-items: center;
+
+        .left_align_content {
+            margin-right: auto;
+        }
+
+        .right_align_content {
+            margin-left: auto;
+        }
+
+        .sub_heading_section {
+            font-size: 6.4pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #3e3e3f;
+            letter-spacing: 1px;
+        }
+    }
+
+    .full_width {
+        width: 100%;
+    }
+
+    .border_radius {
+        border-radius: 10px;
+    }
+
+    .value_content_lbl {
+        margin-bottom: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 10pt;
+    }
+
+    .value_content_lbl_table {
+        color: black;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 10pt;
+        display: flex;
+        align-items: center;
+        height: 30px;
+        .stage_name_lbl {
+            font-weight: 550;
+            font-size: 10pt;
+            margin-right: auto;
+        }
+        .date_lbl {
+            font-size: 11pt;
+            margin-left: auto;
+            font-weight: normal;
+            color: #5f646c;
+        }
+    }
+
+    .stage_col_width {
+        width: 22vw;
+        width: 36%;
+    }
+
+    .status_col_width {
+        width: 10vw;
+        width: 15%;
+    }
+
+    .subtasks_col_width {
+        width: 13vw;
+        width: 49%;
+    }
+
+    .stage_name_lbl {
+        padding-left: 10px;
+    }
+
+    .heading_section {
+        display: flex;
+        align-items: center;
+        font-size: 9pt;
+        color: #878b91;
+        font-weight: 700;
+
+        .each_col {
+            text-align: left;
+        }
+    }
+
+    .body_content_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        .each_col {
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .fa-check-circle,
+    .fa-check-circle-o {
+        font-size: 14pt;
+    }
+
+    .status_div_section {
+        font-size: 7.8pt;
+        padding: 2px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 2px;
+        width: 5vw;
+        width: 95%;
+        text-align: center;
+        max-width: 82px;
+    }
+
+    .page_title {
+        font-size: 17pt;
+        font-weight: 600;
+    }
+
+    .sub_title {
+        font-size: 14pt;
+        font-weight: 620;
+        margin-bottom: 19px !important;
+    }
+
+    .project-info-container,
+    .stage-overview-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Ensures both containers take up full height */
+    }
+
+    .project-info-container {
+        border-radius: 10px;
+        .label_para {
+            font-size: 10.8pt;
+            font-weight: 620;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 19px !important;
+            i {
+                color: rgb(105, 105, 105);
+                font-size: 15pt;
+                width: 20px;
+            }
+            span {
+                padding-left: 10px;
+            }
+        }
+
+        .value_label {
+            height: 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 19px !important;
+
+            span {
+                font-size: 10pt;
+                font-weight: normal;
+            }
+        }
+
+        .each_row_section {
+            display: flex;
+            align-items: center;
+        }
+
+        .label_div_section {
+            width: 220px;
+            min-width: 220px;
+        }
+
+        .value_label {
+            width: 100%;
+        }
+    }
+
+    .stage-overview-container {
+        border-radius: 10px;
+    }
+
+    .project-info-container .container,
+    .stage-overview-container .container {
+        flex-grow: 1; /* Allows content to stretch to fill available space */
+    }
+
+    .green-mark::before {
+        content: "\2713";
+        color: green;
+        font-size: 20px;
+    }
+
+    .normal-mark::before {
+        content: "\2714";
+        color: gray;
+        font-size: 20px;
+    }
+
+    .greenText {
+        background-color: #ecfdf4;
+        padding: 2px 8px 2px 8px;
+        color: #007a4e;
+    }
+
+    .redText {
+        background-color: #fefce8;
+        padding: 2px 8px 2px 8px;
+        color: #a26106;
+    }
+
+    .GreenIcon {
+        color: #007a4e;
+    }
+
+    .InProgressIcon {
+        color: black;
+    }
+
+    /* Ensure table headers have the desired styling */
+    th {
+        background-color: var(--AllPageContentBoxBackgroundColor) !important;
+        color: #656565 !important;
+        font-size: 12px;
+        text-align: left;
+        font-family: "Quicksand", sans-serif;
+    }
+
+    /* Reduce the height of the table rows */
+    .current-tr {
+        height: 20px !important; /* Adjust as needed */
+       
+    }
+
+    /* Additional styling for table cells */
+    .current-td {
+        padding: 5px; /* Adjust padding to reduce overall row height */
+        font-size: 14px; /* Ensure text size is appropriate */
+    }
+
+    /* Ensure table headers have appropriate padding */
+    th {
+        padding: 5px; /* Adjust padding for headers */
+        padding-bottom: 14px;
+    }
+
+    .custom-icon-color {
+        color: #43d657;
+    }
+
+    .profile-pic {
+        width: 25px; /* Adjust the width and height as needed */
+        height: 25px;
+        border-radius: 50%; /* Makes the image round */
+        border: 0x solid #fff; /* Adds a white border around the image */
+    }
+
+    .caption-container {
+        height: 40px; /* Adjust the height as needed */
+        font-size: 12px; /* Adjust the font size as needed */
+        background-color: #f6f9ff;
+    }
+
+    p {
+        font-weight: 600;
+    }
+
+    td {
+        font-weight: 600;
+    }
+
+    .container {
+        white-space: nowrap; /* Prevents wrapping */
+    }
+
+    .profile-pic-container,
+    .client-info {
+        display: inline-block;
+        vertical-align: middle; /* Vertically align elements */
+    }
+
+    .profile-pic-container {
+        margin-right: 10px; /* Space between image and text */
+    }
+
+    .client-role {
+        color: rgb(129, 129, 129);
+        font-size: 10px;
+        margin: 0; /* Remove default margin */
+    }
+
+    .table_header_section {
+        background-color: var(--AllPageContentBoxBackgroundColor) !important;
+
+        th {
+            font-weight: normal;
+            font-size: 10pt;
+            font-weight: 600;
+            border-bottom: solid 1px #e8e8e8;
+        }
+    }
+
+    .display_flex_center {
+        display: flex;
+        align-items: center;
+    }
+
+    .display_user_section {
+        .name_role_section {
+            padding-left: 5px;
+        }
+        .avatar_section {
+            img {
+                height: 30px;
+                width: 30px;
+            }
+        }
+        .content_div {
+            line-height: 13px;
+        }
+        .content_val {
+            font-size: 9pt;
+            font-weight: normal;
+        }
+        .name_section {
+            font-weight: 500;
+        }
+        .role_name {
+            font-size: 7.5pt;
+            color: #878b91;
+        }
+    }
+
+    .task_name_col {
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .status_col {
+        width: 12%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .role_name_col {
+        width: 10%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .content_lbl {
+            font-size: 10pt;
+        }
+    }
+
+    .contact_number_col {
+        width: 17%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .content_lbl {
+            font-size: 10pt;
+        }
+    }
+
+    .contact_address_col {
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .content_lbl {
+            font-size: 10pt;
+        }
+    }
+
+    .contact_email_col {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .content_lbl {
+            font-size: 10pt;
+        }
+    }
+
+    .person_col {
+        width: 27%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .due_date_col {
+        width: 12%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .attachments_col {
+        width: 36%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+    }
+
+    .each_attachment_section {
+        display: flex;
+        align-items: center;
+        font-size: 10pt !important;
+        margin-right: 10px;
+        span {
+            padding-left: 5px;
+        }
+    }
+
+    .fa-paperclip {
+        color: #5f646c;
+    }
+}
+
+::ng-deep .custom-dropdown-checklist .p-dropdown {
+    background: none;
+    border: none;
+    color: white !important;
+}
+
+::ng-deep .custom-dropdown-checklist .p-dropdown .p-dropdown-label {
+    color: #000000 !important;
+    font-size: 13pt;
+    font-weight: 600;
+    width: 100%;
+    background: none !important;
+    border: none !important;
+    border-color: transparent !important;
+    padding: 0;
+}
+
+::ng-deep .custom-dropdown-checklist .p-dropdown-panel {
+    border-radius: 3px;
+}
+
+::ng-deep .custom-dropdown-checklist .p-highlight {
+    color: #125dcb !important;
+    border-bottom: solid 1px #eaeaea;
+    background: transparent;
+}
+
+::ng-deep .custom-dropdown-checklist .p-dropdown-items-wrapper {
+    padding: 15px;
+    max-height: 50vh !important;
+}
+
+/* Custom styles for the dropdown items */
+::ng-deep .custom-dropdown-checklist .p-dropdown-item {
+    color: rgb(34, 34, 34);
+    font-size: 10pt;
+    width: 300px;
+    font-weight: 500;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    margin-bottom: 7px;
+}
+
+/* Remove focus and active border */
+::ng-deep .custom-dropdown-checklist .p-dropdown.p-focus,
+::ng-deep .custom-dropdown-checklist .p-dropdown:focus,
+::ng-deep .custom-dropdown-checklist .p-dropdown:active {
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Additional style to remove focus outline */
+::ng-deep .custom-dropdown-checklist .p-dropdown .p-dropdown-trigger {
+    outline: none !important;
+    color: black;
+}
+
+/*=====================end css dropdown====================== ==========*/
+
+/* Hide the default icons */
+::ng-deep .ui-accordion .ui-accordion-header .ui-accordion-toggle-icon {
+    display: none;
+}
+
+/* --------------------start css accordion 1--------------------------- */
+
+::ng-deep .custom-accordion-checklist-1 .p-accordion-header-link {
+    background-color: rgb(255, 255, 255) !important;
+    height: 66px !important;
+    border-color: transparent;
+    margin-top: 2px !important;
+    border-radius: 2px;
+}
+
+::ng-deep .p-accordion p-accordiontab .p-accordion-tab {
+    margin-bottom: 22px;
+}
+
+::ng-deep .p-accordion-content {
+    border-color: transparent;
+}
+
+::ng-deep .stage-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+::ng-deep .stage-info .stage-name {
+    font-size: 10pt;
+    font-weight: 600;
+    line-height: 18px;
+}
+
+::ng-deep .stage-info .sub-task-count {
+    font-size: 8pt; /* Smaller font size for subTaskCount */
+    color: #939393; /* Optional: Change the color to differentiate */
+    font-weight: 500;
+}
+
+::ng-deep .sub-stage-custom .p-accordion-header-link {
+    background-color: rgb(248, 247, 255) !important;
+    height: 35px !important;
+}
+
+::ng-deep .p-toggleable-content {
+    margin-top: 1px;
+}
+
+/*========================== end css accordion 1=========================  */
+
+/* -------------------------start css accordion 2 ------------------------ */
+
+::ng-deep .custom-accordion-checklist-2 .p-accordion-header {
+    background-color: aqua;
+}
+
+::ng-deep .custom-header .tasks-completed {
+    font-size: 12px; /* Smaller font size for task completion text */
+    margin-top: 4px; /* Add some spacing between sub-stage name and tasks completed text */
+    color: rgb(61, 61, 61); /* Optional: Change the color to differentiate */
+}
+
+::ng-deep .custom-header .sub-stage-name {
+    font-size: 12px; /* Adjust the font size as needed */
+    text-transform: uppercase;
+}
+
+::ng-deep .p-accordion-header-link {
+    text-decoration: none !important; /* Ensures no underline for links */
+    color: inherit !important; /* Inherits color from the parent element to avoid blue color */
+}
+
+::ng-deep .custom-header {
+    color: black !important; /* Ensures the text color is black */
+    text-decoration: none; /* Ensures no underline */
+    display: flex;
+    align-items: center;
+}
+
+::ng-deep .icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 38px;
+    border: 1px solid #f3f3f3;
+    border-radius: 4px;
+    margin-right: 8px;
+    background-color: #f3f3f3;
+}
+
+/* Ensure the icon inside the box is black */
+::ng-deep .icon-box i {
+    color: black !important;
+}
+
+::ng-deep .p-accordion-header-link {
+    background-color: rgb(248, 247, 255) !important;
+}
+
+::ng-deep .p-sidebar {
+    width: 90% !important;
+}
+
+::ng-deep .p-sidebar-header {
+    display: none !important;
+}
+
+::ng-deep .custom_accordion_sub_stage_category {
+    .p-accordion-header-link {
+        display: flex;
+        align-items: center;
+    }
+}
+
+::ng-deep .sub-stage-category-custom .p-accordion-header-link {
+    background-color: rgb(248, 247, 255) !important;
+    height: 20px !important;
+    padding-bottom: 1px;
+}
+
+::ng-deep .custom-accordion-checklist-2 .p-accordion-header-link {
+    background-color: rgb(255, 255, 255) !important;
+    height: 66px !important;
+    border-color: transparent;
+    margin-top: 2px !important;
+    border-radius: 2px;
+}
+
+::ng-deep .custom-accordion-checklist-2 .p-accordion-content {
+    padding-top: 9px;
+    padding-bottom: 9px;
+    padding-left: 30px;
+}
+
+::ng-deep .p-accordion .p-accordion-content {
+    padding: 10px;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+
+::ng-deep .sub-stage-category-custom .p-accordion-tab {
+    margin-bottom: 22px !important;
+}
+
+::ng-deep .p-accordion-toggle-icon {
+    margin-right: 15px;
+}
+
+::ng-deep .sub-stage-category-custom .p-accordion-toggle-icon {
+    margin-right: 10px;
+    height: 19px;
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+}
+
+::ng-deep .contacts .p-datatable .p-datatable-tbody > tr > td {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 9px;
+    padding-bottom: 13.5px;
+}
+
+::ng-deep .sub-stage-task-category-custom .p-accordion .p-accordion-content {
+    padding-left: 5px !important;
+}
+
+.task_details_section {
+    .header_title {
+        font-size: 17pt;
+        font-weight: 600;
+        padding-left: 30px;
+    }
+
+    .value_content_lbl {
+        margin-bottom: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 10pt;
+    }
+
+    .status_div_section {
+        font-size: 7.8pt;
+        padding: 2px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 2px;
+        width: 5vw;
+        width: 100%;
+        text-align: center;
+        max-width: 82px;
+    }
+
+    .each_row_section {
+        display: flex;
+        align-items: center;
+        padding-bottom: 20px;
+    }
+
+    .header_row {
+        padding-bottom: 30px;
+    }
+
+    .content_lbl {
+        font-size: 10pt;
+        font-weight: 650;
+        width: 135px;
+        min-width: 135px;
+        max-width: 135px;
+    }
+
+    .content_value_lbl {
+        font-size: 10pt;
+        font-weight: 500;
+        width: 100%;
+    }
+
+    .display_user_section {
+        .name_role_section {
+            padding-left: 5px;
+        }
+        .avatar_section {
+            img {
+                height: 30px;
+                width: 30px;
+            }
+        }
+        .content_div {
+            line-height: 13px;
+        }
+        .content_val {
+            font-size: 9pt;
+            font-weight: normal;
+        }
+        .name_section {
+            font-weight: 500;
+        }
+        .role_name {
+            font-size: 7.5pt;
+            color: #878b91;
+        }
+    }
+
+    .display_flex_center {
+        display: flex;
+        align-items: center;
+    }
+
+    .display_flex_baseline {
+        display: flex;
+        align-items: start;
+    }
+
+    .fa-check-circle,
+    .fa-check-circle-o {
+        font-size: 14pt;
+    }
+
+    .value_content_lbl_table {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 10pt;
+        display: flex;
+        align-items: center;
+        height: 30px;
+        padding-bottom: 3px;
+        .stage_name_lbl {
+            font-weight: 550;
+            font-size: 10pt;
+        }
+        .date_lbl {
+            font-weight: 550;
+            font-size: 10pt;
+        }
+    }
+
+    .stage_name_lbl {
+        padding-left: 10px;
+    }
+
+    .note_date_lbl {
+        font-size: 8pt;
+        color: #939393;
+        font-weight: 500;
+        margin-bottom: 30px;
+
+        .time_lbl {
+            padding-right: 10px;
+        }
+    }
+
+    .attachments_list {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    }
+
+    .display_flex_baseline {
+        display: flex;
+        align-items: start;
+    }
+
+    .image_container {
+        border: solid thin black;
+        width: 55px;
+        height: 65px;
+        border-radius: 5px;
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+
+    .margin_bottom_auto {
+        margin-bottom: auto;
+    }
+
+    .due_date_clickable {
+        height: 30px;
+        border: solid 1px #e8e8e8;
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    textarea {
+        width: 100%;
+        border-color: #e8e8e8;
+        padding: 10px;
+        border-radius: 3px;
+    }
+
+    .add_note_btn {
+        height: 25px;
+        border: solid 1px #4d86d8;
+        color: #4d86d8;
+        border-radius: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+        .icon_lbl {
+            padding-right: 15px;
+        }
+    }
+
+    .create_btn {
+        height: 25px;
+        border: solid 1px #4d86d8;
+        color: #4d86d8;
+        border-radius: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-right: 10px;
+    }
+
+    .cancel_btn {
+        height: 25px;
+        border: solid 1px #f44336;
+        color: #f44336;
+        border-radius: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .buttons_section {
+        display: flex;
+        align-items: center;
+    }
+
+    .delete_note_icon {
+        padding-left: 10px;
+        color: #125dcb;
+        cursor: pointer;
+    }
+
+    .add_new_attachment {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-style: dashed;
+        cursor: pointer;
+        i {
+            font-size: 13pt;
+        }
+    }
+
+    .remove_attachment_icon {
+        background: #125dcb;
+        width: fit-content;
+        color: white;
+        height: 15px;
+        font-size: 8pt;
+        width: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100%;
+        position: absolute;
+        margin-top: -7px;
+        margin-left: 45px;
+        cursor: pointer;
+    }
+}
+
+::ng-deep .p-overlaypanel-content {
+    padding: 0;
+}
+
+::ng-deep .pending_style .p-icon-wrapper {
+    color: var(--StatusPendingFontColor);
+}
+
+::ng-deep .inprogress_style .p-icon-wrapper {
+    color: var(--StatusProgressFontColor);
+}
+
+::ng-deep .completed_style .p-icon-wrapper {
+    color: var(--StatusCompletedFontColor);
+}
+
+::ng-deep .p-dropdown-item {
+    padding: 5px;
+    font-size: 8pt;
+}
+
+::ng-deep .p-dropdown-items {
+    margin: 0;
+}
+
+::ng-deep .p-sidebar-content {
+    padding: 50px;
+    padding-top: 28px;
+}
+
+::ng-deep .contacts .p-dropdown .p-dropdown-label {
+    font-size: 8pt;
+    padding: 5px !important;
+    background: transparent !important;
+}
+
+::ng-deep .contacts .p-dropdown {
+    border: none;
+    height: 25px !important;
+    background: transparent !important;
+    width: 120px;
+    border-radius: 2px;
+
+    svg {
+        height: 12px;
+    }
+
+    .p-dropdown-trigger {
+        justify-content: end;
+        padding-right: 5px;
+    }
+}
+
+::ng-deep .popup_task .p-dropdown {
+    border: none;
+    height: 30px !important;
+    background: transparent !important;
+    width: 120px;
+    border-radius: 2px;
+
+    svg {
+        height: 12px;
+    }
+
+    .p-dropdown-trigger {
+        justify-content: end;
+        padding-right: 5px;
+    }
+}
+
+::ng-deep .popup_task p-dropdown {
+    height: 100%;
+    display: flex;
+}
+
+::ng-deep .p-element .p-component {
+    padding: 5px;
+}

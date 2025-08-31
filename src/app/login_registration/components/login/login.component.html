@@ -1,0 +1,269 @@
+<ion-content [fullscreen]="true">
+    <div class="row col-12 landing_page" (click)="redirectToLogin()" *ngIf="currentState=='LANDING'"
+        style="position: relative; width: 100%; height: 100vh; overflow: hidden;">
+
+        <!-- Fullscreen Background Image -->
+        <img src="../../../../assets/whitebg.webp"
+            style="position: absolute; width: 100%; height: 100%; object-fit: cover;" />
+
+        <!-- Centered Content -->
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+
+            <!-- Logo (first line) -->
+            <div>
+                <img src="../../../../assets/ManagerXLogo.png" style="width: 800px; margin-bottom: 30px;" />
+            </div>
+
+            <!-- Video Container (second line) -->
+            <div (click)="openModal(); $event.stopPropagation()" style="position: relative; display: inline-block;">
+
+                <img src="../../../../assets/Video/Video_thumbnail.png" style="width:800px;" alt="ManagerX login" />
+
+                <!-- Play button overlay -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    <i class="fas fa-play" style="font-size: 48px; color: white;"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="container  login_page"
+                *ngIf="currentState!=='LANDING' && allUserTypesAll && allUserTypesAll.length > 0"
+                style="background-color: #F4F8F6;">
+
+
+
+                <div class="row full-height-row">
+                    <!-- Left col image section -->
+                    <div class="col-lg-6 col-md-6 col-12 no_padding">
+                        <img id="managerx-login_image" class="image-fullscreen"
+                            src="../../../../assets/ezgif-36b36c357730a4.webp" />
+                    </div>
+
+                    <!-- Right col login section -->
+                    <div class="col-lg-6 col-md-6 col-12 p-5 d-flex flex-column justify-content-center">
+                        <!-- Top wording section -->
+                        <h1 id="managerx-login_welcome_text">Welcome to ManagerXpro.....</h1>
+                        <p id="managerx-login_intro_paragraph" class="mb-5 top_para"> <span class="justify-text">
+                                The Site offers resource tools for the management of tasks and time related schedules
+                                together with Supporting Documentation.
+                                Offering transparency of information between all Stakeholders and Related Parties.
+                            </span>
+                            <br><br>
+                            <span class="no-break">We wish You great success with your Venture!</span>
+                            <br><br>
+                            <span class="no-break">
+                                Feel free to reach out at
+                                <a href="mailto:Info@managerx.com"
+                                    style="color:rgb(51, 92, 180); text-decoration: underline;">
+                                    Info&#64;managerx.com
+                                </a>
+                            </span>
+
+
+                        </p>
+                        <!-- End of Top wording section -->
+
+                        <!-- Form section -->
+                        <div class="col-12">
+                            <!-- Email entering section -->
+                            <div id="managerx-login_email_section" class="form-group form-floating col-12 mb-3">
+                                <!-- Email input section -->
+                                <span id="managerx-login_email_input"
+                                    [ngClass]="(CheckErrorCode('EMPTY$USER$EMAIL') && user_email == '')?'error-placeholder-label':''">
+                                    <input id="managerx-login_email_INPUT" pInputText type="email"
+                                        maxlength="{{emailLimit}}" [(ngModel)]="user_email"
+                                        (input)="onPasteEmailFunction($event)" inputrestriction="^[a-z A-Z 0-9 @ _ .]*$"
+                                        placeholder="" />
+                                    <label for="email" class="label_colors">Email Address</label>
+                                </span>
+                                <!-- End of Email input section -->
+                                <!-- Error Message -->
+                                <div id="managerx-login_email_error1" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('NO$SUBSCRIPTION')">
+                                    <span>{{CheckErrorCode('NO$SUBSCRIPTION')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+                                <!-- Error Message -->
+                                <div id="managerx-login_email_error1" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('EMPTY$USER$EMAIL')">
+                                    <span>{{CheckErrorCode('EMPTY$USER$EMAIL')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_email_error2" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('EMAIL$FORMAT')">
+                                    <span>{{CheckErrorCode('EMAIL$FORMAT')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_email_error3" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('NOT$EXISTS$USER$EMAIL')">
+                                    <span>{{CheckErrorCode('NOT$EXISTS$USER$EMAIL')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+                            </div>
+                            <!-- End of Email entering section -->
+
+                            <!-- Password entering section -->
+                            <div id="managerx-login_password_section" class="form-group form-floating col-12 mb-5"
+                                [ngClass]="(CheckErrorCode('EMPTY$USER$PASSWORD') || CheckErrorCode('LENGTH$USER$PASSWORD') || CheckErrorCode('INVALID$LOGIN'))?'eye-password-label':''">
+                                <!-- Password input section -->
+                                <span id="managerx-login_password_input"
+                                    [ngClass]="(CheckErrorCode('EMPTY$USER$PASSWORD') && user_password == '')?'error-placeholder-label':''">
+                                    <input id="managerx-login_password_INPUT" pInputText [type]="passwordFieldType"
+                                        [(ngModel)]="user_password" maxlength="{{passwordLimit}}"
+                                        (input)="onPastePasswordFunction($event)" placeholder="" />
+                                    <label for="password" class="label_colors">Password</label>
+                                </span>
+                                <!-- End of Password input section -->
+
+                                <!-- Eye icon to toggle password visibility -->
+                                <span id="managerx-login_password_toggle"
+                                    class="password-toggle-icon position-absolute end-0 top-50 translate-middle-y me-4 ms-n6"
+                                    (click)="togglePasswordVisibility()">
+                                    <i id="managerx-login_password_toggle_icon" class="fa"
+                                        [ngClass]="{'fa-eye': !(passwordFieldType == 'text'), 'fa-eye-slash': (passwordFieldType == 'text')}"></i>
+                                </span>
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_password_error1" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('EMPTY$USER$PASSWORD')">
+                                    <span>{{CheckErrorCode('EMPTY$USER$PASSWORD')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_password_error2" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('LENGTH$USER$PASSWORD')">
+                                    <span>{{CheckErrorCode('LENGTH$USER$PASSWORD')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_password_error3" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('INVALID$LOGIN')">
+                                    <span>{{CheckErrorCode('INVALID$LOGIN')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_password_error3" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('BLK$LOGIN')">
+                                    <span>{{CheckErrorCode('BLK$LOGIN')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+                            </div>
+                            <!-- End of Password entering section -->
+
+                            <!-- Buttons section -->
+                            <div class="col-12">
+                                <!-- Button to login as an owner -->
+                                <div class="d-grid gap-2">
+                                    <button id="managerx-login_admin_login_button"
+                                        class="btn btn-lg btn-outline-primary custom-login-btn"
+                                        (click)="checkGhostSuperAdminLogin('AD')">
+                                        <span>Login - {{'AD' | appUpdateUserType}}</span>
+                                    </button>
+                                </div>
+                                <!-- End of Button to login as an owner -->
+
+                                <!-- Button to login as a builder -->
+                                <div class="d-grid gap-2 mt-3">
+                                    <button id="managerx-login_builder_login_button"
+                                        class="btn btn-lg btn-outline-primary custom-login-btn"
+                                        (click)="checkGhostSuperAdminLogin('PM')">
+                                        <span>Login - {{'PM' | appUpdateUserType}}</span>
+                                    </button>
+                                </div>
+                                <!-- End of Button to login as a builder -->
+
+                                <!-- Button to login as an individual contractor -->
+                                <!--  <div class="d-grid gap-2 mt-4"  >
+                        <button id="managerx-login_contractor_login_button"
+                            class="btn btn-lg btn-outline-primary custom-login-btn"
+                            (click)="checkGhostSuperAdminLogin('SP')">
+                            <span>Login - individual {{'SP' | appUpdateUserType}}</span>
+                        </button>
+                    </div> -->
+                                <!-- End of Button to login as an individual contractor -->
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_email_error1" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('SUBSCRIPTION$EXP')">
+                                    <span>{{CheckErrorCode('SUBSCRIPTION$EXP')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+
+                                <!-- Error Message -->
+                                <div id="managerx-login_email_error1" class="col-12 no-side-padding error_message"
+                                    *ngIf="CheckErrorCode('TRIAL$EXP')">
+                                    <span>{{CheckErrorCode('TRIAL$EXP')!.ErrorMessage}}</span>
+                                </div>
+                                <!-- End of Error Message -->
+
+
+
+                            </div>
+                            <!-- End of Buttons section -->
+                        </div>
+                        <!-- End of Form section -->
+
+                        <!-- Below section -->
+                        <div id="managerx-login_or_label" class="text-center mt-4">
+                            <p class="or_label"><b>Or</b></p>
+                        </div>
+
+                        <!-- Create an account button -->
+                        <div class="d-grid gap-2">
+                            <button id="managerx-login_create_account_button"
+                                class="btn btn-lg btn-outline-primary custom-login-btn"
+                                (click)="createAccountOnClick()">
+                                <span>Create an account</span>
+                            </button>
+                        </div>
+                        <!-- End of Create an account button -->
+                        <br>
+                        <!-- Create an account button -->
+                        <div class="d-grid gap-2">
+                            <button id="managerx-login_create_account_button"
+                                class="btn btn-lg btn-outline-primary custom-login-btn"
+                                (click)="subscriptionPlanOnClick()">
+                                <span>Subscription</span>
+                            </button>
+                        </div>
+                        <!-- End of Create an account button -->
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <a href="https://iitcglobal.com/"></a>
+    </div>
+
+    <!-- End of Main content section -->
+
+
+    <!-- Video Modal -->
+    <div class="video-modal" *ngIf="isModalOpen" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <span class="close-btn" (click)="closeModal()">&times;</span>
+            <video #modalVideo width="100%" controls autoplay>
+                <source src="../../../../assets/Video/ManagerXPro.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+
+        </div>
+    </div>
+
+</ion-content>

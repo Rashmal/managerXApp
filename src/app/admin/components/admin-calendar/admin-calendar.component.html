@@ -1,0 +1,368 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 calendar">
+        <!-- Top bar section -->
+        <div class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_admin-calendar_page-title_text" class="page_title">Calendar</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+
+
+            <div class="right_align_section_header" style="width: 100%;margin-top: 10px;margin-bottom: 5px; justify-content: center;">
+                <!-- Label section -->
+                <div class="custom-dropdown-checklist display_flex_center">
+                    <span class="label_header">Select Months Per View: </span>
+                    <p-dropdown [options]="displayMonthsPerView" [(ngModel)]="displayMonths"
+                        (onChange)="onChangeMonthsPerView(displayMonths)">
+                    </p-dropdown>
+                </div>
+                <!-- End of Label section -->
+            </div>
+
+            <!-- End of Search icon box -->
+            <div style="width: 100%;margin-top: 5px;">
+                <p-iconField class="custom-icon-field">
+                    <div class="input-container">
+                        <p-inputIcon id="managerX_admin-calendar_search-icon_icon"
+                            class="pi pi-search search-icon"></p-inputIcon>
+                        <input id="managerX_admin-calendar_search-query_input" type="text" pInputText
+                            placeholder="Search" class="custom-search-box" [(ngModel)]="searchQuery"
+                            (input)="GetAllTaskList();" />
+                    </div>
+                </p-iconField>
+            </div>
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Full calendar section -->
+        <div id="managerX_admin-calendar_full-calendar_section"
+            class="col-12 custom-padding-5px bg-content display_multiple_calendars">
+            <!-- <full-calendar id="managerX_admin-calendar_calendarOptions_calendar"
+            [options]="calendarOptions"></full-calendar>
+        <full-calendar id="managerX_admin-calendar_calendarOptions_calendar"
+            [options]="calendarOptions"></full-calendar> -->
+
+            <div *ngFor="let fc of multipleCalendarsList" class="each_calendar"
+                [ngClass]="(displayMonths==1)?'col-12':(displayMonths==2)?'col-6':(displayMonths==3)?'col-4':'col-4'">
+                <full-calendar id="managerX_admin-calendar_calendarOptions_calendar"
+                    [options]="fc.CalendarOptions"></full-calendar>
+            </div>
+
+        </div>
+        <!-- End of Full calendar section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Display side panel -->
+    <p-sidebar id="managerX_admin-calendar_task-details_sidebar" [(visible)]="isTaskDetailsVisible" [position]="'right'"
+        [modal]="true">
+        <!-- Main content section -->
+        <div class="row col-12 task_details_section" *ngIf="displayTaskDetails">
+            <!-- Top row section -->
+            <div id="managerX_admin-calendar_top-row_section" class="d-flex align-items-center header_row">
+                <div>
+                    <i id="managerX_admin-calendar_close-task-details_icon" class="fa fa-chevron-left"
+                        style="cursor: pointer;" aria-hidden="true" (click)="closeTaskDetails()"></i>
+                </div>
+                <div class="header_title">
+                    <span id="managerX_admin-calendar_task-name_text" class="my-0">{{displayTaskDetails.Name}}</span>
+                </div>
+            </div>
+            <!-- End of Top row section -->
+
+            <!-- Content section -->
+            <div class="col-12">
+                <!-- Status section -->
+                <div id="managerX_admin-calendar_status_section" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-calendar_status-label_text">Status</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Status label section -->
+                    <div>
+                        <div id="managerX_admin-calendar_status-label_value"
+                            class="value_content_lbl status_div_section"
+                            [style.background]="(displayTaskDetails.StatusCode=='COM')?'#e7f6e7':(displayTaskDetails.StatusCode=='INP')?'#fff3e7':'#f1f1ff'"
+                            [style.color]="(displayTaskDetails.StatusCode=='COM')?'#6dbd3a':(displayTaskDetails.StatusCode=='INP')?'#fe9b62':'#5723c6'">
+                            <span *ngIf="displayTaskDetails.StatusName">{{displayTaskDetails.StatusName}}</span>
+                            <span *ngIf="displayTaskDetails.StatusName == ''">-</span>
+                        </div>
+                    </div>
+                    <!-- End of Status label section -->
+                </div>
+                <!-- End of Status section -->
+
+                <!-- Due date section -->
+                <div id="managerX_admin-calendar_due-date_section" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-calendar_due-date-label_text">Due Date</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <span id="managerX_admin-calendar_due-date-value_text">
+                            {{displayTaskDetails.DueDate| date: 'dd MMM yyyy'}}
+                        </span>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Due date section -->
+
+                <!-- Person section section -->
+                <div id="managerX_admin-calendar_person_section" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-calendar_person-label_text">Person</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-calendar_person-value_section" class="content_value_lbl">
+                        <!-- Display the user section -->
+                        <div id="managerX_admin-calendar_user_section" class="display_flex_center display_user_section">
+                            <!-- Avatar section -->
+                            <div id="managerX_admin-calendar_avatar_section" class="avatar_section">
+                                <img id="managerX_admin-calendar_default-avatar_image"
+                                    *ngIf="!displayTaskDetails.PersonList[0].Avatar"
+                                    src="../../../../assets/Images/default_avatar.png">
+                                <img id="managerX_admin-calendar_avatar_image"
+                                    *ngIf="displayTaskDetails.PersonList[0].Avatar"
+                                    [src]="displayTaskDetails.PersonList[0].Avatar">
+                            </div>
+                            <!-- End of Avatar section -->
+                            <!-- Name and role section -->
+                            <div id="managerX_admin-calendar_name-role_section" class="name_role_section">
+                                <!-- Name section -->
+                                <div id="managerX_admin-calendar_name-section_cont" class="content_div">
+                                    <span id="managerX_admin-calendar_name-section_span"
+                                        class="content_val name_section"
+                                        *ngIf="displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].FirstName && displayTaskDetails.PersonList[0].FirstName != ''">{{displayTaskDetails.PersonList[0].FirstName}}
+                                        {{displayTaskDetails.PersonList[0].LastName}}</span>
+                                    <span id="managerX_admin-calendar_no-name-section_span"
+                                        class="content_val name_section"
+                                        *ngIf="!(displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].FirstName && displayTaskDetails.PersonList[0].FirstName != '')">-</span>
+                                </div>
+                                <!-- End of Name section -->
+
+                                <!-- Role name section -->
+                                <div id="managerX_admin-calendar_role-name_section" class="content_div">
+                                    <span id="managerX_admin-calendar_role-name-section_span"
+                                        class="content_val role_name"
+                                        *ngIf="displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].RoleName && displayTaskDetails.PersonList[0].RoleName != ''">{{displayTaskDetails.PersonList[0].RoleName}}</span>
+                                    <span id="managerX_admin-calendar_no-role-name-section_span"
+                                        class="content_val role_name"
+                                        *ngIf="!(displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].RoleName && displayTaskDetails.PersonList[0].RoleName != '')">-</span>
+                                </div>
+                                <!-- End of Role name section -->
+                            </div>
+                            <!-- End of Name and role section -->
+                        </div>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Person section section -->
+
+                <!-- Category section -->
+                <div id="managerX_admin-calendar_category_section" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div id="managerX_admin-calendar_category_label" class="content_lbl">
+                        <span>Category</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-calendar_category_section" class="content_value_lbl">
+                        <span id="managerX_admin-calendar_category-value_span">{{displayTaskDetails.Category}}</span>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Category section -->
+
+                <!-- Description section -->
+                <div id="managerX_admin-calendar_description_section"
+                    class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-calendar_description-label_span">Description</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-calendar_description_value" class="content_value_lbl">
+                        <span
+                            id="managerX_admin-calendar_description-value_text">{{displayTaskDetails.Description}}</span>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Description section -->
+
+                <!-- Subtasks section -->
+                <div id="managerX_admin-calendar_subtasks_section"
+                    class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-calendar_subtasks_label">Subtasks</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-calendar_subtasks-value_section" class="content_value_lbl">
+                        <!-- Content section when its empty -->
+                        <div id="managerX_admin-calendar_subtasks-value_label" class="content_value_lbl"
+                            *ngIf="displayTaskDetails.SubTaskDetailsList.length == 0">
+                            <span>-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+                        <!-- Loop through the sub tasks list -->
+                        <div *ngFor="let subtask of displayTaskDetails.SubTaskDetailsList">
+                            <!-- Task name section -->
+                            <div id="managerX_admin-calendar_subtask_section" class="display_flex_center">
+                                <!-- Green tick icon -->
+                                <i id="managerX_admin-calendar_subtask-status_icon" class="fa" [ngClass]="{'fa-check-circle': subtask.StatusCode === 'COM',
+         'fa-check-circle-o ': subtask.StatusCode !== 'COM'  }"
+                                    [ngStyle]="{'color': subtask.StatusCode === 'COM' ? '#44AA00' : '#a3a3a3' }"></i>
+                                <!-- End of Green tick icon -->
+
+                                <!-- Label section -->
+                                <div id="managerX_admin-calendar_subtask_label" class="value_content_lbl_table">
+                                    <span id="managerX_admin-calendar_subtask_name_span" class="stage_name_lbl"
+                                        *ngIf="subtask.Name">{{subtask.Name}}</span>
+                                    <span class="stage_name_lbl" *ngIf="subtask.Name == ''">-</span>
+                                </div>
+                                <!-- End of Label section -->
+                            </div>
+                            <!-- End of Task name section -->
+                        </div>
+                        <!-- End of Loop through the sub tasks list -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-calendar_paginator_section" class="paginator_sec"
+                            *ngIf="displayTaskDetails.SubTaskDetailsList && displayTaskDetails.SubTaskDetailsList.length > 0 && displayTaskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.SubTaskDetailsList && displayTaskDetails.SubTaskDetailsList.length > 0 && displayTaskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displaySubTasksFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplaySubTasksPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.SubTaskDetailsList.length>0)? displayTaskDetails.SubTaskDetailsList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Subtasks section -->
+
+                <!-- Notes section -->
+                <div id="managerX_admin-calendar_notes_content" class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div id="managerX_admin-calendar_notes_label" class="content_lbl">
+                        <span>Notes</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-calendar_notes_value" class="content_value_lbl">
+                        <!-- Content section when its empty -->
+                        <div id="managerX_admin-calendar_notes_empty" class="content_value_lbl"
+                            *ngIf="displayTaskDetails.SubTaskNoteList.length == 0">
+                            <span>-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+
+                        <!-- Loop through the notes -->
+                        <div id="managerX_admin-calendar_notes_loop"
+                            *ngFor="let note of displayTaskDetails.SubTaskNoteList">
+                            <!-- Note section -->
+                            <div>
+                                <span id="managerX_admin-calendar_note_description">{{note.Description}}</span>
+                            </div>
+                            <!-- End of Note section -->
+
+                            <!-- Date of note section -->
+                            <div id="managerX_admin-calendar_note_date" class="display_flex_center note_date_lbl">
+                                <span class="time_lbl">{{note.AddedDate | date: 'hh:mm'}}</span>
+                                <span>{{note.AddedDate | date: 'dd MMM yyyy'}}</span>
+                            </div>
+                            <!-- End of Date of note section -->
+                        </div>
+                        <!-- End of Loop through the notes -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-calendar_notes_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.SubTaskNoteList && displayTaskDetails.SubTaskNoteList.length > 0 && displayTaskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.SubTaskNoteList && displayTaskDetails.SubTaskNoteList.length > 0 && displayTaskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displayTaskNotesFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.SubTaskNoteList.length>0)? displayTaskDetails.SubTaskNoteList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Notes section -->
+
+                <!-- Attachments section -->
+                <div id="managerX_admin-calendar_attachments_content"
+                    class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div id="managerX_admin-calendar_attachments_label" class="content_lbl margin_bottom_auto">
+                        <span>Attachments</span>
+                    </div>
+                    <!-- End of Label section -->
+
+
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-calendar_attachments_value" class="content_value_lbl attachments_list">
+                        <!-- Content section when its empty -->
+                        <div id="managerX_admin-calendar_attachments_empty" class="content_value_lbl"
+                            *ngIf="displayTaskDetails.AttachmentList.length == 0">
+                            <span>-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+                        <!-- Loop through the attachments -->
+                        <div id="managerX_admin-calendar_attachments_loop" class=""
+                            *ngFor="let image of displayTaskDetails.AttachmentList">
+                            <!-- If the file is an image -->
+                            <div id="managerX_admin-calendar_attachment_image" class="image_container"
+                                *ngIf="image.FileType == 'IMAGE'">
+                                <img id="managerX_admin-calendar_attachment_image_file" *ngIf="!image.FileUrl"
+                                    src="../../../../assets/Images/construction.jpg">
+                                <img id="managerX_admin-calendar_attachment_image_url" *ngIf="image.FileUrl"
+                                    [src]="image.FileUrl">
+                            </div>
+                            <!-- End of If the file is an image -->
+
+                            <!-- If the file is not an image -->
+                            <div id="managerX_admin-calendar_attachment-non_image" class="image_container"
+                                *ngIf="image.FileType !== 'IMAGE'">
+                                <img id="managerX_admin-calendar_attachment-file_icon"
+                                    src="../../../../assets/Images/file_icon.png">
+                            </div>
+                            <!-- End of If the file is not an image -->
+                        </div>
+                        <!-- End of Loop through the attachments -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-calendar_attachments_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.AttachmentList && displayTaskDetails.AttachmentList.length > 0 && displayTaskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.AttachmentList && displayTaskDetails.AttachmentList.length > 0 && displayTaskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displayTaskAttachmentsFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.AttachmentList.length>0)? displayTaskDetails.AttachmentList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Attachments section -->
+            </div>
+            <!-- End of Content section -->
+        </div>
+        <!-- End of Main content section -->
+    </p-sidebar>
+    <!-- End of Display side panel -->
+</ion-content>

@@ -1,0 +1,165 @@
+.stage_level {
+    padding: 20px;
+    padding-top: 30px;
+
+    .error_message {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .selected_stage {
+        background: #1e222d;
+        color: white;
+        font-size: 10pt;
+    }
+
+    .placeholder_section {
+        font-size: 10pt;
+        text-align: center;
+    }
+
+    .header_title {
+        font-size: 10pt !important;
+        font-weight: 600;
+        text-align: center;
+        padding: 0 !important;
+        border-bottom: 1px solid #d8d8d8; 
+        margin-bottom: 5px;
+    }
+
+    .page_title {
+        font-size: 17pt;
+        font-weight: 600;
+    }
+
+    .header_row {
+        padding-bottom: 30px;
+    }
+
+    .top_bar_section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 12px;
+    }
+
+    .header_title {
+        font-size: 17pt;
+        font-weight: 600;
+        padding-left: 30px;
+    }
+
+    .stage_level_management {
+        display: flex;
+        align-items: flex-start;
+        background: var(--AllPageContentBoxBackgroundColor) !important;
+
+        .col_section {
+            border: solid 1px #d8d8d8;
+            min-height: 500px;
+
+            .each_row {
+                padding: 5px;
+                font-size: 10pt;
+                display: flex;
+                align-items: center;
+
+                .delete_icon {
+                    margin-left: auto;
+                }
+            }
+            .each_row:hover {
+                background: #1e222d;
+                color: white;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .create_btn {
+        height: 25px;
+        border: solid 1px #4d86d8;
+        color: #4d86d8;
+        border-radius: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-right: 10px;
+        font-size: 10pt;
+    }
+
+    .margin_right_10 {
+        margin-right: 10px;
+    }
+
+    .cancel_btn {
+        height: 25px;
+        border: solid 1px #f44336;
+        color: #f44336;
+        border-radius: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 10pt;
+    }
+
+    .buttons_section {
+        margin-top: 10px;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    .add_stage_section {
+        padding: 5px;
+
+        input {
+            width: 100%;
+            height: 30px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+  .stage_level {
+    padding: 10px;
+
+    .page_title {
+      font-size: 14pt;
+      text-align: center;
+    }
+
+    .stage_level_management {
+      flex-direction: column;
+
+      .col_section {
+        width: 100% !important;
+        min-height: auto;
+        margin-bottom: 15px;
+
+        .each_row {
+          font-size: 9pt;
+        }
+
+        .header_title {
+          font-size: 11pt !important;
+        }
+      }
+
+      .buttons_section {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .create_btn,
+        .cancel_btn {
+          margin-top: 5px;
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      .add_stage_section input {
+        height: 28px;
+      }
+    }
+  }
+}

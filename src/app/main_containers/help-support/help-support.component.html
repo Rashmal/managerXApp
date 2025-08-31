@@ -1,0 +1,83 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="row col-12 custom_template help">
+        <!-- Top bar section -->
+        <div class="top_bar_section">
+            <!-- Title section -->
+            <div class="page_title">Help & Support</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Content section -->
+        <div class="all_content_box">
+            <!-- Row section -->
+            <ion-row>
+                <ion-col>
+                    <!-- Accordion groups -->
+                    <ion-accordion-group>
+                        <ion-accordion value="first" *ngIf="userType == 'AD'">
+                            <!-- Sub title section -->
+                            <ion-item slot="header" color="light">
+                                <ion-label>Admin</ion-label>
+                            </ion-item>
+                            <!-- End of Sub title section -->
+
+                            <!-- Accordion content section -->
+                            <div class="ion-padding" slot="content">
+                                <div class="pdf-container">
+                                    <pdf-viewer [src]="admin_pdfSrc" [render-text]="true" [show-all]="true"
+                                        [original-size]="false" [fit-to-page]="true"
+                                        style="display: block; width: 100%; height: 100vh;"></pdf-viewer>
+                                </div>
+                            </div>
+                            <!-- End of Accordion content section -->
+                        </ion-accordion>
+
+                        <ion-accordion value="second" *ngIf="userType == 'AD' || userType == 'PM'">
+                            <!-- Sub title section -->
+                            <ion-item slot="header" color="light">
+                                <ion-label>Project Manager</ion-label>
+                            </ion-item>
+                            <!-- End of Sub title section -->
+
+                            <!-- Accordion content section -->
+                            <div class="ion-padding" slot="content">
+                                <div class="pdf-container">
+                                    <pdf-viewer [src]="project_manager_pdfSrc" [render-text]="true" [show-all]="true"
+                                        [original-size]="false" [fit-to-page]="true"
+                                        style="display: block; width: 100%; height: 100vh;"></pdf-viewer>
+                                </div>
+                            </div>
+                            <!-- End of Accordion content section -->
+                        </ion-accordion>
+
+                        <ion-accordion value="third" *ngIf="userType == 'AD' || userType == 'PM' || userType == 'SP'">
+                            <!-- Sub title section -->
+                            <ion-item slot="header" color="light">
+                                <ion-label>Supplier</ion-label>
+                            </ion-item>
+                            <!-- End of Sub title section -->
+
+                            <!-- Accordion content section -->
+                            <div class="ion-padding" slot="content">
+                                <div class="pdf-container">
+                                    <div class="pdf-container">
+                                        <pdf-viewer [src]="supplier_pdfSrc" [render-text]="true" [show-all]="true"
+                                            [original-size]="false" [fit-to-page]="true"
+                                            style="display: block; width: 100%; height: 100vh;"></pdf-viewer>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Accordion content section -->
+                        </ion-accordion>
+                    </ion-accordion-group>
+                    <!-- End of Accordion groups -->
+                </ion-col>
+            </ion-row>
+            <!-- End of Row section -->
+        </div>
+        <!-- End of Content section -->
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

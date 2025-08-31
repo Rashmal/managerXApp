@@ -1,0 +1,92 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div id="managerX_contractor-notifications_notifications_section" class="container-lg-12 md-12 notifications">
+        <!-- Top bar section -->
+        <div id="managerX_contractor-notifications_top-bar_section" class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_contractor-notifications_page_title" class="page_title">Notifications</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_contractor-notifications_search-icon-field_iconField" class="custom-icon-field">
+                <div id="managerX_contractor-notifications_input-container_container" class="input-container">
+                    <p-inputIcon id="managerX_contractor-notifications_search-icon_inputIcon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_contractor-notifications_search-box_input" type="text" pInputText
+                        placeholder="Search" class="custom-search-box" [(ngModel)]="currentFilter.SearchQuery"
+                        (input)="currentFilter.CurrentPage=1;GetAllNotificationDetails()" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Content section -->
+        <div class="row col-12 notification_section">
+            <!-- Loop through the notifications list -->
+            <div id="managerX_contractor-notifications_each-notification_section" class="col-12 each_notification_bar"
+                *ngFor="let notifications of notificationsList">
+                <!-- Icon section -->
+                <div id="managerX_contractor-notifications_icon_section" class="icon_section">
+                    <i id="managerX_contractor-notifications_notification_icon"
+                        [class]="notifications.NotificationTypeIcon" aria-hidden="true"></i>
+                </div>
+                <!-- End of Icon section -->
+
+                <!-- Description section -->
+                <div class="description_section">
+                    <!-- First row section -->
+                    <div id="managerX_contractor-notifications_first-row_section" class="first_row_section">
+                        <span id="managerX_contractor-notifications_name_text">{{notifications.FirstName}}
+                            {{notifications.LastName}}</span>
+                        <span id="managerX_contractor-notifications_description_text">
+                            {{notifications.NotificationDescription}}</span>
+                        <span id="managerX_contractor-notifications_upload_text"
+                            *ngIf="notifications.NotificationType == 'UPLOAD'"> {{notifications.ExtraData}} attachments
+                            in</span>
+                        <span id="managerX_contractor-notifications_assign-task_text"
+                            *ngIf="notifications.NotificationType == 'ASSIGN_TASK'">
+                            {{checkAssignTaskUsername(notifications.ExtraData)}} a new
+                            task</span>
+                        <span id="managerX_contractor-notifications_stage-label_text" class="stage_lbl"
+                            [ngClass]="notifications.StatusCode"> {{notifications.TaskName}} -
+                            {{notifications.SubStageCategoryName}} -
+                            {{notifications.SubStageName}}</span>
+                    </div>
+                    <!-- End of First row section -->
+
+                    <!-- Second row section -->
+                    <div id="managerX_contractor-notifications_second-row_section" class="second_row_section">
+                        <span id="managerX_contractor-notifications_time-part_text"
+                            class="time_part">{{notifications.AddedDate | date: 'hh:mm ' }}</span>
+                        <span id="managerX_contractor-notifications_date_text">
+                            {{notifications.AddedDate | date: 'dd MMM yyyy ' }}
+                        </span>
+                    </div>
+                    <!-- End of Second row section -->
+                </div>
+                <!-- End of Description section -->
+            </div>
+            <!-- End of Loop through the notifications list -->
+
+            <!-- When the notifications are empty -->
+            <div *ngIf="notificationsList.length == 0">
+                <div id="managerX_contractor-notifications_empty-content_section" colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+            </div>
+            <!-- End of When the notifications are empty -->
+
+            <!-- Pagination section -->
+            <p-paginator id="managerX_contractor-notifications_paginator_section" class="paginator_sec" #modulePaginator
+                *ngIf="notificationsList && notificationsList.length > 0 && notificationsList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(notificationsList && notificationsList.length > 0 && notificationsList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onChangeTaskPaginator($event)"
+                [totalRecords]="(notificationsList.length>0)? notificationsList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+        </div>
+        <!-- End of Content section -->
+
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

@@ -1,0 +1,60 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div id="managerX_upload-files_main-content_section" class="row col-12 upload_file_section">
+        <!-- Top row section -->
+        <div id="managerX_upload-files_top-row_section " class="col-12 top_row_section display_flex_center">
+            <!-- Close icon -->
+            <div id="managerX_upload-files_close-icon_container" class="custom-cursor">
+                <i id="managerX_upload-files_close-icon_button" class="fa fa-times" aria-hidden="true"
+                    (click)="closeOnClick()"></i>
+            </div>
+
+            <!-- End of Close icon -->
+        </div>
+        <!-- End of Top row section -->
+
+        <!-- Title section -->
+        <div class="col-12 title_section">
+            <span id="managerX_upload-files_title_lbl">Upload files</span>
+        </div>
+        <!-- End of Title section -->
+
+        <!-- Sub title section -->
+        <div class="col-12 sub_title_section">
+            <span id="managerX_upload-files_sub-title_lbl">Upload your invoice in the contract stages</span>
+        </div>
+        <!-- End of Sub title section -->
+
+        <!-- Upload file icon section -->
+        <div class="col-12">
+            <!-- Drag and drop files section -->
+            <div id="managerX_upload-files_drag-drop_section" class="upload-area" (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+                <!-- Upload icon section -->
+                <div id="managerX_upload-files_icon_section" class="upload-icon">
+                    <img id="managerX_upload-files_icon_img" class="box-pic"
+                        [src]="'../../../assets/Images/uploadoption.PNG'" />
+                </div>
+                <!-- End of Upload icon section -->
+
+                <!-- Content of drag and drop -->
+                <p id="managerX_upload-files_dragdrop_lbl">Drag & Drop your files here </p>
+                <p class="or_label">OR</p>
+                <!-- End of Content of drag and drop -->
+
+                <!-- Button section of browse files -->
+                <button id="managerX_upload-files_browse-files_button" type="button"
+                    class="btn btn-primary browse_file_btn" (click)="triggerFileInput()">Browse
+                    Files</button>
+                <!-- End of Button section of browse files -->
+            </div>
+            <!-- End of Drag and drop files section -->
+
+            <input id="managerX_upload-files_fileInput_input" type="file" id="fileInput"
+                (change)="onFileSelected($event)" class="file-input-hidden" style="display: none;">
+        </div>
+        <!-- End of Upload file icon section -->
+
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

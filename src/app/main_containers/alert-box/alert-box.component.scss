@@ -1,0 +1,112 @@
+.alert-box-section {
+    margin: 0;
+    padding: 20px;
+
+    /*** Common styles ***/
+    .no-side-padding {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .display-flex-center {
+        display: flex;
+        align-items: center;
+    }
+
+    .font_bold {
+        font-weight: bold;
+    }
+
+    .radio_btn_section {
+        width: 20px;
+    }
+
+    .cancelBtn {
+        background-color: #cd0100;
+        color: #fff;
+        height: 25px;
+        border: 1px solid #cd0100;
+        border-radius: 3px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .updateBtn {
+        background-color: #4e7ac1;
+        color: #fff;
+        height: 25px;
+        border: 1px solid #4e7ac1;
+        border-radius: 3px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 10pt;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .hideBtn {
+        background-color: #fff;
+        color: #4e7ac1;
+        height: 25px;
+        border: 1px solid #4e7ac1;
+        border-radius: 3px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /*** End of Common styles ***/
+
+    /*** Grid styles ***/
+    .marginLeft10 {
+        margin-left: 10px;
+    }
+
+    .marginBottom5 {
+        margin-bottom: 5px;
+    }
+
+    .marginBottom10 {
+        margin-bottom: 10px;
+    }
+    /*** End of Grid styles ***/
+
+    .confirm-type-alert {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .message-section {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .buttons-section {
+        padding-top: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .color_red {
+        color: #cd0100;
+    }
+
+    .message_section {
+        font-size: 10pt;
+        text-align: center;
+    }
+}
+
+::ng-deep .alert-box-section .ui-radiobutton .ui-radiobutton-box.ui-state-active .ui-radiobutton-icon {
+    background-color: #4e7ac1;
+}
+
+::ng-deep .alert-box-section .ui-radiobutton .ui-radiobutton-box .ui-radiobutton-icon {
+    left: 49%;
+    top: 51%;
+}
+
+::ng-deep .alert-box-section .ui-radiobutton .ui-radiobutton-box .ui-radiobutton-icon {
+    width: 9px !important;
+    height: 10px !important;
+}

@@ -1,0 +1,479 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 project_overview">
+        <!-- Title section -->
+        <div id="managerX_admin-overview_page_title" class="page_title">Overview</div>
+        <!-- End of Title section -->
+
+        <!-- First row section -->
+        <div class="row g-3 mt-1">
+            <!-- Project information box section -->
+            <div class="col-sm-12 col-lg-6">
+                <!-- Box container section -->
+                <div id="managerX_admin-overview_project-info_container" class="project-info-container bg-content">
+                    <!-- Container section -->
+                    <div class="container mt-2">
+                        <!-- Sub title section -->
+                        <div id="managerX_admin-overview_sub_title" class="sub_title">Project Information</div>
+                        <!-- End of Sub title section -->
+
+                        <!-- Content body section -->
+                        <div class="row row-cols-auto pt-2">
+                            <!-- Each row section: Start Date -->
+                            <div id="managerX_admin-overview_start-date_section" class="col-12 each_row_section">
+                                <!-- Label section -->
+                                <div class="label_div_section">
+                                    <p class="label_para">
+                                        <i id="managerX_admin-overview_start-date_icon" class="fa fa-calendar-o"
+                                            aria-hidden="true"></i>
+                                        <span>Start Date:</span>
+                                    </p>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_div_section">
+                                    <p id="managerX_admin-overview_start-date_value" class="value_label">
+                                        <span *ngIf="projectDetails && projectDetails.Id == 0"> - </span>
+                                        <span id="managerX_admin-overview_start-date_date"
+                                            *ngIf="projectDetails && projectDetails.Id !== 0">
+                                            {{ projectDetails.StartDate | date: 'dd MMMM yyyy' }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                            <!-- End of Each row section: Start Date -->
+
+                            <!-- Each row section: Delivery Date -->
+                            <div id="managerX_admin-overview_delivery_date-section" class="col-12 each_row_section">
+                                <!-- Label section -->
+                                <div class="label_div_section">
+                                    <p class="label_para">
+                                        <i id="managerX_admin-overview_delivery_icon" class="fa fa-anchor"></i>
+                                        <span>Delivery Date:</span>
+                                    </p>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_div_section">
+                                    <p id="managerX_admin-overview_delivery-date_value" class="value_label">
+                                        <span *ngIf="projectDetails && projectDetails.Id == 0"> - </span>
+                                        <span id="managerX_admin-overview_delivery-date_date"
+                                            *ngIf="projectDetails && projectDetails.Id !== 0">
+                                            {{ projectDetails.DeliveryDate | date: 'dd MMMM yyyy' }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                            <!-- End of Each row section: Delivery Date -->
+
+                            <!-- Each row section: Project duration -->
+                            <div id="managerX_admin-overview_project-duration_section" class="col-12 each_row_section">
+                                <!-- Label section -->
+                                <div class="label_div_section">
+                                    <p class="label_para">
+                                        <i id="managerX_admin-overview_project-duration_icon" class="fa fa-clock-o"></i>
+                                        <span>Project Duration:</span>
+                                    </p>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_div_section">
+                                    <p id="managerX_admin-overview_project-duration_value" class="value_label">
+                                        <span *ngIf="projectDetails && projectDetails.Id == 0"> - </span>
+                                        <span id="managerX_admin-overview_project-duration_duration"
+                                            *ngIf="projectDetails && projectDetails.Id !== 0">
+                                            {{ projectDetails.ProjectDuration }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                            <!-- End of Each row section: Project duration -->
+
+                            <!-- Each row section: Owner -->
+                            <div id="managerX_admin-overview_owner_section" class="col-12 each_row_section">
+                                <!-- Label section -->
+                                <div class="label_div_section">
+                                    <p class="label_para">
+                                        <i id="managerX_admin-overview_owner_icon" class="fa fa-user-o"></i>
+                                        <span>Owner:</span>
+                                    </p>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_div_section">
+                                    <p id="managerX_admin-overview_owner_value" class="value_label">
+                                        <span *ngIf="projectDetails && projectDetails.Id == 0"> - </span>
+                                        <span id="managerX_admin-overview_owner_icon"
+                                            *ngIf="projectDetails && projectDetails.Id !== 0">
+                                            {{ projectDetails.Owner }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                            <!-- End of Each row section: Owner -->
+
+                            <!-- Each row section: Address -->
+                            <div id="managerX_admin-overview_address_section" class="col-12 each_row_section">
+                                <!-- Label section -->
+                                <div class="label_div_section">
+                                    <p class="label_para">
+                                        <i id="managerX_admin-overview_address_icon" class="fa fa-map-marker"></i>
+                                        <span>Address:</span>
+                                    </p>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_div_section">
+                                    <p id="managerX_admin-overview_address_value" class="value_label">
+                                        <span *ngIf="projectDetails && projectDetails.Id == 0"> - </span>
+                                        <span id="managerX_admin-overview_address_text"
+                                            *ngIf="projectDetails && projectDetails.Id !== 0">
+                                            {{ projectDetails.Address }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                            <!-- End of Each row section: Address -->
+
+                            <!-- Each row section: Project Manager Company -->
+                            <div id="managerX_admin-overview_pm-company_section" class="col-12 each_row_section">
+                                <!-- Label section -->
+                                <div class="label_div_section">
+                                    <p class="label_para">
+                                        <i id="managerX_admin-overview_pm-company_icon" class="fa fa-wrench"></i>
+                                        <span>{{'PM' | appUpdateUserType}} Company:</span>
+                                    </p>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_div_section">
+                                    <p id="managerX_admin-overview_pm-company_value" class="value_label">
+                                        <span *ngIf="projectDetails && projectDetails.Id == 0"> - </span>
+                                        <span id="managerX_admin-overview_pm-company_text"
+                                            *ngIf="projectDetails && projectDetails.Id !== 0">
+                                            {{ projectDetails.BuilderCompany }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                            <!-- End of Each row section: Project Manager Company -->
+                        </div>
+                        <!-- End of Content body section -->
+                    </div>
+                    <!-- End of Container section -->
+                </div>
+                <!-- End of Box container section -->
+            </div>
+            <!-- End of Project information box section -->
+
+            <!-- Stage overview section -->
+            <div class="col-sm-12 col-lg-6">
+                <!-- Box container section -->
+                <div class="p-2  stage-overview-container bg-content">
+                    <!-- Container section -->
+                    <div class="container mt-2">
+                        <!-- Sub title section -->
+                        <div id="managerX_admin-overview_stage-overview_sub-title" class="mb-3 sub_title">Stage Overview
+                        </div>
+                        <!-- End of Sub title section -->
+
+                        <!-- Content body section -->
+                        <div class="row row-cols-auto pt-2">
+                            <!-- Heading sections -->
+                            <div id="managerX_admin-overview_stage-overview_heading" class="col-12 heading_section">
+                                <!-- Stage heading -->
+                                <div class="col-6 each_col stage_col_width">
+                                    <span id="managerX_admin-overview_stage-overview_text"
+                                        class="header_label_span">STAGE</span>
+                                </div>
+                                <!-- End of Stage heading -->
+
+                                <!-- Status heading -->
+                                <div class="col-3 each_col status_col_width_status">
+                                    <span id="managerX_admin-overview_stage-overview_text2"
+                                        class="header_label_span">STATUS</span>
+                                </div>
+                                <!-- End of Status heading -->
+
+                                <!-- Subtasks heading -->
+                                <div class="col-3 each_col final_col">
+                                    <span id="managerX_admin-overview_stage-overview_text3"
+                                        class="header_label_span">SUBTASKS</span>
+                                </div>
+                                <!-- End of Subtasks heading -->
+                            </div>
+                            <!-- End of Heading sections -->
+
+                            <!-- When the data is empty -->
+                            <div id="managerX_admin-overview_stage-overview_empty-content" class="col-12 empty_content"
+                                *ngIf="stageList.length == 0">
+                                There are no records to display
+                            </div>
+                            <!-- End of When the data is empty -->
+
+                            <!-- Body content sections -->
+                            <div class="col-12">
+                                <p-scroller id="managerX_admin-overview_stage-overview_scroller" [items]="stageList"
+                                    [itemSize]="50" [showLoader]="false" [delay]="250" [loading]="false" [lazy]="true"
+                                    (onLazyLoad)="onLazyLoad($event)" styleClass="border-1 surface-border"
+                                    [style]="{'height': '200px'}">
+                                    <!-- Ng template section for the list -->
+                                    <ng-template pTemplate="item" let-item let-options="options">
+                                        <!-- Setting the content -->
+                                        <div id="managerX_admin-overview_stage-overview_body-content"
+                                            class="col-12 body_content_section">
+                                            <!-- Stage heading -->
+                                            <div class="col-6 each_col  stage_col_width">
+                                                <!-- Green tick icon -->
+                                                <i id="managerX_admin-overview_stage-overview_stage-icon" class="fa"
+                                                    [ngClass]="{'fa-check-circle': item.StatusCode === 'COM',
+                                                    'fa-check-circle-o ': item.StatusCode !== 'COM'  }"
+                                                    [ngStyle]="{'color': item.StatusCode === 'COM' ? '#44AA00' : '#a3a3a3' }"></i>
+                                                <!-- End of Green tick icon -->
+
+                                                <!-- Label section -->
+                                                <div class="value_content_lbl ">
+                                                    <span id="managerX_admin-overview_stage-overview_label"
+                                                        class="stage_name_lbl">{{item.Name}}</span>
+                                                </div>
+                                                <!-- End of Label section -->
+                                            </div>
+                                            <!-- End of Stage heading -->
+
+                                            <!-- Status heading -->
+                                            <div class="col-3 each_col status_col_width_status">
+                                                <div id="managerX_admin-overview_stage-overview_status-content"
+                                                    class="value_content_lbl status_div_section"
+                                                    [ngClass]="item.StatusCode">
+                                                    <span>{{item.StatusName}}</span>
+                                                </div>
+                                            </div>
+                                            <!-- End of Status heading -->
+
+                                            <!-- Subtasks heading -->
+                                            <div class="col-3 each_col final_col">
+                                                <div class="value_content_lbl">
+                                                    <span>{{item.TotalCompletedSubTasks}}/{{item.TotalSubTasks}}
+                                                        Subtasks
+                                                        completed</span>
+                                                </div>
+                                            </div>
+                                            <!-- End of Subtasks heading -->
+                                        </div>
+                                        <!-- End of Setting the content -->
+                                    </ng-template>
+                                    <!-- End of Ng template section for the list -->
+                                </p-scroller>
+                            </div>
+                            <!-- End of Body content sections -->
+                        </div>
+                        <!-- End of Content body section -->
+                    </div>
+                    <!-- End of Container section -->
+                </div>
+                <!-- End of Box container section -->
+            </div>
+            <!-- End of Stage overview section -->
+        </div>
+        <!-- End of First row section -->
+
+        <!-- Second row section -->
+        <div class="my-2 p-3 border_radius bg-content">
+            <!-- Sub title section -->
+            <div id="managerX_admin-overview_current-stage_sub-title" class="mb-3 sub_title">Current Stage</div>
+            <!-- End of Sub title section -->
+
+            <!-- Content section -->
+            <div id="managerX_admin-overview_current-stage_content" class="col my-3" *ngIf="currentSubStageCategory">
+                <!-- Stage heading section -->
+                <div class="caption-container">
+                    <div class="pt-3 row_heading_section">
+                        <!-- Left align section -->
+                        <div class="left_align_content sub_heading_section">
+                            <span>{{currentSubStageCategory.Name}}</span>
+                            <i id="managerX_admin-overview_current-stage_status-icon"
+                                class="fa fa-circle overall_status"
+                                *ngIf="currentSubStageCategory.TaskDetailsList.length != 0"
+                                [ngClass]="currentSubStageCategory.OverallStatusCode.toUpperCase()"
+                                aria-hidden="true"></i>
+                        </div>
+                        <!-- End of Left align section -->
+
+                        <!-- Right align section -->
+                        <div class="right_align_content sub_heading_section">
+                            <span>{{this.CompletedTaskCount}}/ {{this.TotTaskCount}} TASKS COMPLETED</span>
+                        </div>
+                        <!-- End of Right align section -->
+                    </div>
+                </div>
+                <!-- End of Stage heading section -->
+
+                <!-- Current stage content section -->
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Current prime ng table section -->
+                        <p-table id="managerX_admin-overview_current-stage_table"
+                            [value]="currentSubStageCategory.TaskDetailsList">
+                            <!-- Headers section -->
+                            <ng-template pTemplate="header">
+                                <tr id="managerX_admin-overview_current-stage_table_headers"
+                                    class="table_header_section">
+                                    <th id="managerX_admin-overview_current-stage_table-task-name"
+                                        class="header_label_span task_name_col">TASK NAME</th>
+                                    <th id="managerX_admin-overview_current-stage_table-status"
+                                        class="header_label_span status_col">STATUS</th>
+                                    <th id="managerX_admin-overview_current-stage_table-person"
+                                        class="header_label_span person_col">PERSON</th>
+                                    <th id="managerX_admin-overview_current-stage_table-due-date"
+                                        class="header_label_span due_date_col">DUE DATE</th>
+                                    <th id="managerX_admin-overview_current-stage_table-attachments"
+                                        class="header_label_span attachments_col">ATTACHMENTS</th>
+                                </tr>
+                            </ng-template>
+                            <!-- End of Headers section -->
+
+                            <!-- Table body content section -->
+                            <ng-template pTemplate="body" let-task>
+                                <tr class="current-tr">
+                                    <td id="managerX_admin-overview_current-stage_task_name" class="task_name_col">
+                                        <!-- Task name section -->
+                                        <div class="display_flex_center">
+                                            <!-- Green tick icon -->
+                                            <i id="managerX_admin-overview_current-stage_table-task-name_icon"
+                                                class="fa" [ngClass]="{'fa-check-circle': task.StatusCode === 'COM',
+                                         'fa-check-circle-o ': task.StatusCode !== 'COM'  }"
+                                                [ngStyle]="{'color': task.StatusCode === 'COM' ? '#44AA00' : '#a3a3a3' }"></i>
+                                            <!-- End of Green tick icon -->
+
+                                            <!-- Label section -->
+                                            <div class="value_content_lbl_table">
+                                                <span class="stage_name_lbl">{{task.Name}}</span>
+                                            </div>
+                                            <!-- End of Label section -->
+                                        </div>
+                                        <!-- End of Task name section -->
+                                    </td>
+                                    <td id="managerX_admin-overview_current-stage-table_status" class="status_col">
+                                        <!-- Status section -->
+                                        <div class="display_flex_center value_content_lbl_table">
+                                            <div id="managerX_admin-overview_current-stage_tablestatus-content"
+                                                class="value_content_lbl status_div_section"
+                                                [ngClass]="task.StatusCode">
+                                                <span>{{task.StatusName}}</span>
+                                            </div>
+                                        </div>
+                                        <!-- End of Status section -->
+                                    </td>
+                                    <td id="managerX_admin-overview_current-stage-table_person" class="person_col">
+                                        <!-- Display the user section -->
+                                        <div class="display_flex_center display_user_section">
+                                            <!-- Avatar section -->
+                                            <div class="avatar_section">
+                                                <img id="managerX_admin-overview_current-stage-table_person-avatar-default"
+                                                    *ngIf="!task.PersonList[0].Avatar"
+                                                    src="../../../../assets/Images/default_avatar.png">
+                                                <img id="managerX_admin-overview_current-stage-table_person-avatar"
+                                                    *ngIf="task.PersonList[0].Avatar" [src]="task.PersonList[0].Avatar">
+                                            </div>
+                                            <!-- End of Avatar section -->
+                                            <!-- Name and role section -->
+                                            <div class="name_role_section">
+                                                <!-- Name section -->
+                                                <div class="content_div">
+                                                    <span id="managerX_admin-overview_current-stage_person-name-val"
+                                                        class="content_val name_section">{{task.PersonList[0].FirstName}}
+                                                        {{task.PersonList[0].LastName}}</span>
+                                                </div>
+                                                <!-- End of Name section -->
+
+                                                <!-- Role name section -->
+                                                <div class="content_div">
+                                                    <span id="managerX_admin-overview_current-stage_table-person-role"
+                                                        class="content_val role_name">{{task.PersonList[0].RoleName}}</span>
+                                                </div>
+                                                <!-- End of Role name section -->
+                                            </div>
+                                            <!-- End of Name and role section -->
+                                        </div>
+                                        <!-- End of Display the user section -->
+                                    </td>
+                                    <td id="managerX_admin-overview_current-stage_tabledue-date" class="due_date_col">
+                                        <!-- Due date section -->
+                                        <div class="display_flex_center value_content_lbl_table">
+                                            <span class="date_lbl">{{ task.DueDate | date: 'dd MMM yyyy ' }}</span>
+                                        </div>
+                                        <!-- End of Due date section -->
+                                    </td>
+                                    <td id="managerX_admin-overview_current-stage-table_attachments"
+                                        class="attachments_col">
+                                        <div class="value_content_lbl_table">
+                                            <!-- Files section -->
+                                            <div id="managerX_admin-overview_current-stage-table_attachments-files"
+                                                class="each_attachment_section" *ngIf="task.NoOfFiles != 0">
+                                                <!-- File icon section -->
+                                                <i class="fa fa-file-text-o"></i>
+                                                <!-- End of File icon section -->
+
+                                                <!-- No section -->
+                                                <span>{{task.NoOfFiles}}</span>
+                                                <!-- End of No section -->
+                                            </div>
+                                            <!-- End of Files section -->
+
+                                            <!-- Images section -->
+                                            <div id="managerX_admin-overview_current-stage_attachments-images"
+                                                class="each_attachment_section" *ngIf="task.NoOfImages != 0">
+                                                <!-- Images icon section -->
+                                                <i class="fa fa-paperclip"></i>
+                                                <!-- End of Images icon section -->
+
+                                                <!-- No section -->
+                                                <span>{{task.NoOfImages}}</span>
+                                                <!-- End of No section -->
+                                            </div>
+                                            <!-- End of Images section -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <!-- End of Table body content section -->
+                        </p-table>
+                        <!-- End of Current prime ng table section -->
+
+                        <!--End of Client list table-->
+                        <div id="managerX_admin-overview_current-empty_content_text"
+                            *ngIf="currentSubStageCategory.TaskDetailsList.length == 0">
+                            <div colspan="9" class="empty_content">
+                                There are no records to display
+                            </div>
+                        </div>
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-overview_paginator_section" class="paginator_sec"
+                            #modulePaginator
+                            *ngIf="currentSubStageCategory.TaskDetailsList && currentSubStageCategory.TaskDetailsList.length > 0 && currentSubStageCategory.TaskDetailsList[0].TotalRecords > currentStageFilter.RecordsPerPage"
+                            [ngClass]="(currentSubStageCategory.TaskDetailsList && currentSubStageCategory.TaskDetailsList.length > 0 && currentSubStageCategory.TaskDetailsList[0].TotalRecords > currentStageFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="currentStageFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                            [totalRecords]="(currentSubStageCategory.TaskDetailsList.length>0)? currentSubStageCategory.TaskDetailsList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                </div>
+                <!-- End of Current stage content section -->
+            </div>
+            <!-- End of Content section -->
+        </div>
+        <!-- End of Second row section -->
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

@@ -1,0 +1,481 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 projects">
+        <!-- Top bar section -->
+        <div id="managerX_admin-projects_top-bar_section" class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_admin-projects_page_title" class="page_title" *ngIf="currentState == 'DISPLAY_TABLE'">
+                Project
+                Overview</div>
+            <!-- End of Title section -->
+
+            <!-- Display the project name -->
+            <div id="managerX_admin-projects_display-project-name_section" class="display_project_name"
+                *ngIf="currentClientDetails && currentState == 'PROJECT'">
+                <!-- Arrow section -->
+                <div id="managerX_admin-projects_back-icon_button" class="back_icon" (click)="goBackOnClick()">
+                    <i id="managerX_admin-projects_back-icon_icon" class="fa fa-angle-left" aria-hidden="true"></i>
+                </div>
+                <!-- End of Arrow section -->
+
+                <!-- Name section -->
+                <div>
+                    <div id="managerX_admin-projects_client-name_title" class="page_title">
+                        {{currentClientDetails.FirstName}} {{currentClientDetails.LastName}}</div>
+                    <div id="managerX_admin-projects_client-address_text" class="address_lbl">
+                        {{currentClientDetails.Address}}</div>
+                </div>
+                <!-- End of Name section -->
+            </div>
+            <!-- End of Display the project name -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_admin-projects_search-field_input" class="custom-icon-field">
+                <div id="managerX_admin-projects_search-input-container_container" class="input-container">
+                    <p-inputIcon class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_admin-projects_search-box_input" type="text" pInputText placeholder="Search"
+                        class="custom-search-box" [(ngModel)]="currentFilter.SearchQuery"
+                        (input)="currentFilter.CurrentPage = 1;GetAllClientListDetails();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- projects table section -->
+        <div id="managerX_admin-projects_table_section" class="col-12"
+            [ngClass]="(currentState !== 'DISPLAY_TABLE')?'hide_component':''">
+            <!-- Current prime ng table section -->
+            <p-table id="managerX_admin-projects_projects_table" [value]="clientList">
+                <!-- Headers section -->
+                <ng-template pTemplate="header">
+                    <tr id="managerX_admin-projects_table_header" class="table_header_section">
+                        <th id="managerX_admin-projects_client-name_header" class="header_label_span person_col">{{'CL'
+                            |
+                            appUpdateUserType}} Name</th>
+                        <th id="managerX_admin-projects_address_header" class="header_label_span person_col">Address
+                        </th>
+                        <th id="managerX_admin-projects_current-stage_header" class="header_label_span person_col">
+                            Current
+                            Stage</th>
+                        <th id="managerX_admin-projects_current-task_header" class="header_label_span person_col">
+                            Current
+                            task</th>
+                        <th id="managerX_admin-projects_due-date_header" class="header_label_span person_col">Due Date
+                        </th>
+                        <th id="managerX_admin-projects_phone-number_header"
+                            class="header_label_span contact_email_col">
+                            Phone Number</th>
+                    </tr>
+                </ng-template>
+                <!-- End of Headers section -->
+
+                <!-- Table body content section -->
+                <ng-template pTemplate="body" let-project>
+                    <tr id="managerX_admin-projects_project-row_tr" class="current-tr"
+                        (click)="projectOnClick(project.Id, project.CreatorId)">
+                        <td id="managerX_admin-projects_client-name_td" class="person_col"
+                            (click)="$event.stopPropagation();clientOnClick(project.Id, project.CreatorId)"
+                            pTooltip="Edit {{'CL' | appUpdateUserType}}" tooltipPosition="top"
+                            [tooltipStyleClass]="(project.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Display the user section -->
+                            <div id="managerX_admin-projects_client-info_section"
+                                class="display_flex_center display_user_section">
+                                <!-- info icon -->
+                                <i id="managerX_admin-projects_info-icon_button" class="fa fa-info-circle info_icon"
+                                    aria-hidden="true" (click)="$event.stopPropagation();opInfo.toggle($event)"></i>
+                                <!-- End of info icon -->
+
+                                <!-- Avatar section -->
+                                <div id="managerX_admin-projects_avatar_section" class="avatar_section">
+                                    <img id="managerX_admin-projects_avatar_default-image" *ngIf="!project.Avatar"
+                                        src="../../../../assets/Images/default_avatar.png">
+                                    <img id="managerX_admin-projects_avatar_image" *ngIf="project.Avatar"
+                                        [src]="project.Avatar">
+                                </div>
+                                <!-- End of Avatar section -->
+                                <!-- Name and role section -->
+                                <div id="managerX_admin-projects_name-role_section" class="name_role_section">
+                                    <!-- Name section -->
+                                    <div class="content_div">
+                                        <span id="managerX_admin-projects_client-fullname_text"
+                                            class="content_val name_section"
+                                            *ngIf="project.FirstName != ''">{{project.FirstName}}
+                                            {{project.LastName}}</span>
+                                        <!-- Edit icon -->
+
+                                        <i id="managerX_admin-projects_client-edit_button"
+                                            *ngIf="project.FirstName != '' && project.CreatorId == overallCookieInterface.GetUserId() || overallCookieInterface.GetUserId() < 0"
+                                            class="fa fa-pencil edit_icon" aria-hidden="true"></i>
+                                        <!-- End of Edit icon -->
+
+                                        <span id="managerX_admin-projects_no-client-name_text"
+                                            class="content_val name_section" *ngIf="!(project.FirstName != '')">-</span>
+                                    </div>
+                                    <!-- End of Name section -->
+                                </div>
+                                <!-- End of Name and role section -->
+                            </div>
+                            <!-- End of Display the user section -->
+                        </td>
+
+                        <td id="managerX_admin-projects_address_td" class="role_name_col"
+                            pTooltip="View Project Information" tooltipPosition="top"
+                            [tooltipStyleClass]="(project.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <div id="managerX_admin-projects_address-value_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-projects_address_text" class="content_lbl"
+                                    *ngIf="project.Address && project.Address != ''">{{
+                                    project.Address}}</span>
+                                <span id="managerX_admin-projects_no-address_text" class="content_lbl"
+                                    *ngIf="!(project.Address && project.Address != '')">{{
+                                    project.Address}}</span>
+                            </div>
+                        </td>
+
+                        <td id="managerX_admin-projects_current-stage_td" class="person_col"
+                            pTooltip="View Project Information" tooltipPosition="top"
+                            [tooltipStyleClass]="(project.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-projects_current-stage-value_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-projects_stage_text" class="content_lbl"
+                                    *ngIf="project.CurrentStage && project.CurrentStage != ''">{{
+                                    project.CurrentStage}}</span>
+                                <span id="managerX_admin-projects_no-stage_text" class="content_lbl"
+                                    *ngIf="!(project.CurrentStage && project.CurrentStage != '')">-</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_admin-projects_current-task_td" class="person_col"
+                            pTooltip="View Project Information" tooltipPosition="top"
+                            [tooltipStyleClass]="(project.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-projects_current-task-value_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-projects_task-text_text" class="content_lbl"
+                                    *ngIf="project.CurrentTask && project.CurrentTask != ''">{{
+                                    project.CurrentTask}}</span>
+                                <span id="managerX_admin-projects_no-task_text" class="content_lbl"
+                                    *ngIf="!(project.CurrentTask && project.CurrentTask != '')">-</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_admin-projects_due-date_td" class="person_col"
+                            pTooltip="View Project Information" tooltipPosition="top"
+                            [tooltipStyleClass]="(project.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-projects_due-date-value_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-projects_due-date-text_text" class="content_lbl"
+                                    *ngIf="project.ProjectId != 0 && project.DueDate">
+                                    {{ project.DueDate | date: 'dd MMM yyyy'}}
+                                </span>
+                                <span id="managerX_admin-projects_no-due-date_text" class="content_lbl"
+                                    *ngIf="!(project.ProjectId != 0 && project.DueDate)">-</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td class="contact_address_col" pTooltip="View Project Information" tooltipPosition="top"
+                            [tooltipStyleClass]="(project.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-projects_phoneNumber_value-section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_admin-projects_phoneNumber-value_lbl" class="content_lbl"
+                                    *ngIf="project.PhoneNumber && project.PhoneNumber != ''">{{
+                                    project.PhoneNumber}}</span>
+                                <span id="managerX_admin-projects_noPhoneNumber-value_lbl" class="content_lbl"
+                                    *ngIf="!(project.PhoneNumber && project.PhoneNumber != '')">-</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+                    </tr>
+                </ng-template>
+                <!-- Table body content section -->
+            </p-table>
+            <!-- End of Current prime ng table section -->
+
+            <!--End of Client list table-->
+            <div *ngIf="clientList.length == 0">
+                <div id="managerX_admin-projects_noRecords-empty_content" colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+            </div>
+            <!-- Pagination section -->
+            <p-paginator id="managerX_admin-projects_paginator_section" class="paginator_sec" #modulePaginator
+                *ngIf="clientList && clientList.length > 0 && clientList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(clientList && clientList.length > 0 && clientList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                [totalRecords]="(clientList.length>0)? clientList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+
+            <!-- Add new contact button -->
+            <div class="col-12 " style="margin-top:5px">
+                <button id="managerX_admin-projects_addNewClient_button" class="add_note_btn"
+                    *ngIf="!IsShowPurchaseButton ||  overallCookieInterface.GetUserId() < 0"
+                    (click)="addNewClientOnClick()">
+                    <span class="icon_lbl">
+                        <i id="managerX_admin-projects_addNewClient_icon" class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+
+                    <span *ngIf="overallCookieInterface.GetUserId() > 0">Add a new {{('CL' |
+                        appUpdateUserType).toLowerCase()}} ({{restCreatingTotal}})</span>
+                    <span *ngIf="overallCookieInterface.GetUserId() < 0">Add a new {{('CL' |
+                        appUpdateUserType).toLowerCase()}} </span>
+                </button>
+                &nbsp;
+                <!-- Add Purchase more users button -->
+                <button *ngIf="IsShowPurchaseButton" id="managerX_admin-contacts_Purchase-nore-user_button"
+                    class="add_note_btn" (click)="addPurchaseClick()">
+                    <span class="icon_lbl">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    <span>Purchase more {{('CL' |
+                        appUpdateUserType).toLowerCase()}} </span>
+                </button>
+                <!-- End of Add new contact button -->
+            </div>
+            <!-- End of Add new contact button -->
+        </div>
+        <!-- End of projects table section -->
+
+        <!-- Display the project details section -->
+        <div id="managerX_admin-projects_projectDetails_section" class="col-12"
+            [ngClass]="(currentState !== 'PROJECT')?'hide_component':''">
+            <!-- Nav section -->
+            <ul id="managerX_admin-projects_nav_tabs" class="nav nav-tabs custom-nav-tabs" id="myTab" role="tablist">
+                <li id="managerX_admin-projects_projectInformation_tab" class="nav-item" role="presentation"
+                    (click)="selectedSubTab = 'PROJECT_INFORMATION'">
+                    <a id="managerX_admin-projects_nav-link_link" class="nav-link active" id="project-info-tab"
+                        data-bs-toggle="tab" href="#project-info" role="tab" aria-controls="project-info"
+                        aria-selected="true">Project Information</a>
+                </li>
+                <li id="managerX_admin-projects_checklist_tab" class="nav-item" role="presentation"
+                    (click)="selectedSubTab = 'PROJECT_CHECKLIST'">
+                    <a id="managerX_admin-projects_nav-link_link2" class="nav-link" id="checklist-tab"
+                        data-bs-toggle="tab" href="#checklist" role="tab" aria-controls="checklist"
+                        aria-selected="false">Checklist</a>
+                </li>
+                <li id="managerX_admin-projects_contract_tab" class="nav-item" role="presentation"
+                    (click)="selectedSubTab = 'PROJECT_CONTRACT'">
+                    <a id="managerX_admin-projects_nav-link_link3" class="nav-link" id="contract-tab"
+                        data-bs-toggle="tab" href="#contract" role="tab" aria-controls="contract"
+                        aria-selected="false">Contract</a>
+                </li>
+            </ul>
+            <!-- End of Nav section -->
+
+            <!-- Project information section -->
+            <div id="managerX_admin-projects_projectInformation_content" class="tab-content" class="col-12"
+                id="myTabContent">
+                <div id="managerX_admin-projects_projectInformation_section"
+                    *ngIf="selectedSubTab == 'PROJECT_INFORMATION'" class="tab-pane fade show active col-12"
+                    id="project-info" role="tabpanel" aria-labelledby="project-info-tab">
+                    <!-- First col section -->
+                    <div id="managerX_admin-projects_firstCol_section" class="col-6">
+                        <!-- Each row section: Start Date -->
+                        <div id="managerX_admin-projects_startDate_row" class="col-12 each_row_section">
+                            <!-- Label section -->
+                            <div id="managerX_admin-projects_startDate_label" class="label_div_section">
+                                <p id="managerX_admin-projects_startDate-label_text" class="label_para">
+                                    <i id="managerX_admin-projects_startDate-span_icon" class="fa fa-calendar-o"
+                                        aria-hidden="true"></i>
+                                    <span id="managerX_admin-projects_startDate-span_lbl">Start Date:</span>
+                                </p>
+                            </div>
+                            <!-- End of Label section -->
+
+                            <!-- Value section -->
+                            <div id="managerX_admin-projects_startDate_value-section" class="value_div_section">
+                                <p id="managerX_admin-projects_startDate-value_lbl" class="value_label">
+                                    <span *ngIf="currentProjectDetails && currentProjectDetails.Id == 0"> - </span>
+                                    <span id="managerX_admin-projects_startDate-value_date"
+                                        *ngIf="currentProjectDetails && currentProjectDetails.Id !== 0">
+                                        {{ currentProjectDetails.StartDate | date: 'dd MMMM, yyyy' }}
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- End of Value section -->
+                        </div>
+                        <!-- End of Each row section: Start Date -->
+
+                        <!-- Each row section: Delivery Date -->
+                        <div id="managerX_admin-projects_deliveryDate_row" class="col-12 each_row_section">
+                            <!-- Label section -->
+                            <div id="managerX_admin-projects_deliveryDate_label" class="label_div_section">
+                                <p id="managerX_admin-projects_deliveryDate-label_text" class="label_para">
+                                    <i id="managerX_admin-projects_deliveryDate_icon" class="fa fa-anchor"></i>
+                                    <span id="managerX_admin-projects_deliveryDate-span_lbl">Delivery Date:</span>
+                                </p>
+                            </div>
+                            <!-- End of Label section -->
+
+                            <!-- Value section -->
+                            <div id="managerX_admin-projects_deliveryDate-value_section" class="value_div_section">
+                                <p id="managerX_admin-projects_deliveryDate-value_lbl" class="value_label">
+                                    <span *ngIf="currentProjectDetails && currentProjectDetails.Id == 0"> - </span>
+                                    <span id="managerX_admin-projects_deliveryDate-defvalue_lbl"
+                                        *ngIf="currentProjectDetails && currentProjectDetails.Id !== 0">
+                                        {{ currentProjectDetails.DeliveryDate | date: 'dd MMMM yyyy' }}
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- End of Value section -->
+                        </div>
+                        <!-- End of Each row section: Delivery Date -->
+
+                        <!-- Each row section: Project duration -->
+                        <div id="managerX_admin-projects_projectDuration_row" class="col-12 each_row_section">
+                            <!-- Label section -->
+                            <div id="managerX_admin-projects_projectDuration_label" class="label_div_section">
+                                <p id="managerX_admin-projects_projectDuration-label_text" class="label_para">
+                                    <i id="managerX_admin-projects_projectDuration_icon" class="fa fa-clock-o"></i>
+                                    <span id="managerX_admin-projects_projectDuration-span_lbl">Project Duration:</span>
+                                </p>
+                            </div>
+                            <!-- End of Label section -->
+
+                            <!-- Value section -->
+                            <div id="managerX_admin-projects_projectDuration_value" class="value_div_section">
+                                <p id="managerX_admin-projects_projectDuration_lbl" class="value_label">
+                                    <span *ngIf="currentProjectDetails && currentProjectDetails.Id == 0"> - </span>
+                                    <span id="managerX_admin-projects_projectDuration_text"
+                                        *ngIf="currentProjectDetails && currentProjectDetails.Id !== 0">
+                                        {{ currentProjectDetails.ProjectDuration }}
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- End of Value section -->
+                        </div>
+                        <!-- End of Each row section: Project duration -->
+                    </div>
+                    <!-- End of First col section -->
+
+                    <!-- Second col section -->
+                    <div id="managerX_admin-projects_secondCol_section" class="col-6">
+                        <!-- Each row section: Owner -->
+                        <div id="managerX_admin-projects_owner_row" class="col-12 each_row_section">
+                            <!-- Label section -->
+                            <div id="managerX_admin-projects_owner_label" class="label_div_section">
+                                <p id="managerX_admin-projects_owner_text" class="label_para">
+                                    <i id="managerX_admin-projects_owner_icon" class="fa fa-user-o"></i>
+                                    <span id="managerX_admin-projects_owner-span_lbl">Owner:</span>
+                                </p>
+                            </div>
+                            <!-- End of Label section -->
+
+                            <!-- Value section -->
+                            <div id="managerX_admin-projects_owner-value_section" class="value_div_section">
+                                <p id="managerX_admin-projects_owner-value_label" class="value_label">
+                                    <span *ngIf="currentProjectDetails && currentProjectDetails.Id == 0"> - </span>
+                                    <span id="managerX_admin-projects_owner-value_text"
+                                        *ngIf="currentProjectDetails && currentProjectDetails.Id !== 0">
+                                        {{ currentProjectDetails.Owner }}
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- End of Value section -->
+                        </div>
+                        <!-- End of Each row section: Owner -->
+
+                        <!-- Each row section: Address -->
+                        <div id="managerX_admin-projects_address_section" class="col-12 each_row_section">
+                            <!-- Label section -->
+                            <div id="managerX_admin-projects_address_label" class="label_div_section">
+                                <p id="managerX_admin-projects_address-label_text" class="label_para">
+                                    <i id="managerX_admin-projects_address_icon" class="fa fa-map-marker"></i>
+                                    <span>Address:</span>
+                                </p>
+                            </div>
+                            <!-- End of Label section -->
+
+                            <!-- Value section -->
+                            <div id="managerX_admin-projects_address-value_section" class="value_div_section">
+                                <p id="managerX_admin-projects_address-value_label" class="value_label">
+                                    <span *ngIf="currentProjectDetails && currentProjectDetails.Id == 0"> - </span>
+                                    <span id="managerX_admin-projects_address_value_text"
+                                        *ngIf="currentProjectDetails && currentProjectDetails.Id !== 0">
+                                        {{ currentProjectDetails.Address }}
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- End of Value section -->
+                        </div>
+                        <!-- End of Each row section: Address -->
+
+                        <!-- Each row section: Project Manager Company -->
+                        <div id="managerX_admin-projects_pm-company_section" class="col-12 each_row_section">
+                            <!-- Label section -->
+                            <div id="managerX_admin-projects_pm-company_label" class="label_div_section">
+                                <p id="managerX_admin-projects_pm-company-label_text" class="label_para">
+                                    <i id="managerX_admin-projects_pm-company_icon" class="fa fa-wrench"></i>
+                                    <span id="managerX_admin-projects_pm-company_text">{{'PM' | appUpdateUserType}}
+                                        Company:</span>
+                                </p>
+                            </div>
+                            <!-- End of Label section -->
+
+                            <!-- Value section -->
+                            <div id="managerX_admin-projects_pm-company-value_section" class="value_div_section">
+                                <p id="managerX_admin-projects_pm-company-value_label" class="value_label">
+                                    <span *ngIf="currentProjectDetails && currentProjectDetails.Id == 0"> - </span>
+                                    <span id="managerX_admin-projects_pm-company_text"
+                                        *ngIf="currentProjectDetails && currentProjectDetails.Id !== 0">
+                                        {{ currentProjectDetails.BuilderCompany }}
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- End of Value section -->
+                        </div>
+                        <!-- End of Each row section: Project Manager Company -->
+                    </div>
+                    <!-- End of Second col section -->
+                </div>
+
+                <!-- Project Checklist section -->
+                <div id="managerX_admin-projects_project-checklist_tab" *ngIf="selectedSubTab == 'PROJECT_CHECKLIST'"
+                    class="tab-pane fade show active" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+                    <app-admin-checklist id="managerX_admin-projects_project-checklist_component"
+                        [SelectedClientId]="currentClientDetails.Id" [DisplayTopBar]="false"></app-admin-checklist>
+                </div>
+                <!-- End of Project Checklist section-->
+
+                <!-- Project Contract section -->
+                <div id="managerX_admin-projects_project-contract_tab" *ngIf="selectedSubTab == 'PROJECT_CONTRACT'"
+                    class="tab-pane fade show active" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+                    <app-admin-project-contract id="managerX_admin-projects_project-contract_component"
+                        [SelectedClientId]="currentClientDetails.Id"
+                        [DisplayTopBar]="false"></app-admin-project-contract>
+                </div>
+                <!-- End of Project Contract section-->
+            </div>
+            <!-- End of Project information section -->
+
+
+        </div>
+        <!-- End of Display the project details section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Display side panel -->
+    <p-sidebar id="managerX_admin-projects_add-new-client_sidebar" *ngIf="isAddNewClientDetailsVisible"
+        class="projects_slide" [(visible)]="isAddNewClientDetailsVisible" [position]="'right'" [modal]="true">
+        <app-new-client id="managerX_admin-projects_new-client_component"
+            (closeSlideInPopup)="closeSlideInPopup($event)"
+            (closeSlideInPopupRefresh)="closeSlideInPopupRefresh($event)"
+            (closeSlideInPopupDeleteRefresh)="closeSlideInPopupDeleteRefresh($event)" [addedByState]="'AD'"
+            [SelectedPersonClientId]="SelectedPersonClientId"></app-new-client>
+    </p-sidebar>
+    <!-- End of Display side panel -->
+
+    <!-- Overlay panel -->
+    <p-overlayPanel id="managerX_admin-projects_overlay_panel" #opInfo>
+        <div id="managerX_admin-projects_overlay-info_text" class="col-12 info_section">
+            <span>Only the creator can edit this client.</span>
+        </div>
+    </p-overlayPanel>
+    <!-- End of Overlay panel -->
+</ion-content>

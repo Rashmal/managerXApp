@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Stripe Plans</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container stripe_page">
+    <!-- Row section -->
+    <div class="row justify-content-center align-items-center">
+
+      <!-- Header col section -->
+      <div class="col-lg-12 col-md-6 p-5">
+        <h1> <i class=" fa fa-chevron-left " style="cursor: pointer;" (click)="backFunction()"></i> Manger X
+          Subscription
+          Plans</h1>
+      </div>
+    </div>
+
+    <!-- Row section -->
+    <div class="row justify-content-center align-items-center">
+      <!-- Right col section -->
+      <div class="col-lg-12 col-md-6 p-5">
+        <div class="container stripe_plan_page">
+          <div class="row justify-content-center">
+
+            <!-- Admin Plan -->
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="pricing-card">
+                <h3 class="plan-title"> Plan 500</h3>
+                <p class="price">${{AdminPlanPrice}}us</p>
+                <ul class="plan-features">
+                  <!--   <li><strong>Access Level:</strong> Full Access</li> -->
+                  <li><strong>Customer Support:</strong> Priority Support</li>
+
+                  <li><strong>User Accounts:</strong> Up to {{ AdminLimitationAccount}}</li>
+
+                </ul>
+                <button class="btn btn-primary" (click)="doThePayment('Plan1')">Select Plan</button>
+              </div>
+            </div>
+
+            <!-- Project Manager Plan -->
+            <!--    <div class="col-lg-4 col-md-6 col-12">
+            <div class="pricing-card">
+              <h3 class="plan-title"> Plan 21</h3>
+              <p class="price">US$ {{PmPlanPrice}}</p>
+              <ul class="plan-features"> -->
+            <!--      <li><strong>Access Level:</strong> Limited Access</li> -->
+            <!-- <li><strong>Customer Support:</strong> Email Support</li>
+
+                <li><strong>User Accounts:</strong> Up to {{ PMLimitationAccount}}</li>
+
+              </ul>
+              <button class="btn btn-warning" (click)="doThePayment('Plan2')">Select Plan</button>
+            </div>
+          </div>
+ -->
+            <!-- Supplier Plan -->
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="pricing-card">
+                <h3 class="plan-title"> Plan 100</h3>
+                <p class="price"> ${{SupplierPlanPrice}}us</p>
+                <ul class="plan-features">
+                  <!--   <li><strong>Access Level:</strong> Basic Access</li> -->
+                  <li><strong>Customer Support:</strong> No Support</li>
+
+                  <li><strong>User Accounts:</strong> Up to {{ SupplerLimitationAccount}}</li>
+                </ul>
+                <button class="btn btn-success" (click)="doThePayment('Plan3')">Select Plan</button>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+
+            <!-- Note section -->
+            <div class="col-lg-12 col-md-6 col-12 d-flex justify-content-center pt-4">
+              <h5 class="extra-ratio text-center">
+                * NOTE Unlimited users can be added to any account at your Plan subscription rate per User.
+              </h5>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

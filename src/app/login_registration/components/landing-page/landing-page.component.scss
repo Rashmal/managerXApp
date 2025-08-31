@@ -1,0 +1,18 @@
+.landing_page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    text-align: center;
+    background-image: url(../../../../assets/Images/login.gif);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.landing_page img {
+    width: 63%;
+    max-width: 100%; /* Ensures the image scales within its container */
+    height: auto; /* Keeps the aspect ratio of the image */
+    object-fit: contain; /* Ensures the image is contained within the div */
+}

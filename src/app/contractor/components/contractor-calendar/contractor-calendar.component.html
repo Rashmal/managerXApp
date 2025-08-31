@@ -1,0 +1,30 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 calendar">
+        <!-- Top bar section -->
+        <div class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_contractor-calendar_page_title" class="page_title">Calendar</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField class="custom-icon-field">
+                <div class="input-container">
+                    <p-inputIcon id="managerX_contractor-calendar_search_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_contractor-calendar_search_input" type="text" pInputText placeholder="Search"
+                        class="custom-search-box" [(ngModel)]="searchQuery" (input)="GetAllTaskList();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Full calendar section -->
+        <div class="col-12 custom-padding-5px bg-content">
+            <full-calendar id="managerX_contractor-calendar_full_calendar" [options]="calendarOptions"></full-calendar>
+        </div>
+        <!-- End of Full calendar section -->
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

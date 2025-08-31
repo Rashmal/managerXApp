@@ -1,0 +1,171 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container create_account_page">
+        <!-- Row section -->
+        <div class="row justify-content-center align-items-center">
+            <!-- Left col image section -->
+            <div class="col-lg-6 col-md-6 col-12 no_padding">
+                <!-- Image section -->
+                <img id="managerx-create_account_banner_image" class="img-fluid d-none d-md-block banner_image"
+                    src="../../../../assets/Images/create.gif" alt="ManagerX login">
+                <!-- End of Image section -->
+            </div>
+            <!-- End of Left col image section -->
+
+            <!-- Right col section -->
+            <div class="col-lg-6 col-md-6 p-5">
+                <!-- Top wording section -->
+                <h1 id="managerx-create_account_title_text">Create your account</h1>
+                <!--  <p id="managerx-create_account_description_text" class="mb-5 top_para">The site is a working resource tool
+                to manage
+                and track information related to the management of task and or time related schedules and supporting
+                Documentation. The site opens the pathway of information between all Stakeholders and Related Parties.
+                We wish You great success.</p> -->
+                <p id="managerx-login_intro_paragraph" class="mb-5 top_para">The Site offers resource tools for the
+                    management of tasks and time related schedules together with Supporting Documentation.
+                    Offering transparency of information between all Stakeholders and Related Parties.
+                    <br><br>
+                    <span class="no-break">We wish You great success with your Venture!</span>
+                </p>
+                <!-- End of Top wording section -->
+
+                <!-- Form section -->
+                <div class="col-12">
+                    <!-- Email entering section -->
+                    <div id="managerx-create_account_email_input_section" class="form-group form-floating col-12 mb-3">
+                        <!-- Email input section -->
+                        <span
+                            [ngClass]="(CheckErrorCode('EMPTY$USER$EMAIL') && user_email == '')?'error-placeholder-label':''">
+                            <input id="managerx-create_account_email_input" pInputText type="email"
+                                maxlength="{{emailLimit}}" [(ngModel)]="user_email"
+                                (input)="onPasteEmailFunction($event)" inputrestriction="^[a-z A-Z 0-9 @ _ .]*$"
+                                placeholder="" />
+                            <label id="managerx-create_account_email_label" for="email" class="label_colors">Email
+                                Address</label>
+                        </span>
+                        <!-- End of Email input section -->
+
+                        <!-- Error Message -->
+                        <div id="managerx-create_account_email_empty_error1"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$USER$EMAIL')">
+                            <span>{{CheckErrorCode('EMPTY$USER$EMAIL')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Error Message -->
+                        <div id="managerx-create_account_email_empty_error2"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMAIL$FORMAT')">
+                            <span>{{CheckErrorCode('EMAIL$FORMAT')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Error Message -->
+                        <div id="managerx-create_account_email_empty_error3"
+                            class="col-12 no-side-padding error_message"
+                            *ngIf="CheckErrorCode('NOT$EXISTS$USER$EMAIL')">
+                            <span>{{CheckErrorCode('NOT$EXISTS$USER$EMAIL')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+                    </div>
+                    <!-- End of Email entering section -->
+
+                    <!-- Password entering section -->
+                    <div id="managerx-create_account_password_input_section"
+                        class="form-group form-floating col-12 mb-5"
+                        [ngClass]="(CheckErrorCode('EMPTY$USER$PASSWORD') || CheckErrorCode('LENGTH$USER$PASSWORD') || CheckErrorCode('INVALID$LOGIN'))?'eye-password-label':''">
+                        <!-- Password input section -->
+                        <span
+                            [ngClass]="(CheckErrorCode('EMPTY$USER$PASSWORD') && user_password == '')?'error-placeholder-label':''">
+                            <input id="managerx-create_account_password_input" pInputText [type]="passwordFieldType"
+                                [(ngModel)]="user_password" maxlength="{{passwordLimit}}"
+                                (input)="onPastePasswordFunction($event)" placeholder="" />
+                            <label id="managerx-create_account_password_label" for="password"
+                                class="label_colors">Password</label>
+                        </span>
+                        <!-- End of Password input section -->
+
+                        <!-- Eye icon to toggle password visibility -->
+                        <span id="managerx-create_account_password_toggle_icon"
+                            class="password-toggle-icon position-absolute end-0 top-50 translate-middle-y me-4 ms-n6"
+                            (click)="togglePasswordVisibility()">
+                            <i class="fa"
+                                [ngClass]="{'fa-eye': !(passwordFieldType == 'text'), 'fa-eye-slash': (passwordFieldType == 'text')}"></i>
+                        </span>
+
+                        <!-- Error Message -->
+                        <div id="managerx-create_account_password_empty_error1"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$USER$PASSWORD')">
+                            <span>{{CheckErrorCode('EMPTY$USER$PASSWORD')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Error Message -->
+                        <div id="managerx-create_account_password_empty_error2"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('LENGTH$USER$PASSWORD')">
+                            <span>{{CheckErrorCode('LENGTH$USER$PASSWORD')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Error Message -->
+                        <div id="managerx-create_account_password_empty_error3"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('INVALID$LOGIN')">
+                            <span>{{CheckErrorCode('INVALID$LOGIN')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+                    </div>
+                    <!-- End of Password entering section -->
+
+                    <!-- Buttons section -->
+                    <div class="col-12">
+                        <!-- Button to login as an owner -->
+                        <div class="d-grid gap-2">
+                            <button id="managerx-create_account_create_admin_account_button"
+                                class="btn btn-lg btn-outline-primary custom-login-btn" (click)="createOnClick('AD')">
+                                <span>Create an {{'AD' | appUpdateUserType}} account</span>
+                            </button>
+                        </div>
+                        <!-- End of Button to login as an owner -->
+
+                        <!-- Button to login as a builder -->
+                        <!--     <div class="d-grid gap-2 mt-3">
+                        <button id="managerx-create_account_create_builder_account_button"
+                            class="btn btn-lg btn-outline-primary custom-login-btn" (click)="createOnClick('PM')">
+                            <span>Create a {{'PM' | appUpdateUserType}} account</span>
+                        </button>
+                    </div> -->
+                        <!-- End of Button to login as a builder -->
+
+                        <!-- Button to login as an individual contractor -->
+                        <!--   <div class="d-grid gap-2 mt-4">
+                        <button id="managerx-create_account_create_contractor_account_button"
+                            class="btn btn-lg btn-outline-primary custom-login-btn" (click)="createOnClick('SP')">
+                            <span>Create an individual {{'SP' | appUpdateUserType}} account</span>
+                        </button>
+                    </div> -->
+                        <!-- End of Button to login as an individual contractor -->
+                    </div>
+                    <!-- End of Buttons section -->
+                </div>
+                <!-- End of Form section -->
+
+                <!-- Below section -->
+                <div id="managerx-create_account_or_section" class="text-center mt-4">
+                    <p id="managerx-create_account_or_label" class="or_label"><b>Or</b></p>
+                </div>
+
+                <!-- Create an account button -->
+                <div class="d-grid gap-2">
+                    <button id="managerx-create_account_login_instead_button"
+                        class="btn btn-lg btn-outline-primary custom-login-btn" (click)="loginOnClick()">
+                        <span>Login instead</span>
+                    </button>
+                </div>
+                <!-- End of Create an account button -->
+                <!-- End of Below section -->
+            </div>
+            <!-- End of Right col section -->
+        </div>
+        <!-- End of Row section -->
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

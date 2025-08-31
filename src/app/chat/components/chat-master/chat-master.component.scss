@@ -1,0 +1,432 @@
+.chat_full_master {
+    position: fixed; /* Ensures the element is fixed to the viewport */
+    top: 0;
+    left: 0;
+    width: 99vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    background-color: #f0f0f0; /* Example background */
+    display: flex; /* For centering content */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it appears on top */
+}
+
+.chat_master {
+    margin: 0;
+    padding: 0;
+
+    .archive_bg {
+        background: #0a439747 !important;
+    }
+
+    .archived_header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
+        padding-bottom: 0;
+        color: #125dcb;
+
+        i {
+            color: #125dcb;
+            margin-right: 10px;
+        }
+    }
+
+    .unread_count {
+        background: #f44336;
+        color: white;
+        font-size: 10pt;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100%;
+    }
+
+    .top_bar_section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .page_title {
+        font-size: 17pt;
+        font-weight: 600;
+    }
+
+    .margin_left_flex {
+        margin-right: auto;
+    }
+
+    .margin_right_flex {
+        margin-left: auto;
+    }
+
+    .main_content {
+        // margin-top: 10px;
+        display: flex;
+        padding: 0;
+        border: solid thin #ccc;
+
+        .sub_title {
+            font-size: 14pt;
+            font-weight: 600;
+            span {
+                padding-left: 10px;
+            }
+        }
+
+        .left_section {
+            width: 20%;
+            height: 94vh;
+            overflow-y: auto;
+            padding: 10px;
+            border-right: solid thin #ccc;
+
+            -webkit-transition: width 1s ease-in-out;
+            -moz-transition: width 1s ease-in-out;
+            -o-transition: width 1s ease-in-out;
+            transition: width 1s ease-in-out;
+        }
+
+        .left_section_full {
+            width: 5%;
+            min-width: 105px;
+            -webkit-transition: width 1s ease-in-out;
+            -moz-transition: width 1s ease-in-out;
+            -o-transition: width 1s ease-in-out;
+            transition: width 1s ease-in-out;
+        }
+
+        .right_section_full {
+            width: 100% !important;
+            -webkit-transition: width 1s ease-in-out;
+            -moz-transition: width 1s ease-in-out;
+            -o-transition: width 1s ease-in-out;
+            transition: width 1s ease-in-out;
+        }
+
+        .right_section {
+            width: 100%;
+
+            -webkit-transition: width 1s ease-in-out;
+            -moz-transition: width 1s ease-in-out;
+            -o-transition: width 1s ease-in-out;
+            transition: width 1s ease-in-out;
+        }
+
+        .left_top_bar {
+            display: flex;
+        }
+
+        .search_bar {
+            display: flex;
+            height: 30px;
+            align-items: center;
+            background: rgb(203, 234, 245);
+            border-radius: 3px;
+            margin-top: 5px;
+
+            .icon {
+                padding: 5px;
+                color: #6b7280;
+                cursor: pointer;
+            }
+
+            .user_prompt {
+                width: 100%;
+                input {
+                    width: 100%;
+                    padding-bottom: 4px;
+                    border: none;
+                    background: transparent;
+                    font-size: 10pt !important;
+                    outline: none !important;
+                }
+            }
+        }
+
+        .tabs_section {
+            margin: 0;
+            padding: 0;
+            font-size: 11pt;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            color: #6b7280;
+            text-align: center;
+            div {
+                height: 100%;
+                padding-top: 4px;
+                cursor: pointer;
+            }
+        }
+
+        .tabs_section_active {
+            border-bottom: solid thin #125dcb;
+            color: #125dcb;
+        }
+    }
+
+    .cursor_pointer {
+        cursor: pointer;
+    }
+
+    .each_chat_title {
+        height: 35px;
+        display: flex;
+        align-items: center;
+        font-size: 11pt;
+        color: #125dcb;
+        margin-top: 10px;
+        i {
+            padding-right: 10px;
+            padding-top: 4px;
+        }
+    }
+
+    .each_chat_title_lbl {
+        height: 35px;
+        display: flex;
+        align-items: center;
+        font-size: 11pt;
+        color: #b1afaf;
+        margin-top: 10px;
+    }
+
+    .default_message {
+        align-content: center;
+        height: 100%;
+        .icon_default {
+            font-size: 20pt;
+            text-align: center;
+            color: #125dcb;
+        }
+        .title_default {
+            font-size: 15pt;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .sub_title_default {
+            font-size: 13pt;
+            color: #b1afaf;
+            text-align: center;
+            margin-top: 10px;
+        }
+    }
+
+    .overall_chat {
+        height: 100%;
+    }
+
+    .selected_chat_room {
+        background: #031530;
+        color: white;
+    }
+
+    .chat_room_display:hover {
+        background: #031530;
+        color: white;
+    }
+
+    .chat_room_display {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        cursor: pointer;
+        padding: 10px;
+        border: solid thin #125dcb;
+
+        .room_logo {
+            background: #125dcb;
+            padding: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
+            border-radius: 100px;
+            color: white;
+            margin-right: 5px;
+            max-width: 100%;
+        }
+
+        .name_lbl {
+            font-size: 10pt;
+            font-weight: bold;
+        }
+
+        .description_lbl {
+            font-size: 9pt;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .chat_master {
+        .top_bar_section {
+            text-align: center;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            width: 85%;
+        }
+
+        .page_title {
+            font-size: 14pt;
+        }
+
+        .main_content {
+            flex-direction: column;
+            border: none;
+
+            .left_section {
+                width: 100%;
+                height: auto;
+                padding: 5px;
+                border-right: none;
+            }
+
+            .left_section_full {
+                width: 100%;
+                min-width: 105px;
+            }
+
+            .right_section {
+                width: 100%;
+                height: auto;
+            }
+
+            .right_section_full {
+                width: 100% !important;
+            }
+
+            .search_bar {
+                flex-direction: row;
+                align-items: center;
+                height: auto;
+                padding: 5px;
+                margin-bottom: 10px;
+
+                .icon {
+                    padding: 5px 0;
+                }
+
+                .user_prompt {
+                    width: 100%;
+                }
+            }
+
+            .tabs_section {
+                justify-content: space-around;
+                div {
+                    padding: 5px 0;
+                }
+            }
+
+            .each_chat_title {
+                font-size: 10pt;
+                margin-top: 5px;
+            }
+
+            .each_chat_title_lbl {
+                font-size: 10pt;
+            }
+
+            .default_message {
+                .icon_default {
+                    font-size: 16pt;
+                }
+                .title_default {
+                    font-size: 13pt;
+                }
+                .sub_title_default {
+                    font-size: 11pt;
+                }
+            }
+
+            .chat_room_display {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+
+                .room_logo {
+                    margin-bottom: 5px;
+                }
+
+                .name_lbl {
+                    font-size: 10pt;
+                }
+
+                .description_lbl {
+                    font-size: 9pt;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .chat_master {
+        .top_bar_section {
+            .page_title {
+                font-size: 12pt;
+            }
+        }
+
+        .main_content {
+            .left_section {
+                display: none; /* Hide left section for smaller screens if needed */
+            }
+
+            .right_section {
+                width: 100%;
+            }
+
+            .chat_room_display {
+                padding: 8px;
+                font-size: 9pt;
+
+                .name_lbl {
+                    font-size: 9pt;
+                }
+
+                .description_lbl {
+                    font-size: 8pt;
+                }
+            }
+
+            .default_message {
+                .icon_default {
+                    font-size: 14pt;
+                }
+                .title_default {
+                    font-size: 11pt;
+                }
+                .sub_title_default {
+                    font-size: 9pt;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1350px) {
+    .chat_room_display {
+        flex-direction: column !important; /* Switch to column for smaller screens */
+        div {
+            text-align: center;
+            font-size: 1vw;
+        }
+        .flex_align_left {
+            margin: 0;
+            width: 100%;
+        }
+    }
+
+    .room_logo {
+        margin-right: 0 !important;
+    }
+}

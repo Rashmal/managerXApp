@@ -35,3 +35,498 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* You can add global styles to this file, and also import other style files */
+
+@import "primeicons/primeicons.css";
+
+.display-flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.flex_align_right {
+    margin-left: auto;
+}
+
+.flex_align_left {
+    margin-right: auto;
+}
+
+.full_width {
+    width: 100%;
+}
+
+.full_width_dropdown .p-dropdown {
+    width: 100%;
+}
+
+.no_padding {
+    padding: 0 !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.p-dropdown {
+    height: 45px;
+    align-items: center;
+}
+
+.client_address_dropdown {
+    .p-dropdown {
+        height: unset !important;
+        min-height: 45px !important;
+        align-items: center;
+    }
+}
+
+.p-dropdown-panel .p-dropdown-items {
+    padding: 0 !important;
+}
+
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+.error_message {
+    color: #be0606;
+    font-size: 11pt;
+}
+
+input {
+    font-size: 11pt !important;
+}
+
+.login_page .form-group input:focus + label,
+.login_page .form-group input:not(:placeholder-shown) + label {
+    font-size: 10px !important;
+    color: #a3a7ae !important;
+}
+
+body {
+    //font-family: 'Quicksand', sans-serif;
+    font-family: sans-serif;
+    font-size: 0.875rem;
+    opacity: 1;
+    overflow-y: scroll;
+    margin: 0;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "Quicksand", sans-serif;
+}
+
+li {
+    list-style: none;
+}
+
+/* Start search box css */
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 300px; /* Set the maximum width for the search field container */
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px; /* Adjust as needed */
+    font-size: 10.2pt !important; /* Adjust as needed */
+    color: #99999c; /* Adjust as needed */
+    margin-bottom: -4px;
+}
+
+.custom-search-box {
+    width: 100%;
+    padding: 8px 12px 8px 30px; /* Adjust padding to make room for the icon */
+    border: 1px solid #ffffff;
+    border-radius: 2px;
+    box-sizing: border-box; /* Ensure padding doesn't affect total width */
+    font-size: 10.2pt !important;
+    height: 30px;
+}
+
+.custom-icon-field {
+    display: flex;
+    align-items: center;
+}
+
+/* End search box css */
+
+.custom-badge-success {
+    color: #58b41c !important;
+    background-color: #e6f6e6;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+.custom-badge-warning {
+    color: #fc9256 !important;
+    background-color: #fef2e6;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+.custom-badge-pending {
+    color: #4006be !important;
+    background-color: #f0f0fe;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+.custom-badge-overdue {
+    color: #be0606 !important;
+    background-color: #fef0f0;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+/* In your global styles.css or component's styles */
+.ui-accordion .ui-accordion-header .ui-accordion-toggle-icon {
+    font-weight: 900;
+    content: "\f0da" !important; /* FontAwesome down arrow */
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+.ui-accordion .ui-accordion-header .ui-accordion-toggle-icon.ui-accordion-toggle-icon-rotated {
+    content: "\f0da" !important; /* FontAwesome up arrow */
+}
+
+.p-paginator-element {
+    font-size: 10.2pt;
+}
+
+/* Override the expand icon */
+.p-accordion .p-accordion-tab-active .p-accordion-header .p-accordion-toggle-icon:before {
+    content: "\f0d7"; /* fa-chevron-down */
+    font-family: "FontAwesome";
+    font-size: 10pt;
+}
+
+.p-accordion {
+    svg {
+        display: none;
+    }
+}
+
+/* Override the collapse icon */
+.p-accordion .p-accordion-header .p-accordion-toggle-icon:before {
+    content: "\f0da"; /* fa-chevron-up */
+    font-family: "FontAwesome";
+    font-size: 10pt;
+}
+
+.sub-stage-category-custom .p-accordion-tab-active .p-accordion-header .p-accordion-toggle-icon:before {
+    content: "\f0d7" !important; /* fa-chevron-down */
+    font-family: "FontAwesome" !important;
+    font-size: 10pt !important;
+}
+
+.sub-stage-category-custom .p-accordion-header .p-accordion-toggle-icon:before {
+    content: "\f0da" !important; /* fa-chevron-down */
+    font-family: "FontAwesome" !important;
+    font-size: 10pt !important;
+}
+
+.empty_content {
+    font-size: 10pt;
+    text-align: center;
+    padding-top: 5px;
+    color: #8f8f91;
+}
+
+.p-dialog-content {
+    padding: 0;
+}
+
+.custom-cursor {
+    cursor: pointer !important;
+}
+
+.small-tooltip {
+    font-size: 12px; /* Adjust the font size as needed */
+    padding: 1px 3px; /* Adjust the padding as needed */
+}
+
+.custom-padding-5px {
+    padding: 5px;
+}
+
+.hide_tooltip {
+    display: none !important;
+}
+
+.info_section {
+    font-size: 10pt;
+    padding: 10px;
+    width: 200px;
+}
+
+.p-overlaypanel-content {
+    padding: 0;
+    font-size: 10pt;
+}
+
+.edit_icon {
+    padding-left: 5px;
+    font-size: 10pt;
+    color: #979ea4;
+    cursor: pointer;
+}
+
+.info_icon {
+    padding-right: 5px;
+    font-size: 10pt;
+    padding-left: 5px;
+    color: #979ea4;
+}
+
+button:disabled,
+button[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.RED {
+    color: #f8312f;
+}
+
+.GREEN {
+    color: #44aa00;
+}
+
+.BLUE {
+    color: #0074ba;
+}
+
+.YELLOW {
+    color: #f6fe62;
+}
+
+.ORANGE {
+    color: #fd8440;
+}
+
+.PURPLE {
+    color: #4106be;
+}
+
+.overall_status {
+    margin-left: 5px;
+}
+
+// .INP {
+//   color: rgb(253, 132, 64) !important;
+// }
+
+// .COM {
+//   color: rgb(68, 170, 0) !important;
+// }
+
+// .PED {
+//   color: rgb(65, 6, 190) !important;
+// }
+
+:root {
+    // login page realted
+    --LoginButtonBackgroundColor: #ffffff;
+    --LoginButtonFontColor: #000000;
+    --LoginButtonBorderColor: #000000;
+    --LoginButtonBorderStyle: solid;
+    --LoginButtonBorderWidth: 1px;
+    --LoginButtonFontSize: 12px;
+    --LoginButtonPaddingBottom: 10px;
+    --LoginButtonPaddingTop: 10px;
+    --LoginButtonPaddingRight: 20px;
+    --LoginButtonPaddingLeft: 20px;
+    --LoginButtonBackgroundHoverColor: #ffffff;
+    --LoginButtonHoverFontColor: #ffffff;
+    // All pages related
+    --AllPageBackgroundColor: #ffffff;
+    --AllPageContentBoxBackgroundColor: #ffffff;
+    // Status styles
+    --StatusCompletedBackgroundColor: #e7f6e7;
+    --StatusCompletedFontColor: #4106be;
+    --StatusPendingBackgroundColor: #fff3e7;
+    --StatusPendingFontColor: #fd8440;
+    --StatusProgressBackgroundColor: #f1f1ff;
+    --StatusProgressFontColor: #4106be;
+}
+
+.COM {
+    background: var(--StatusCompletedBackgroundColor) !important;
+    color: var(--StatusCompletedFontColor) !important;
+    .p-inputtext {
+        color: var(--StatusCompletedFontColor) !important;
+    }
+}
+
+.PED {
+    background: var(--StatusPendingBackgroundColor) !important;
+    color: var(--StatusPendingFontColor) !important;
+    .p-inputtext {
+        color: var(--StatusPendingFontColor) !important;
+    }
+}
+
+.INP {
+    background: var(--StatusProgressBackgroundColor) !important;
+    color: var(--StatusProgressFontColor) !important;
+    .p-inputtext {
+        color: var(--StatusProgressFontColor) !important;
+    }
+}
+
+.bg-content {
+    background: var(--AllPageContentBoxBackgroundColor) !important;
+    background-color: var(--AllPageContentBoxBackgroundColor) !important;
+}
+
+.paginator_sec {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    .p-paginator {
+        border-radius: 0;
+    }
+}
+
+th {
+    background: var(--AllPageContentBoxBackgroundColor) !important;
+    background-color: var(--AllPageContentBoxBackgroundColor) !important;
+}
+
+.p-paginator,
+th,
+tr,
+.table_header_section {
+    background: var(--AllPageContentBoxBackgroundColor) !important;
+    background-color: var(--AllPageContentBoxBackgroundColor) !important;
+}
+
+.each_notification_bar {
+    background: var(--AllPageContentBoxBackgroundColor) !important;
+}
+
+.custom_template .p-colorpicker-preview {
+    height: 28px !important;
+    width: 28px !important;
+}
+
+.custom_template .p-dropdown {
+    height: 28px !important;
+}
+
+.simple-notification.info {
+    background: #125dcb !important;
+}
+
+.simple-notification .sn-title {
+    line-height: 30px !important;
+    font-size: 12pt !important;
+}
+
+.simple-notification .sn-content {
+    font-size: 10pt !important;
+    line-height: 20px !important;
+}
+
+.p-dialog .p-dialog-header {
+    border-bottom: 0 none;
+    background: #ffffff;
+    color: #374151;
+    padding: 5px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.each_section_invite .p-dropdown-label {
+    font-size: 10pt;
+    padding: 5px;
+}
+
+.p-float-label textarea.p-filled ~ label {
+    top: -0.75rem !important;
+    font-size: 12px !important;
+}
+
+.p-float-label textarea:focus ~ label {
+    top: -0.75rem !important;
+    font-size: 12px !important;
+}
+
+.p-float-label-filled {
+    top: -0.75rem !important;
+    font-size: 12px !important;
+}
+
+#managerx-login_image {
+    display: block; // default for larger screens
+
+    @media screen and (max-width: 768px) {
+        display: none; // hide on mobile
+    }
+}
+
+.p-component-overlay {
+    z-index: -1 !important;
+}
+
+.p-sidebar-content {
+    padding: 5px !important;
+}
+
+.avatar_section {
+    min-width: 50px;
+}
+
+.p-sidebar {
+    margin-top: 45px;
+}
+
+// @media (max-width: 768px) {
+//     p-table .p-datatable-thead {
+//         display: none;
+//     }
+
+//     p-table .p-datatable-tbody > tr {
+//         display: block;
+//         border: 1px solid #ccc;
+//         margin-bottom: 10px;
+//         padding: 10px;
+//         border-radius: 6px;
+//     }
+
+//     p-table .p-datatable-tbody > tr > td {
+//         display: flex;
+//         width: 100%;
+//         justify-content: space-between;
+//         padding: 6px 0;
+//         border: none;
+//         position: relative;
+//         padding-left: 120px;
+//         font-size: 13px;
+//     }
+
+//     p-table .p-datatable-tbody > tr > td::before {
+//         content: attr(data-label);
+//         position: absolute;
+//         left: 10px;
+//         top: 6px;
+//         font-weight: bold;
+//         white-space: nowrap;
+//         width: 100px;
+//         text-align: left;
+//     }
+// }

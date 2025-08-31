@@ -1,0 +1,88 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 notifications">
+        <!-- Top bar section -->
+        <div id="managerX_admin-notification_top_bar" class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_admin-notification_title_section" class="page_title">Notifications</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_admin-notification_search_box" class="custom-icon-field">
+                <div class="input-container">
+                    <p-inputIcon id="managerX_admin-notification_search_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_admin-notification_search_input" type="text" pInputText placeholder="Search"
+                        class="custom-search-box" [(ngModel)]="currentFilter.SearchQuery"
+                        (input)="currentFilter.CurrentPage=1;GetAllNotificationDetails()" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Content section -->
+        <div id="managerX_admin-notification_content_section" class="row col-12 notification_section">
+            <!-- Loop through the notifications list -->
+            <div class="col-12 each_notification_bar" *ngFor="let notifications of notificationsList">
+                <!-- Icon section -->
+                <div id="managerX_admin-notification_icon_section" class="icon_section">
+                    <i id="managerX_admin-notification_NotificationTypeIcon_icon"
+                        [class]="notifications.NotificationTypeIcon" aria-hidden="true"></i>
+                </div>
+                <!-- End of Icon section -->
+
+                <!-- Description section -->
+                <div id="managerX_admin-notification_description_section" class="description_section">
+                    <!-- First row section -->
+                    <div id="managerX_admin-notification_first-row_section" class="first_row_section">
+                        <span>{{notifications.FirstName}} {{notifications.LastName}}</span>
+                        <span> {{notifications.NotificationDescription}}</span>
+                        <span *ngIf="notifications.NotificationType == 'UPLOAD'"> {{notifications.ExtraData}}
+                            attachments
+                            in</span>
+                        <span id="managerX_admin-notification_assign_task"
+                            *ngIf="notifications.NotificationType == 'ASSIGN_TASK'">
+                            {{checkAssignTaskUsername(notifications.ExtraData)}} a new
+                            task</span>
+                        <span id="managerX_admin-notification_stage_lbl" class="stage_lbl"
+                            [ngClass]="notifications.StatusCode">
+                            {{notifications.TaskName}} -
+                            {{notifications.SubStageCategoryName}} -
+                            {{notifications.SubStageName}}
+                        </span>
+                    </div>
+                    <!-- End of First row section -->
+
+                    <!-- Second row section -->
+                    <div id="managerX_admin-notification_second_row" class="second_row_section">
+                        <span class="time_part">{{notifications.AddedDate | date: 'hh:mm ' }}</span>
+                        <span>{{notifications.AddedDate | date: 'dd MMM yyyy ' }}</span>
+                    </div>
+                    <!-- End of Second row section -->
+                </div>
+                <!-- End of Description section -->
+            </div>
+            <!-- End of Loop through the notifications l st -->
+
+            <!-- When the notifications are empty -->
+            <div id="managerX_admin-notification_empty" *ngIf="notificationsList.length == 0">
+                <div colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+            </div>
+            <!-- End of When the notifications are empty -->
+
+            <!-- Pagination section -->
+            <p-paginator id="managerX_admin-notification_paginator_section" class="paginator_sec" #modulePaginator
+                *ngIf="notificationsList && notificationsList.length > 0 && notificationsList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(notificationsList && notificationsList.length > 0 && notificationsList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onChangeTaskPaginator($event)"
+                [totalRecords]="(notificationsList.length>0)? notificationsList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+        </div>
+        <!-- End of Content section -->
+
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

@@ -1,0 +1,1002 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <ion-grid class="custom_template">
+        <!-- Content section -->
+        <ion-row>
+            <!-- Top bar section -->
+            <div class="top_bar_section">
+                <!-- Title section -->
+                <div class="page_title">Custom Template</div>
+                <!-- End of Title section -->
+            </div>
+            <!-- End of Top bar section -->
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <!-- Accordion groups -->
+                <ion-accordion-group>
+                    <ion-accordion value="first">
+                        <!-- Sub title section -->
+                        <ion-item slot="header" color="light">
+                            <ion-label>All Pages styles</ion-label>
+                        </ion-item>
+                        <!-- End of Sub title section -->
+
+                        <!-- Accordion content section -->
+                        <div class="ion-padding" slot="content">
+                            <!-- Styles section -->
+                            <div class="sub_title_styles col-12"
+                                *ngIf="allPageTemplateStyles && allPageTemplateStyles.BackgroundColor">
+                                <!-- Left align section -->
+                                <div class="bg-white bg-white-section bg-content label_section_width">
+                                    <!-- Each row section -->
+                                    <div class="each_row_section">
+                                        <!-- Label section -->
+                                        <div class="label_div">
+                                            <span>Page Background</span>
+                                        </div>
+                                        <!-- End of Label section -->
+
+                                        <!-- Value section -->
+                                        <div class="value_lbl">
+                                            <input type="text" [(ngModel)]="allPageTemplateStyles.BackgroundColor"
+                                                (input)="onChangeStyle('APBG')">
+                                            <p-colorPicker [(ngModel)]="allPageTemplateStyles.BackgroundColor"
+                                                (onChange)="onChangeStyle('APBG')" />
+                                        </div>
+                                        <!-- End of Value section -->
+                                    </div>
+                                    <!-- End of Each row section -->
+
+                                    <!-- Each row section -->
+                                    <div class="each_row_section">
+                                        <!-- Label section -->
+                                        <div class="label_div">
+                                            <span>Content section background</span>
+                                        </div>
+                                        <!-- End of Label section -->
+
+                                        <!-- Value section -->
+                                        <div class="value_lbl">
+                                            <input type="text"
+                                                [(ngModel)]="allPageTemplateStyles.ContentBoxBackgroundColor"
+                                                (input)="onChangeStyle('APBGC')">
+                                            <p-colorPicker [(ngModel)]="allPageTemplateStyles.ContentBoxBackgroundColor"
+                                                (onChange)="onChangeStyle('APBGC')" />
+                                        </div>
+                                        <!-- End of Value section -->
+                                    </div>
+                                    <!-- End of Each row section -->
+                                </div>
+                                <!-- End of Left align section -->
+
+                                <!-- Right align section -->
+                                <div class="preview_section bg-white bg-white-section bg-content">
+                                    <!-- Page preview section -->
+                                    <div class="preview_layout">
+                                        <div class="elipsis">
+                                            <span>Title</span>
+                                        </div>
+
+                                        <div class="row col-12 content_box">
+                                            <div class="col-6 no_padding_left">
+                                                <div class="sub_box">
+                                                    <div class="elipsis">
+                                                        <span>Sub title</span>
+                                                    </div>
+                                                    <div class="elipsis">
+                                                        <span>Description</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 no_padding_right">
+                                                <div class="sub_box">
+                                                    <div class="elipsis">
+                                                        <span>Sub title</span>
+                                                    </div>
+                                                    <div class="elipsis">
+                                                        <span>Description</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="sub_box">
+                                                <div class="elipsis">
+                                                    <span>Sub title</span>
+                                                </div>
+                                                <div class="elipsis">
+                                                    <span>Description</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Page preview section -->
+                                </div>
+                                <!-- End of Right align section -->
+                            </div>
+                            <!-- End of Styles section -->
+                        </div>
+                        <!-- End of Accordion content section -->
+                    </ion-accordion>
+                    <ion-accordion value="second">
+                        <!-- Sub title section -->
+                        <ion-item slot="header" color="light">
+                            <ion-label>Login/Signup Page styles</ion-label>
+                        </ion-item>
+                        <!-- End of Sub title section -->
+
+                        <!-- Accordion content section -->
+                        <div class="ion-padding" slot="content">
+                            <div class="sub_title_styles col-12"
+                                *ngIf="buttonCustomTemplateStyles && buttonCustomTemplateStyles.LoginButtonBackgroundColor">
+                                <!-- Left align section -->
+                                <div class="bg-white bg-white-section label_section_width_second">
+                                    <div class="second_lvl_wrap">
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button background</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="text"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBackgroundColor"
+                                                    (input)="onChangeStyle('LBBC')">
+                                                <p-colorPicker
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBackgroundColor"
+                                                    (onChange)="onChangeStyle('LBBC')" />
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button font</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="text"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonFontColor"
+                                                    (input)="onChangeStyle('LBFC')">
+                                                <p-colorPicker
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonFontColor"
+                                                    (onChange)="onChangeStyle('LBFC')" />
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button border</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="text"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderColor"
+                                                    (input)="onChangeStyle('LBBRC')">
+                                                <p-colorPicker
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderColor"
+                                                    (onChange)="onChangeStyle('LBBRC')" />
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+                                    </div>
+
+                                    <div class="second_lvl_wrap">
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button hover</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="text"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverColor"
+                                                    (input)="onChangeStyle('LBHC')">
+                                                <p-colorPicker
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverColor"
+                                                    (onChange)="onChangeStyle('LBHC')" />
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button hover font</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="text"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverFontColor"
+                                                    (input)="onChangeStyle('LBHFC')">
+                                                <p-colorPicker
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverFontColor"
+                                                    (onChange)="onChangeStyle('LBHFC')" />
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button border</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <p-dropdown class="custom_dropdown" [options]="borderStylesList"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderStyle"
+                                                    (onChange)="onChangeStyle('LBBS')" />
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+                                    </div>
+
+                                    <div class="second_lvl_wrap">
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button border width</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="number"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderWidth"
+                                                    (input)="onChangeStyle('LBBW')">
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Button font size (px)</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="number"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonFontSize"
+                                                    (input)="onChangeStyle('LBFS')">
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Padding Top (px)</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="number"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingTop"
+                                                    (input)="onChangeStyle('LBPT')">
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+                                    </div>
+
+                                    <div class="second_lvl_wrap">
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Padding Bottom (px)</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="number"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingBottom"
+                                                    (input)="onChangeStyle('LBPB')">
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Padding Left (px)</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="number"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingLeft"
+                                                    (input)="onChangeStyle('LBPL')">
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section">
+                                            <!-- Label section -->
+                                            <div class="label_div">
+                                                <span>Padding Right (px)</span>
+                                            </div>
+                                            <!-- End of Label section -->
+
+                                            <!-- Value section -->
+                                            <div class="value_lbl">
+                                                <input type="number"
+                                                    [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingRight"
+                                                    (input)="onChangeStyle('LBPR')">
+                                            </div>
+                                            <!-- End of Value section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+                                    </div>
+                                </div>
+                                <div class="preview_section bg-white bg-white-section">
+                                    <!-- Preview section -->
+
+                                    <button id="managerx-login_admin_login_button"
+                                        class="btn btn-lg btn-outline-primary custom-login-btn preview_btn">
+                                        <span>Preview Login Button</span>
+                                    </button>
+                                    <!-- End of Preview section -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Accordion content section -->
+                    </ion-accordion>
+                    <ion-accordion value="third">
+                        <!-- Sub title section -->
+                        <ion-item slot="header" color="light">
+                            <ion-label>Status styles</ion-label>
+                        </ion-item>
+                        <!-- End of Sub title section -->
+
+                        <!-- Accordion content section -->
+                        <div class="ion-padding" slot="content">
+                            <div class="sub_title_styles col-12">
+                                <!-- Left align section -->
+                                <div class="bg-white bg-white-section label_section_width label_section_width_large"
+                                    *ngIf="statusTemplateStyles">
+                                    <!-- Each row section -->
+                                    <div class="each_row_section each_row_section_height"
+                                        *ngFor="let statusObj of statusDetailsList">
+                                        <!-- Label section -->
+                                        <div class="label_div" style="margin-top: 0;">
+                                            <span>Status: {{statusObj.Name}}</span>
+                                        </div>
+                                        <!-- End of Label section -->
+
+                                        <!-- Value section -->
+                                        <div class="value_lbl second_lvl_wrap">
+                                            <div class="status_each_section">
+                                                <div class="label_section">
+                                                    <span>Background</span>
+                                                </div>
+                                                <input *ngIf="statusObj.Code=='COM'" type="text"
+                                                    [(ngModel)]="statusTemplateStyles.CompletedBackgroundColor"
+                                                    (input)="onChangeStyle('SSTCPB')">
+                                                <p-colorPicker *ngIf="statusObj.Code=='COM'"
+                                                    [(ngModel)]="statusTemplateStyles.CompletedBackgroundColor"
+                                                    (onChange)="onChangeStyle('SSTCPB')" />
+
+                                                <input *ngIf="statusObj.Code=='PED'" type="text"
+                                                    [(ngModel)]="statusTemplateStyles.PendingBackgroundColor"
+                                                    (input)="onChangeStyle('SSTPDB')">
+                                                <p-colorPicker *ngIf="statusObj.Code=='PED'"
+                                                    [(ngModel)]="statusTemplateStyles.PendingBackgroundColor"
+                                                    (onChange)="onChangeStyle('SSTPDB')" />
+
+                                                <input *ngIf="statusObj.Code=='INP'" type="text"
+                                                    [(ngModel)]="statusTemplateStyles.ProgressBackgroundColor"
+                                                    (input)="onChangeStyle('SSTPGB')">
+                                                <p-colorPicker *ngIf="statusObj.Code=='INP'"
+                                                    [(ngModel)]="statusTemplateStyles.ProgressBackgroundColor"
+                                                    (onChange)="onChangeStyle('SSTPGB')" />
+                                            </div>
+                                            <div class="status_each_section">
+                                                <div class="label_section">
+                                                    <span>Font color</span>
+                                                </div>
+                                                <input *ngIf="statusObj.Code=='COM'" type="text"
+                                                    [(ngModel)]="statusTemplateStyles.CompletedFontColor"
+                                                    (input)="onChangeStyle('SSTCPFC')">
+                                                <p-colorPicker *ngIf="statusObj.Code=='COM'"
+                                                    [(ngModel)]="statusTemplateStyles.CompletedFontColor"
+                                                    (onChange)="onChangeStyle('SSTCPFC')" />
+
+                                                <input *ngIf="statusObj.Code=='PED'" type="text"
+                                                    [(ngModel)]="statusTemplateStyles.PendingFontColor"
+                                                    (input)="onChangeStyle('SSTPDFC')">
+                                                <p-colorPicker *ngIf="statusObj.Code=='PED'"
+                                                    [(ngModel)]="statusTemplateStyles.PendingFontColor"
+                                                    (onChange)="onChangeStyle('SSTPDFC')" />
+
+                                                <input *ngIf="statusObj.Code=='INP'" type="text"
+                                                    [(ngModel)]="statusTemplateStyles.ProgressFontColor"
+                                                    (input)="onChangeStyle('SSTPGFC')">
+                                                <p-colorPicker *ngIf="statusObj.Code=='INP'"
+                                                    [(ngModel)]="statusTemplateStyles.ProgressFontColor"
+                                                    (onChange)="onChangeStyle('SSTPGFC')" />
+                                            </div>
+                                        </div>
+                                        <!-- End of Value section -->
+
+                                        <!-- Each row section -->
+                                        <div class="each_row_section each_row_section_height each_row_section_preview"
+                                            style="padding:0px">
+                                            <!-- Label section -->
+                                            <div [ngClass]="statusObj.Code" class="status_preview fixed_width"
+                                                style="padding:0px;margin-top: 5px;">
+                                                <span class="status_span">{{statusObj.Name}}</span>
+                                            </div>
+                                            <!-- End of Label section -->
+                                        </div>
+                                        <!-- End of Each row section -->
+                                    </div>
+                                    <!-- End of Each row section -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Sub title section -->
+                    </ion-accordion>
+                </ion-accordion-group>
+                <!-- End of Accordion groups -->
+            </ion-col>
+        </ion-row>
+        <!-- End of Content section -->
+    </ion-grid>
+
+
+
+
+
+    <div class="row col-12 custom_template" *ngIf="false">
+
+
+
+        <!-- Content section -->
+        <div class="all_content_box">
+
+            <!-- Sub title section -->
+            <div class="col-12 sub_title cursor_pointer" (click)="expandOnClick('ALL')">
+                <i class="fa fa-chevron-down accordian_arrows" aria-hidden="true"
+                    *ngIf="currentExpandState !== 'ALL'"></i>
+                <i class="fa fa-chevron-up accordian_arrows" aria-hidden="true" *ngIf="currentExpandState == 'ALL'"></i>
+
+                <span class="margin_right_10">All Pages styles</span>
+
+                <div class="sub_btns_section">
+                    <button class="update_btn margin_right_10" (click)="updateOnClick('ALL_PAGE_BTN')">Update</button>
+                    <button class="reset_btn" (click)="resetOnClick('ALL_PAGE_BTN')">Reset</button>
+                </div>
+            </div>
+            <!-- End of Sub title section -->
+
+            <!-- Styles section -->
+            <div class="sub_title_styles col-12"
+                *ngIf="currentExpandState == 'ALL' && allPageTemplateStyles && allPageTemplateStyles.BackgroundColor">
+                <!-- Left align section -->
+                <div class="bg-white bg-white-section bg-content label_section_width">
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Page Background color</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="text" [(ngModel)]="allPageTemplateStyles.BackgroundColor"
+                                (input)="onChangeStyle('APBG')">
+                            <p-colorPicker [(ngModel)]="allPageTemplateStyles.BackgroundColor"
+                                (onChange)="onChangeStyle('APBG')" />
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Content section background color</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="text" [(ngModel)]="allPageTemplateStyles.ContentBoxBackgroundColor"
+                                (input)="onChangeStyle('APBGC')">
+                            <p-colorPicker [(ngModel)]="allPageTemplateStyles.ContentBoxBackgroundColor"
+                                (onChange)="onChangeStyle('APBGC')" />
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+                </div>
+                <!-- End of Left align section -->
+
+                <!-- Right align section -->
+                <div class="preview_section bg-white bg-white-section bg-content">
+                    <!-- Page preview section -->
+                    <div class="preview_layout">
+                        <div class="elipsis">
+                            <span>Title</span>
+                        </div>
+
+                        <div class="row col-12 content_box">
+                            <div class="col-6 no_padding_left">
+                                <div class="sub_box">
+                                    <div class="elipsis">
+                                        <span>Sub title</span>
+                                    </div>
+                                    <div class="elipsis">
+                                        <span>Description</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 no_padding_right">
+                                <div class="sub_box">
+                                    <div class="elipsis">
+                                        <span>Sub title</span>
+                                    </div>
+                                    <div class="elipsis">
+                                        <span>Description</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="sub_box">
+                                <div class="elipsis">
+                                    <span>Sub title</span>
+                                </div>
+                                <div class="elipsis">
+                                    <span>Description</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Page preview section -->
+                </div>
+                <!-- End of Right align section -->
+            </div>
+            <!-- End of Styles section -->
+
+            <!-- Divider section -->
+            <div class="divider_section">
+                <div></div>
+            </div>
+            <!-- End of Divider section -->
+
+            <!-- Sub title section -->
+            <div class="col-12 sub_title cursor_pointer" (click)="expandOnClick('LOGIN')">
+                <i class="fa fa-chevron-down accordian_arrows" aria-hidden="true"
+                    *ngIf="currentExpandState !== 'LOGIN'"></i>
+                <i class="fa fa-chevron-up accordian_arrows" aria-hidden="true"
+                    *ngIf="currentExpandState == 'LOGIN'"></i>
+                <span class="margin_right_10">Login/Signup Page styles</span>
+
+                <div class="sub_btns_section">
+                    <button class="update_btn margin_right_10" (click)="updateOnClick('LOGIN_PAGE_BTN')">Update</button>
+                    <button class="reset_btn" (click)="resetOnClick('LOGIN_PAGE_BTN')">Reset</button>
+                </div>
+            </div>
+            <!-- End of Sub title section -->
+
+            <!-- Styles section -->
+            <div class="sub_title_styles col-12"
+                *ngIf="currentExpandState == 'LOGIN' && buttonCustomTemplateStyles && buttonCustomTemplateStyles.LoginButtonBackgroundColor">
+                <!-- Left align section -->
+                <div class="bg-white bg-white-section label_section_width">
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button background color</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="text" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBackgroundColor"
+                                (input)="onChangeStyle('LBBC')">
+                            <p-colorPicker [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBackgroundColor"
+                                (onChange)="onChangeStyle('LBBC')" />
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button font color</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="text" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonFontColor"
+                                (input)="onChangeStyle('LBFC')">
+                            <p-colorPicker [(ngModel)]="buttonCustomTemplateStyles.LoginButtonFontColor"
+                                (onChange)="onChangeStyle('LBFC')" />
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button border color</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="text" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderColor"
+                                (input)="onChangeStyle('LBBRC')">
+                            <p-colorPicker [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderColor"
+                                (onChange)="onChangeStyle('LBBRC')" />
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button hover color</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="text" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverColor"
+                                (input)="onChangeStyle('LBHC')">
+                            <p-colorPicker [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverColor"
+                                (onChange)="onChangeStyle('LBHC')" />
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button hover font color</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="text" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverFontColor"
+                                (input)="onChangeStyle('LBHFC')">
+                            <p-colorPicker [(ngModel)]="buttonCustomTemplateStyles.LoginButtonHoverFontColor"
+                                (onChange)="onChangeStyle('LBHFC')" />
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button border style</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <p-dropdown class="custom_dropdown" [options]="borderStylesList"
+                                [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderStyle"
+                                (onChange)="onChangeStyle('LBBS')" />
+
+                            <div class="border_preview"
+                                [style.border-style]="buttonCustomTemplateStyles.LoginButtonBorderStyle">
+                            </div>
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button border width</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="number" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonBorderWidth"
+                                (input)="onChangeStyle('LBBW')">
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span>Button font size (px)</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <input type="number" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonFontSize"
+                                (input)="onChangeStyle('LBFS')">
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div" style="margin-top: 30px;">
+                            <span>Padding options</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Each row section -->
+                        <div class="each_row_section">
+                            <div class="label_div_right">
+                                <!-- Label section -->
+                                <div class="label_div">
+                                    <span style="font-weight: 400;">Padding Top (px)</span>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_lbl">
+                                    <input type="number" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingTop"
+                                        (input)="onChangeStyle('LBPT')">
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+
+                            <div class="label_div_right">
+                                <!-- Label section -->
+                                <div class="label_div">
+                                    <span style="font-weight: 400;">Padding Bottom (px)</span>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_lbl">
+                                    <input type="number"
+                                        [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingBottom"
+                                        (input)="onChangeStyle('LBPB')">
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                        </div>
+                        <!-- End of Each row section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="each_row_section">
+                        <!-- Label section -->
+                        <div class="label_div">
+                            <span></span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Each row section -->
+                        <div class="each_row_section">
+                            <div class="label_div_right">
+                                <!-- Label section -->
+                                <div class="label_div">
+                                    <span style="font-weight: 400;">Padding Left (px)</span>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_lbl">
+                                    <input type="number" [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingLeft"
+                                        (input)="onChangeStyle('LBPL')">
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+
+                            <div class="label_div_right">
+                                <!-- Label section -->
+                                <div class="label_div">
+                                    <span style="font-weight: 400;">Padding Right (px)</span>
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Value section -->
+                                <div class="value_lbl">
+                                    <input type="number"
+                                        [(ngModel)]="buttonCustomTemplateStyles.LoginButtonPaddingRight"
+                                        (input)="onChangeStyle('LBPR')">
+                                </div>
+                                <!-- End of Value section -->
+                            </div>
+                        </div>
+                        <!-- End of Each row section -->
+                    </div>
+                    <!-- End of Each row section -->
+                </div>
+                <div class="preview_section bg-white bg-white-section">
+                    <!-- Preview section -->
+
+                    <button id="managerx-login_admin_login_button"
+                        class="btn btn-lg btn-outline-primary custom-login-btn preview_btn">
+                        <span>Preview Login Button</span>
+                    </button>
+                    <!-- End of Preview section -->
+                </div>
+            </div>
+            <!-- End of Styles section -->
+
+            <!-- Divider section -->
+            <div class="divider_section">
+                <div></div>
+            </div>
+            <!-- End of Divider section -->
+
+            <!-- Sub title section -->
+            <div class="col-12 sub_title cursor_pointer" (click)="expandOnClick('STYLES')">
+                <i class="fa fa-chevron-down accordian_arrows" aria-hidden="true"
+                    *ngIf="currentExpandState !== 'STYLES'"></i>
+                <i class="fa fa-chevron-up accordian_arrows" aria-hidden="true"
+                    *ngIf="currentExpandState == 'STYLES'"></i>
+                <span class="margin_right_10">Status styles</span>
+
+                <div class="sub_btns_section">
+                    <button class="update_btn margin_right_10" (click)="updateOnClick('STATUS_STYLE')">Update</button>
+                    <button class="reset_btn" (click)="resetOnClick('STATUS_STYLE')">Reset</button>
+                </div>
+            </div>
+            <!-- End of Sub title section -->
+
+            <!-- Styles section -->
+            <div class="sub_title_styles col-12" *ngIf="currentExpandState == 'STYLES'">
+                <!-- Left align section -->
+                <div class="bg-white bg-white-section label_section_width label_section_width_large"
+                    *ngIf="statusTemplateStyles">
+                    <!-- Each row section -->
+                    <div class="each_row_section each_row_section_height" *ngFor="let statusObj of statusDetailsList">
+                        <!-- Label section -->
+                        <div class="label_div" style="margin-top: 20px;">
+                            <span>Status: {{statusObj.Name}}</span>
+                        </div>
+                        <!-- End of Label section -->
+
+                        <!-- Value section -->
+                        <div class="value_lbl">
+                            <div class="status_each_section">
+                                <div class="label_section">
+                                    <span>Background</span>
+                                </div>
+                                <input *ngIf="statusObj.Code=='COM'" type="text"
+                                    [(ngModel)]="statusTemplateStyles.CompletedBackgroundColor"
+                                    (input)="onChangeStyle('SSTCPB')">
+                                <p-colorPicker *ngIf="statusObj.Code=='COM'"
+                                    [(ngModel)]="statusTemplateStyles.CompletedBackgroundColor"
+                                    (onChange)="onChangeStyle('SSTCPB')" />
+
+                                <input *ngIf="statusObj.Code=='PED'" type="text"
+                                    [(ngModel)]="statusTemplateStyles.PendingBackgroundColor"
+                                    (input)="onChangeStyle('SSTPDB')">
+                                <p-colorPicker *ngIf="statusObj.Code=='PED'"
+                                    [(ngModel)]="statusTemplateStyles.PendingBackgroundColor"
+                                    (onChange)="onChangeStyle('SSTPDB')" />
+
+                                <input *ngIf="statusObj.Code=='INP'" type="text"
+                                    [(ngModel)]="statusTemplateStyles.ProgressBackgroundColor"
+                                    (input)="onChangeStyle('SSTPGB')">
+                                <p-colorPicker *ngIf="statusObj.Code=='INP'"
+                                    [(ngModel)]="statusTemplateStyles.ProgressBackgroundColor"
+                                    (onChange)="onChangeStyle('SSTPGB')" />
+                            </div>
+                            &nbsp;&nbsp;
+                            <div class="status_each_section">
+                                <div class="label_section">
+                                    <span>Font color</span>
+                                </div>
+                                <input *ngIf="statusObj.Code=='COM'" type="text"
+                                    [(ngModel)]="statusTemplateStyles.CompletedFontColor"
+                                    (input)="onChangeStyle('SSTCPFC')">
+                                <p-colorPicker *ngIf="statusObj.Code=='COM'"
+                                    [(ngModel)]="statusTemplateStyles.CompletedFontColor"
+                                    (onChange)="onChangeStyle('SSTCPFC')" />
+
+                                <input *ngIf="statusObj.Code=='PED'" type="text"
+                                    [(ngModel)]="statusTemplateStyles.PendingFontColor"
+                                    (input)="onChangeStyle('SSTPDFC')">
+                                <p-colorPicker *ngIf="statusObj.Code=='PED'"
+                                    [(ngModel)]="statusTemplateStyles.PendingFontColor"
+                                    (onChange)="onChangeStyle('SSTPDFC')" />
+
+                                <input *ngIf="statusObj.Code=='INP'" type="text"
+                                    [(ngModel)]="statusTemplateStyles.ProgressFontColor"
+                                    (input)="onChangeStyle('SSTPGFC')">
+                                <p-colorPicker *ngIf="statusObj.Code=='INP'"
+                                    [(ngModel)]="statusTemplateStyles.ProgressFontColor"
+                                    (onChange)="onChangeStyle('SSTPGFC')" />
+                            </div>
+                        </div>
+                        <!-- End of Value section -->
+                    </div>
+                    <!-- End of Each row section -->
+                </div>
+                <div class="preview_section_basic bg-white bg-white-section">
+
+                    <!-- Each row section -->
+                    <div class="each_row_section each_row_section_height each_row_section_preview"
+                        *ngFor="let statusObj of statusDetailsList" style="padding:0px">
+                        <!-- Label section -->
+                        <div [ngClass]="statusObj.Code" class="status_preview fixed_width"
+                            style="padding:0px;margin-top: 5px;">
+                            <span class="status_span">{{statusObj.Name}}</span>
+                        </div>
+                        <!-- End of Label section -->
+                    </div>
+                    <!-- End of Each row section -->
+                </div>
+            </div>
+            <!-- End of Styles section -->
+
+        </div>
+        <!-- End of Content section -->
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

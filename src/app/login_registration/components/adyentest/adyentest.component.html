@@ -1,0 +1,227 @@
+<ion-content [fullscreen]="true">
+  <div class="container stripe_page">
+    <!-- Row section -->
+    <div class="row justify-content-center align-items-center">
+      <!-- Left col image section -->
+      <div class="col-lg-6 col-md-6 col-12 no_padding">
+        <!-- Image section -->
+        <img id="managerx-login_image" class="img-fluid d-none d-md-block banner_image" src="../../../../assets/X4.webp"
+          alt="ManagerX login">
+        <!-- End of Image section -->
+      </div>
+      <!-- End of Left col image section -->
+
+      <!-- Right col section -->
+      <div class="col-lg-6 col-md-6 p-5">
+
+
+        <!--Start Plans Section-->
+        <div class="container stripe_plan_page">
+          <div class="row justify-content-center">
+            <!-- Admin Plan -->
+            <div class="col-lg-12 col-md-6 col-12" *ngIf="Plan_Name=='Plan1'">
+              <div class="pricing-card">
+                <h3 *ngIf="this.userDetails.IsStripeLimitIncreaseReqLogin " class="plan-title-2">Limit Increase</h3>
+                <h3 class="plan-title">You Selected Plan 500 <p *ngIf="this.userDetails.IsStripeLimitIncreaseReqLogin ">
+                    &
+                    You already subscribed this plan.</p>
+                </h3>
+                <p class="extra-ratio">* For each extra account, you will charge {{ this.LimitExRatio }}% of the base
+                  price.</p>
+
+                <p class="extra-price-p">
+                  Extra charge:
+                  <span class="extra-price">${{ this.extraAddedPrice }}us</span>
+                </p>
+                <p class="tot-price-p">
+                  Total payment:
+                  <span class="tot-price">${{ this.TotalPrice }}us</span>
+                </p>
+                <ul class="plan-features">
+                  <li><strong>Access Level:</strong> Limited Access</li>
+                  <li><strong>User Accounts:</strong> Up to {{minNoOfAccounts}}</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Project Manager Plan -->
+            <div class="col-lg-12 col-md-6 col-12" *ngIf="Plan_Name=='Plan2'">
+              <div class="pricing-card">
+                <h3 *ngIf="this.userDetails.IsStripeLimitIncreaseReqLogin " class="plan-title-2">Limit Increase</h3>
+                <h3 class="plan-title">You Selected Plan 21 <p *ngIf="this.userDetails.IsStripeLimitIncreaseReqLogin ">&
+                    You already subscribed this plan.</p>
+                </h3>
+                <p class="extra-ratio">* For each extra account, you will charge {{ this.LimitExRatio }}% of the base
+                  price.</p>
+                <p class="extra-price-p">
+                  Extra charge:
+                  <span class="extra-price">${{ this.extraAddedPrice }}us</span>
+                </p>
+                <p class="tot-price-p">
+                  Total payment:
+                  <span class="tot-price">${{ this.TotalPrice }}us</span>
+                </p>
+                <ul class="plan-features">
+                  <li><strong>Access Level:</strong> Full Access</li>
+                  <li><strong>User Accounts:</strong> Up to {{minNoOfAccounts}}</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Supplier Plan -->
+            <div class="col-lg-12 col-md-6 col-12" *ngIf="Plan_Name=='Plan3'">
+              <div class="pricing-card">
+                <h3 *ngIf="this.userDetails.IsStripeLimitIncreaseReqLogin " class="plan-title-2">Limit Increase</h3>
+                <h3 class="plan-title"> You Selected Plan 100 <p
+                    *ngIf="this.userDetails.IsStripeLimitIncreaseReqLogin ">&
+                    You already subscribed this plan.</p>
+                </h3>
+                <p class="extra-ratio">* For each extra account, you will charge {{ this.LimitExRatio }}% of the base
+                  price.</p>
+                <p class="extra-price-p">
+                  Extra charge:
+                  <span class="extra-price">${{ this.extraAddedPrice }}us</span>
+                </p>
+                <p class="tot-price-p">
+                  Total payment:
+                  <span class="tot-price">${{ this.TotalPrice }}us</span>
+                </p>
+                <ul class="plan-features">
+                  <li><strong>Access Level:</strong> Limited Access</li>
+                  <li><strong>User Accounts:</strong> Up to {{minNoOfAccounts}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--End Plans Section -->
+
+        <br>
+
+
+        <!-- Form section -->
+        <div class="col-12">
+          <!-- Email entering section -->
+          <div id="managerx-login_email_section" class="form-group form-floating col-12 mb-3">
+            <!-- Email input section -->
+            <span id="managerx-login_email_input">
+              <input type="text" id="email" [(ngModel)]="email" name="email" required (keyup)="checkNoOfUserAccounts()"
+                inputrestriction="^[a-z A-Z 0-9 @ _ .]*$" placeholder="" maxlength="80" />
+              <label for="email" class="label_colors">Email Address</label>
+            </span>
+            <!-- End of Email input section -->
+
+            <!-- Error Message -->
+            <div id="managerx-login_email_error3" class="col-12 no-side-padding error_message"
+              *ngIf="CheckErrorCode('NOT$EXISTS$USER$EMAIL')">
+              <span>{{CheckErrorCode('NOT$EXISTS$USER$EMAIL')!.ErrorMessage}}</span>
+            </div>
+            <!-- End of Error Message -->
+          </div>
+
+          <!-- Name entering section -->
+          <div id="managerx-login_email_section" class="form-group form-floating col-12 mb-3">
+            <!-- Name input section -->
+            <span id="managerx-login_email_input">
+              <input type="text" id="name" [(ngModel)]="name" name="name" required
+                inputrestriction="^[a-z A-Z 0-9 @ _ .]*$" placeholder="" maxlength="50" />
+              <label for="name" class="label_colors">Name</label>
+            </span>
+            <!-- End of Name input section -->
+            <!-- Name ERROR Message -->
+            <div id="managerx-login_email_error3" class="col-12 no-side-padding error_message"
+              *ngIf="CheckErrorCode('NAME$ERROR')">
+              <span class="message-text">{{CheckErrorCode('NAME$ERROR')!.ErrorMessage}}</span>
+            </div>
+            <!-- End of Name ERRORMessage -->
+          </div>
+
+
+          <!-- Select Plan section -->
+          <div id="managerx-login_ub_plan_section" class="form-group form-floating col-12 mb-3" style="display: none;">
+            <!-- Name input section -->
+            <span id="managerx-login_ub_plan_section">
+              <select [(ngModel)]="priceId" name="plan" required [disabled]="true">
+                <option *ngFor="let plan of StripeSubscriptionPlansList" [value]="plan.PriceToken">
+                  {{ plan.Plan_Name }}
+                </option>
+              </select>
+
+            </span>
+            <!-- End of Select Plan section -->
+          </div>
+
+
+          <!-- noOfAccounts entering section -->
+          <div id="managerx-login_noOfAccounts_section" class="form-group form-floating col-12 mb-3">
+            <!-- noOfAccounts input section -->
+            <span id="managerx-login_noOfAccounts_input">
+              <input type="text" id="noOfAccounts" (ngModelChange)="calculation()" [(ngModel)]="noOfAccounts"
+                name="noOfAccounts" required appOnlyNumbers placeholder="" [disabled]="minNoOfAccounts === 0"
+                maxlength="4" minNoOfAccounts />
+              <label for="noOfAccounts" class="label_colors">No of Accounts </label>
+            </span>
+            <!-- End of noOfAccounts input section -->
+
+            <!-- noOfAccounts ERROR Message -->
+            <div *ngIf="noOfAccounts && +noOfAccounts < creatingTotalCountLimit" class="text-danger">
+              Minimum {{creatingTotalCountLimit}} required
+            </div>
+            <!-- End of noOfAccounts ERROR Message -->
+          </div>
+
+          <!-- card entering section -->
+          <div id="managerx-login_email_section" class="form-group form-floating col-12 mb-3" #dropinContainer
+            style="margin-top: 20px;">
+          </div>
+
+        </div>
+
+
+
+        <!--Start Button section -->
+        <div class="col-12">
+
+          <!-- Success Message -->
+          <div id="managerx-login_email_error3" class="col-12 success-message"
+            *ngIf="CheckErrorCode('PAYMENT$SUCCESS')">
+            <span class="message-text">{{CheckErrorCode('PAYMENT$SUCCESS')!.ErrorMessage}}</span>
+          </div>
+          <!-- End of Success Message -->
+
+          <!-- Failed Message -->
+          <div id="managerx-login_email_error3" class="col-12 failed-message" *ngIf="CheckErrorCode('PAYMENT$FAILED')">
+            <span class="message-text">{{CheckErrorCode('PAYMENT$FAILED')!.ErrorMessage}}</span>
+          </div>
+          <!-- End of Failed Message -->
+
+          <!-- ALREADY PAID Message -->
+          <div id="managerx-login_email_error3" class="col-12 success-message" *ngIf="CheckErrorCode('ALREADY$PAID')">
+            <span class="message-text">{{CheckErrorCode('ALREADY$PAID')!.ErrorMessage}}</span>
+          </div>
+          <!-- End of ALREADY PAID  Message -->
+
+        </div>
+
+
+        <br *ngIf="isEmailExists">
+        <div class="col-12">
+          <!-- Register Button -->
+          <button type="submit" *ngIf="!isEmailExists" (click)="registerUser()">Register</button>
+        </div>
+        <br *ngIf="!isEmailExists">
+        <div class="col-12">
+
+          <!-- Back to Plans Button-->
+          <button type="submit" (click)="subscribePlan()" *ngIf="!this.userDetails.IsStripeLimitIncreaseReqLogin"> Back
+            to
+            Plans</button>
+          <button type="submit" (click)="backToHome()" *ngIf="this.userDetails.IsStripeLimitIncreaseReqLogin"> Back to
+            Home</button>
+        </div>
+        <!--End Button section -->
+      </div>
+    </div>
+  </div>
+</ion-content>

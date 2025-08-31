@@ -1,0 +1,76 @@
+.create_account_form {
+    .row {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .pR0 {
+        padding-right: 0px;
+    }
+
+    .pLR0 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    input,
+    button {
+        height: 45px;
+        font-size: 11pt;
+    }
+
+    textarea {
+        min-height: 45px;
+        width: 100%;
+        color: #4b5563;
+        background: #ffffff;
+        padding: 0.75rem 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+    }
+
+    .custom-login-btn {
+        color: black;
+        border-color: rgb(158, 158, 158);
+        transition: color 0.3s ease; /* Adding transition for smooth hover effect */
+        font-size: 15px;
+    }
+
+    .custom-login-btn:hover {
+        color: white; /* Change color to white on hover */
+    }
+
+    .header_title_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        .header_icon {
+            font-size: 16pt;
+            color: black;
+            padding-right: 20px;
+            cursor: pointer;
+        }
+    }
+
+    .sub_heading_div {
+        p {
+            font-size: 14pt;
+            color: #252729;
+            font-weight: 500;
+        }
+    }
+}
+
+.p-float-label textarea:focus ~ label,
+.p-float-label textarea.p-filled ~ label,
+.p-float-label textarea:focus ~ label,
+.p-float-label textarea.p-filled ~ label,
+.p-float-label .p-inputwrapper-focus ~ label,
+.p-float-label .p-inputwrapper-filled ~ label {
+    top: -0.75rem;
+    font-size: 12px;
+}

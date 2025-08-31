@@ -1,0 +1,253 @@
+<ion-content [fullscreen]="true">
+    <div class="accept-container">
+        <!-- Accept profile card -->
+        <div class="accept-content" *ngIf="currentState=='ACCEPT'">
+            <div class="emoji">🎉</div>
+            <h1>Welcome Aboard!</h1>
+            <p>
+                We're thrilled to have you join the chat room. To make the most of your experience, please take a moment
+                to
+                complete your profile. (Once its completed you will get an email with the password for your profile)
+            </p>
+            <a class="profile-button" (click)="completeYourProfileOnClick()">Complete Your Profile</a>
+        </div>
+        <!-- End of Accept profile card -->
+
+
+        <!-- Main content section -->
+        <div class="container my-5 create_account_form accept-content-profile" *ngIf="currentState=='PROFILE'">
+            <!-- Heading title -->
+            <div class="col-12 header_title_section">
+                <h1>Complete your profile</h1>
+            </div>
+            <!-- End of Heading title -->
+
+            <!-- Body section -->
+            <div class="row">
+                <!-- Personal details section -->
+                <div class="col-12 sub_heading_div">
+                    <p id="managerX-create_account_form-personal_details_text" class="lead text-start mb-4">Personal
+                        Details
+                    </p>
+                </div>
+                <!-- End of Personal details section -->
+
+                <!-- Personal details fields -->
+                <div class="row col-12 pLR0">
+                    <!-- Each row section -->
+                    <div class="row pLR0">
+                        <!-- First name section -->
+                        <div class="form-group form-floating col-md-6 mb-4">
+                            <span class="p-float-label">
+                                <input id="managerX-create_account_form-first_name_input" pInputText type="text"
+                                    [(ngModel)]="userDetails.FirstName" [maxlength]="firstNameLimit">
+                                <label for="firstName4">First Name</label>
+                            </span>
+
+                            <!-- Error Message -->
+                            <div id="managerx-create_account_form_error1" class="col-12 no-side-padding error_message"
+                                *ngIf="CheckErrorCode('EMPTY$FIRST$NAME')">
+                                <span>{{CheckErrorCode('EMPTY$FIRST$NAME')!.ErrorMessage}}</span>
+                            </div>
+                            <!-- End of Error Message -->
+                        </div>
+                        <!-- End of First name section -->
+
+                        <!-- Last name section -->
+                        <div class="form-group form-floating col-md-6 mb-4">
+                            <span class="p-float-label">
+                                <input id="managerX-create_account_form-last_name_input" pInputText type="text"
+                                    [(ngModel)]="userDetails.LastName" [maxlength]="lastNameLimit">
+                                <label for="lastName4">Last Name</label>
+                            </span>
+
+                            <!-- Error Message -->
+                            <div id="managerx-create_account_form_error2" class="col-12 no-side-padding error_message"
+                                *ngIf="CheckErrorCode('EMPTY$LAST$NAME')">
+                                <span>{{CheckErrorCode('EMPTY$LAST$NAME')!.ErrorMessage}}</span>
+                            </div>
+                            <!-- End of Error Message -->
+                        </div>
+                        <!-- End of Last name section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="row pLR0">
+                        <!-- Contact number section -->
+                        <div class="form-group form-floating mb-4">
+                            <span class="p-float-label">
+                                <input id="managerX-create_account_form-contact_number_input" pInputText type="text"
+                                    [(ngModel)]="userDetails.Email" [maxlength]="contactNumberLimit"
+                                    inputrestriction="^[0-9]*$" disabled>
+                                <label for="contactNumber">Email</label>
+                            </span>
+                        </div>
+                        <!-- End of Contact number section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="row pLR0">
+                        <!-- Contact number section -->
+                        <div class="form-group form-floating mb-4">
+                            <span class="p-float-label">
+                                <input id="managerX-create_account_form-contact_number_input" pInputText type="text"
+                                    [(ngModel)]="userDetails.ContactNumber" [maxlength]="contactNumberLimit"
+                                    inputrestriction="^[0-9]*$">
+                                <label for="contactNumber">Contact Number</label>
+                            </span>
+
+                            <!-- Error Message -->
+                            <div id="managerx-create_account_form_error3" class="col-12 no-side-padding error_message"
+                                *ngIf="CheckErrorCode('EMPTY$CONTACT$NUMBER')">
+                                <span>{{CheckErrorCode('EMPTY$CONTACT$NUMBER')!.ErrorMessage}}</span>
+                            </div>
+                            <!-- End of Error Message -->
+                        </div>
+                        <!-- End of Contact number section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section for Role -->
+                    <div class="row pLR0">
+                        <!-- Your role section -->
+                        <div class="form-group form-floating mb-4">
+                            <span class="p-float-label">
+                                <p-dropdown id="managerX-create_account_form-role_dropdown" class="full_width_dropdown"
+                                    [options]="userRoleList" [(ngModel)]="userDetails.RoleId" />
+                                <label for="contractorRole">Your Role</label>
+                            </span>
+                        </div>
+                        <!-- End of Your role section -->
+                    </div>
+                    <!-- End of Each row section for Role -->
+                </div>
+                <!-- End of Personal details fields -->
+
+                <!-- Address details section -->
+                <div class="col-12 sub_heading_div mt-2">
+                    <p id="managerX-create_account_form-address_details_text" class="lead text-start mb-4">Address</p>
+                </div>
+                <!-- End of Address details section -->
+
+                <!-- Address details fields -->
+                <div class="row col-12 pLR0">
+                    <!-- Each row section -->
+                    <div class="row pLR0">
+                        <!-- Street address section -->
+                        <div class="form-group form-floating mb-4">
+                            <span class="p-float-label">
+                                <textarea id="managerX-create_account_form-street_address_textarea"
+                                    name="contactstreetAddress" [(ngModel)]="userDetails.AddressDetails.StreetAddress"
+                                    [maxlength]="addressStreetLimit"></textarea>
+                                <label for="contactstreetAddress"
+                                    [ngClass]="(userDetails.AddressDetails.StreetAddress.trim())?'p-float-label-filled':''">Street
+                                    Address</label>
+                            </span>
+
+                            <!-- Error Message -->
+                            <div id="managerx-create_account_form_error5" class="col-12 no-side-padding error_message"
+                                *ngIf="CheckErrorCode('EMPTY$STREET$ADDRESS')">
+                                <span>{{CheckErrorCode('EMPTY$STREET$ADDRESS')!.ErrorMessage}}</span>
+                            </div>
+                            <!-- End of Error Message -->
+                        </div>
+                        <!-- End of Street address section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="row pLR0">
+                        <!-- City Suburb section -->
+                        <div class="form-group form-floating mb-4">
+                            <span class="p-float-label">
+                                <input id="managerX-create_account_form-city_input" pInputText type="text"
+                                    [(ngModel)]="userDetails.AddressDetails.City" [maxlength]="addressCityLimit"
+                                    inputrestriction="^[a-z A-Z]*$">
+                                <label for="contactNumber">City/Suburb</label>
+                            </span>
+
+                            <!-- Error Message -->
+                            <div id="managerx-create_account_form_error6" class="col-12 no-side-padding error_message"
+                                *ngIf="CheckErrorCode('EMPTY$CITY')">
+                                <span>{{CheckErrorCode('EMPTY$CITY')!.ErrorMessage}}</span>
+                            </div>
+                            <!-- End of Error Message -->
+                        </div>
+                        <!-- End of City Suburb section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="row pLR0">
+                        <!-- State section -->
+                        <div class="form-group form-floating col-md-6 mb-4">
+                            <span class="p-float-label">
+                                <input id="managerX-create_account_form-state_input" pInputText type="text"
+                                    [(ngModel)]="userDetails.AddressDetails.State" [maxlength]="addressStateLimit"
+                                    inputrestriction="^[a-z A-Z]*$">
+                                <label for="firstName4">State</label>
+                            </span>
+
+                            <!-- Error Message -->
+                            <div id="managerx-create_account_form_error7" class="col-12 no-side-padding error_message"
+                                *ngIf="CheckErrorCode('EMPTY$STATE')">
+                                <span>{{CheckErrorCode('EMPTY$STATE')!.ErrorMessage}}</span>
+                            </div>
+                            <!-- End of Error Message -->
+                        </div>
+                        <!-- End of State section -->
+
+                        <!-- Post code section -->
+                        <div class="form-group form-floating col-md-6 mb-4">
+                            <span class="p-float-label">
+                                <input id="managerX-create_account_form-postcode_input" pInputText type="text"
+                                    [(ngModel)]="userDetails.AddressDetails.PostCode" [maxlength]="addressPostcodeLimit"
+                                    inputrestriction="^[0-9]*$">
+                                <label for="lastName4">Postcode</label>
+                            </span>
+
+                            <!-- Error Message -->
+                            <div id="managerx-create_account_form_error8" class="col-12 no-side-padding error_message"
+                                *ngIf="CheckErrorCode('EMPTY$POSTCODE')">
+                                <span>{{CheckErrorCode('EMPTY$POSTCODE')!.ErrorMessage}}</span>
+                            </div>
+                            <!-- End of Error Message -->
+                        </div>
+                        <!-- End of Post code section -->
+                    </div>
+                    <!-- End of Each row section -->
+
+                    <!-- Each row section -->
+                    <div class="row pLR0">
+                        <!-- Country list section -->
+                        <div class="form-group form-floating mb-4">
+                            <span class="p-float-label">
+                                <p-dropdown id="managerX-create_account_form-country_dropdown"
+                                    class="full_width_dropdown" [options]="displayCountryList"
+                                    [(ngModel)]="userDetails.AddressDetails.CountryId" />
+                                <label for="contractorRole">Country</label>
+                            </span>
+                        </div>
+                        <!-- End of Country list section -->
+                    </div>
+                    <!-- End of Each row section -->
+                </div>
+                <!-- End of Address details fields -->
+
+                <!-- Create account button -->
+                <div class="d-grid gap-2 mt-3">
+                    <button id="managerX-create_account_form-create_acc_button" class="btn btn-lg btn-primary"
+                        (click)="onClickCreateAccount()">
+                        Create account
+                    </button>
+                </div>
+                <!-- End of Create account button -->
+
+            </div>
+            <!-- End of Body section -->
+        </div>
+        <!-- End of Main content section -->
+    </div>
+</ion-content>

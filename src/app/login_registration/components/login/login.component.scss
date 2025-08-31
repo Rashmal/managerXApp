@@ -1,0 +1,276 @@
+.login_page {
+
+    .image-fullscreen {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    display: block;
+  }
+
+  .full-height-row {
+    height: 100vh;
+  }
+
+  .no_padding {
+    padding: 0;
+  }
+
+    .error-placeholder-label {
+        label {
+            top: 32% !important;
+        }
+    }
+
+    .eye-password-label {
+        .fa.fa-eye,
+        .fa.fa-eye-slash {
+            margin-top: -18px;
+            position: absolute;
+        }
+    }
+
+    // input,
+    // button {
+    //     height: 45px;
+    // }
+
+    input {
+        height: 45px;
+    }
+
+    button {
+        span {
+            font-weight: 500;
+            // font-size: 10.5pt;
+        }
+    }
+
+    .or_label {
+        font-size: 10.5pt;
+    }
+
+    .banner_image {
+        width: 100%;
+        height: 100vh;
+        object-fit: fill;
+    }
+
+    .top_para {
+        font-weight: 500;
+        font-size: 11pt;
+    }
+
+    .label_colors {
+        color: rgb(167, 167, 167);
+    }
+
+    .custom-login-btn {
+        color: black;
+        border-color: rgb(224 224 224);
+        transition: color 0.3s ease; /* Adding transition for smooth hover effect */
+        font-size: 15px;
+    }
+
+    .custom-login-btn:hover {
+        color: white; /* Change color to white on hover */
+    }
+
+    /* CSS */
+    .form-group {
+        position: relative;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .form-group label {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        transition: all 0.3s ease;
+        color: #666;
+    }
+
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label {
+        top: 8px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    /* Password input field */
+    /* Password input field */
+    .password-group input {
+        width: calc(100% - 40px); /* Adjust for eye icon width */
+        padding-right: 40px; /* Adjust for eye icon width */
+    }
+
+    /* Password label */
+    .password-group label {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        transition: all 0.3s ease;
+        color: #666;
+    }
+
+    /* Adjust label position */
+    .password-group input:not(:focus) + label {
+        top: 50%; /* Keep label centered when input is not focused */
+        font-size: 16px; /* Adjust label font size as needed */
+    }
+
+    /* Eye icon for password visibility */
+    .password-toggle-icon {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        right: 10px; /* Adjust as needed */
+        transform: translateY(-50%);
+    }
+
+    /* Adjust error message position */
+    .password-group .text-danger {
+        position: absolute;
+        bottom: -20px; /* Adjust as needed */
+        left: 10px;
+        font-size: 12px;
+        color: #ff0000; /* Red color for error message */
+    }
+    .no-break {
+        white-space: nowrap;
+    }
+
+    .justify-text {
+        // text-align: justify;
+        // display: block;
+    }
+
+
+
+
+.video-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.video-thumbnail {
+  width: 100%;
+ 
+  display: block;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: 0.3s ease-in-out;
+}
+
+.play-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+}
+
+.landing_page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    text-align: center;
+    // background-image: url(../../../../assets/Images/login.gif);
+    // background-size: cover;
+    // background-repeat: no-repeat;
+    // background-position: center;
+    padding: 0;
+}
+
+.landing_page img {
+    width: 100%;
+    max-width: 100%; /* Ensures the image scales within its container */
+    height: 100%; /* Keeps the aspect ratio of the image */
+    object-fit: cover; /* Ensures the image is contained within the div */
+    padding: 0;
+}
+
+.custom-login-btn {
+    background-color: var(--LoginButtonBackgroundColor) !important;
+    color: var(--LoginButtonFontColor) !important;
+    border-color: var(--LoginButtonBorderColor) !important;
+    border-style: var(--LoginButtonBorderStyle) !important;
+    border-width: var(--LoginButtonBorderWidth) !important;
+    font-size: var(--LoginButtonFontSize) !important;
+    padding-bottom: var(--LoginButtonPaddingBottom) !important;
+    padding-top: var(--LoginButtonPaddingTop) !important;
+    padding-left: var(--LoginButtonPaddingLeft) !important;
+    padding-right: var(--LoginButtonPaddingRight) !important;
+}
+
+.custom-login-btn:hover {
+    background-color: var(--LoginButtonBackgroundHoverColor) !important;
+    color: var(--LoginButtonHoverFontColor) !important;
+}
+
+.landing_page video {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+}
+
+#managerx-login_welcome_text {
+    font-size: 2.2rem;
+}
+
+
+
+
+    
+.video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  width: 80%;
+  max-width: 900px;
+  background: #000;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.close-btn {
+  position: absolute;
+  top: -18px;
+  right: 0px;
+  font-size: 35px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+}

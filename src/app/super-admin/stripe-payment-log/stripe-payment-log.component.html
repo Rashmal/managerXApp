@@ -1,0 +1,79 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class=" contacts">
+
+        <!-- Contacts table section -->
+        <div class="col-12">
+            <!-- Current prime ng table section -->
+            <p-table [value]="StripePaymentLogList">
+                <!-- Headers section -->
+                <ng-template pTemplate="header">
+                    <tr class="table_header_section">
+
+                        <th class="header_label_span">Subscription ID</th>
+                        <th class="header_label_span">Plan Name</th>
+                        <th class="header_label_span">Payment</th>
+                        <th class="header_label_span">Payment Date</th>
+
+                        <th class="header_label_span">Trial Expiry</th>
+                        <th class="header_label_span">Subscription Expiry</th>
+                        <th class="header_label_span">Status</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <!-- End of Headers section -->
+
+                <!-- Table body content section -->
+                <ng-template pTemplate="body" let-payment>
+                    <tr class="current-tr">
+                        <td>{{ payment.StripeSubscriptionId }}</td>
+                        <td>
+                            {{
+                            payment.Plans.Plan_Name === 'Plan1' ? 'Plan 500' :
+                            payment.Plans.Plan_Name === 'Plan2' ? 'Plan 210' :
+                            payment.Plans.Plan_Name === 'Plan3' ? 'Plan 100' :
+                            payment.Plans.Plan_Name
+                            }}
+                        </td>
+                        <td>{{ payment.Payment | currency }}</td>
+                        <td>{{ payment.PaymentDate | date:'yyyy-MM-dd' }}</td>
+                        <td>
+                            {{ payment.TrialExpiredOn === '0001-01-01T00:00:00' ? '-' : (payment.TrialExpiredOn |
+                            date:'yyyy-MM-dd') }}
+                        </td>
+                        <td>{{ payment.SubscriptionExpiredOn ? (payment.SubscriptionExpiredOn | date:'yyyy-MM-dd') :
+                            'N/A'
+                            }}</td>
+                        <td>{{ payment.StripePayStatusName }}</td>
+                        <td> <button class="btn btn-sm btn-warning" *ngIf="payment.BK_StripePayStatusId==1"
+                                (click)="refund(payment.StripeSubscriptionId,payment.Plans.Plan_Name, payment.Payment)"><i
+                                    class="fa fa-refresh" style="cursor: pointer;"> </i> Refund</button> </td>
+                    </tr>
+                </ng-template>
+                <!-- End of Table body content section -->
+            </p-table>
+
+            <!-- End of Current prime ng table section -->
+
+            <div id="managerX_admin-contacts_no-records_text" *ngIf="StripePaymentLogList.length == 0">
+                <div colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+
+            </div>
+
+            <p-paginator id="managerX_admin-contacts_paginator_sections" class="paginator_sec" #modulePaginator
+                *ngIf="StripePaymentLogList && StripePaymentLogList.length > 0 && StripePaymentLogList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(StripePaymentLogList && StripePaymentLogList.length > 0 && StripePaymentLogList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                [totalRecords]="(StripePaymentLogList.length>0)? StripePaymentLogList[0].TotalRecords:0"></p-paginator>
+
+
+        </div>
+        <!-- End of Contacts table section -->
+    </div>
+    <!-- End of Main content section -->
+
+
+    <p-toast></p-toast>
+</ion-content>

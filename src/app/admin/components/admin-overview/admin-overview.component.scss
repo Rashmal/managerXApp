@@ -1,0 +1,429 @@
+.project_overview {
+    padding: 20px;
+    padding-top: 30px;
+
+    .container {
+        padding: 0 !important;
+    }
+
+    .item-container {
+        height: 215px;
+        overflow-y: auto;
+    }
+
+    .item {
+        // padding: 10px;
+        // border-bottom: 1px solid #ccc;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .header_label_span {
+        font-weight: 600 !important;
+        font-family: "Inter var" !important;
+        color: #878b91 !important;
+    }
+
+    .row_heading_section {
+        display: flex;
+        align-items: center;
+
+        .left_align_content {
+            margin-right: auto;
+        }
+
+        .right_align_content {
+            margin-left: auto;
+        }
+
+        .sub_heading_section {
+            font-size: 6.4pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #3e3e3f;
+            letter-spacing: 1px;
+        }
+    }
+
+    .border_radius {
+        border-radius: 5px;
+    }
+
+    .value_content_lbl {
+        margin-bottom: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 10pt;
+    }
+
+    .value_content_lbl_table {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 10pt;
+        display: flex;
+        align-items: center;
+        height: 30px;
+        .stage_name_lbl {
+            font-weight: 550;
+            font-size: 10pt;
+        }
+        .date_lbl {
+            font-weight: 550;
+            font-size: 10pt;
+        }
+    }
+
+    .stage_col_width {
+        width: 22vw;
+        width: 36%;
+    }
+
+    .status_col_width {
+        width: 10vw;
+        width: 15%;
+    }
+
+    .status_col_width_status {
+        width: 10vw;
+        width: 18%;
+    }
+
+    .final_col {
+        width: 44%;
+    }
+
+    .subtasks_col_width {
+        width: 13vw;
+        width: 49%;
+    }
+
+    .stage_name_lbl {
+        padding-left: 10px;
+    }
+
+    .heading_section {
+        display: flex;
+        align-items: center;
+        font-size: 9pt;
+        color: #878b91;
+        font-weight: 700;
+
+        .each_col {
+            text-align: left;
+        }
+    }
+
+    .body_content_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        .each_col {
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .fa-check-circle {
+        font-size: 14pt;
+    }
+
+    .status_div_section {
+        font-size: 7.8pt;
+        padding: 2px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 2px;
+        width: 5vw;
+        width: 95%;
+        text-align: center;
+        max-width: 82px;
+    }
+
+    .page_title {
+        font-size: 17pt;
+        font-weight: 600;
+    }
+
+    .sub_title {
+        font-size: 14pt;
+        font-weight: 620;
+        margin-bottom: 19px !important;
+    }
+
+    .project-info-container,
+    .stage-overview-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Ensures both containers take up full height */
+    }
+
+    .project-info-container {
+        border-radius: 5px;
+        .label_para {
+            font-size: 10.8pt;
+            font-weight: 620;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 19px !important;
+            i {
+                color: rgb(105, 105, 105);
+                font-size: 15pt;
+                width: 20px;
+            }
+            span {
+                padding-left: 10px;
+            }
+        }
+
+        .value_label {
+            height: 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 19px !important;
+            white-space: normal; /* allows text to wrap */
+            span {
+                font-size: 10pt;
+                font-weight: normal;
+            }
+        }
+
+        .each_row_section {
+            display: flex;
+            align-items: center;
+        }
+
+        .label_div_section {
+            width: 220px;
+            min-width: 220px;
+        }
+
+        .value_label {
+            width: 100%;
+        }
+    }
+
+    .stage-overview-container {
+        border-radius: 5px;
+    }
+
+    .project-info-container .container,
+    .stage-overview-container .container {
+        flex-grow: 1; /* Allows content to stretch to fill available space */
+    }
+
+    .green-mark::before {
+        content: "\2713";
+        color: green;
+        font-size: 20px;
+    }
+
+    .normal-mark::before {
+        content: "\2714";
+        color: gray;
+        font-size: 20px;
+    }
+
+    .greenText {
+        background-color: #ecfdf4;
+        padding: 2px 8px 2px 8px;
+        color: #007a4e;
+    }
+
+    .redText {
+        background-color: #fefce8;
+        padding: 2px 8px 2px 8px;
+        color: #a26106;
+    }
+
+    .GreenIcon {
+        color: #007a4e;
+    }
+
+    .InProgressIcon {
+        color: black;
+    }
+
+    /* Ensure table headers have the desired styling */
+    th {
+        background-color: var(--AllPageContentBoxBackgroundColor) !important;
+        color: rgb(173, 171, 171) !important;
+        font-size: 12px;
+        text-align: left;
+        font-family: "Quicksand", sans-serif;
+    }
+
+    tr {
+        background: var(--AllPageContentBoxBackgroundColor) !important;
+    }
+
+    /* Reduce the height of the table rows */
+    .current-tr {
+        height: 20px !important; /* Adjust as needed */
+    }
+
+    /* Additional styling for table cells */
+    .current-td {
+        padding: 5px; /* Adjust padding to reduce overall row height */
+        font-size: 14px; /* Ensure text size is appropriate */
+    }
+
+    /* Ensure table headers have appropriate padding */
+    th {
+        padding: 5px; /* Adjust padding for headers */
+    }
+
+    .custom-icon-color {
+        color: #43d657;
+    }
+
+    .profile-pic {
+        width: 25px; /* Adjust the width and height as needed */
+        height: 25px;
+        border-radius: 50%; /* Makes the image round */
+        border: 0x solid #fff; /* Adds a white border around the image */
+    }
+
+    .caption-container {
+        height: 40px; /* Adjust the height as needed */
+        font-size: 12px; /* Adjust the font size as needed */
+        background-color: #f6f9ff;
+    }
+
+    p {
+        font-weight: 600;
+    }
+
+    td {
+        font-weight: 600;
+    }
+
+    .container {
+        white-space: nowrap; /* Prevents wrapping */
+    }
+
+    .profile-pic-container,
+    .client-info {
+        display: inline-block;
+        vertical-align: middle; /* Vertically align elements */
+    }
+
+    .profile-pic-container {
+        margin-right: 10px; /* Space between image and text */
+    }
+
+    .client-role {
+        color: rgb(129, 129, 129);
+        font-size: 10px;
+        margin: 0; /* Remove default margin */
+    }
+
+    .table_header_section {
+        // background-color: rgb(255, 255, 255) !important;
+
+        th {
+            font-weight: normal;
+            font-size: 7.7pt;
+            font-weight: normal;
+        }
+    }
+
+    .display_flex_center {
+        display: flex;
+        align-items: center;
+    }
+
+    .display_user_section {
+        .name_role_section {
+            padding-left: 5px;
+        }
+        .avatar_section {
+            img {
+                height: 30px;
+                width: 30px;
+            }
+        }
+        .content_div {
+            line-height: 13px;
+        }
+        .content_val {
+            font-size: 9pt;
+            font-weight: normal;
+        }
+        .name_section {
+            font-weight: 500;
+        }
+        .role_name {
+            font-size: 7.5pt;
+            color: #878b91;
+        }
+    }
+
+    .task_name_col {
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .status_col {
+        width: 12%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .person_col {
+        width: 15%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .due_date_col {
+        width: 12%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .attachments_col {
+        width: 36%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+    }
+
+    .each_attachment_section {
+        display: flex;
+        align-items: center;
+        font-size: 10pt !important;
+        margin-right: 10px;
+        span {
+            padding-left: 5px;
+        }
+    }
+}
+
+@media (min-width: 576px) {
+    .container,
+    .container-sm {
+        max-width: 100%;
+    }
+}
+
+::ng-deep .project_overview .p-datatable .p-datatable-tbody > tr > td {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 13.5px;
+}

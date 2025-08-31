@@ -1,0 +1,287 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="row col-12 create_chat_room">
+
+        <!-- Header section -->
+        <div class="col-12 no_side_padding top_bar_section">
+            <span class="page_title" *ngIf="selectedType=='VIEW_INFO'">View Chat Room</span>
+            <span class="page_title" *ngIf="selectedType=='CREATE_INFO'">Create Chat Room</span>
+            <span class="page_title" *ngIf="selectedType=='EDIT_ROOM'">Edit Chat Room</span>
+        </div>
+        <!-- End of Header section -->
+
+        <!-- Content section -->
+        <div class="col-12 main_content">
+            <!-- Each row section -->
+            <div class="col-12 each_row">
+                <div class="col-2 label">
+                    <span>Room ID</span>
+                </div>
+                <div class="col-10 prompt">
+                    <span class="default" *ngIf="chatRoom.Id == 0">This will be generated automatically</span>
+                    <span class="default" *ngIf="chatRoom.Id !== 0">RID{{chatRoom.Id}}</span>
+                </div>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row">
+                <div class="col-2 label">
+                    <span>Creator</span>
+                </div>
+                <div class="col-10 prompt">
+                    <span class="default">{{chatRoom.PersonOwnerEmail}}</span>
+                </div>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row">
+                <div class="col-2 label">
+                    <span>Room Type</span>
+                </div>
+                <div class="col-10 prompt">
+                    <p-selectButton [options]="stateOptions" [(ngModel)]="chatRoom.ChatRoomTypeId"
+                        [disabled]="(selectedType=='VIEW_INFO')?true:false" />
+                </div>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row">
+                <div class="col-2 label">
+                    <span>Name</span> <span class="red_color">*</span>
+                </div>
+                <div class="col-10 prompt">
+                    <input type="text" placeholder="Enter the room name" [(ngModel)]="chatRoom.RoomName"
+                        [disabled]="(selectedType=='VIEW_INFO')?true:false">
+                </div>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row">
+                <div class="col-2 label">
+                    <span>Description</span>
+                </div>
+                <div class="col-10 prompt">
+                    <textarea placeholder="Enter the description" [(ngModel)]="chatRoom.RoomDescription"
+                        [disabled]="(selectedType=='VIEW_INFO')?true:false"></textarea>
+                </div>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row">
+                <div class="col-2 label">
+                    <span>Group Members</span>
+                </div>
+                <div class="col-10 prompt">
+                    <!-- Added list -->
+                    <div class="added_list">
+                        <div *ngFor="let personObj of chatRoom.ChatRoomMembersList">
+                            <!-- Avatar section -->
+                            <div class="added_each_person">
+                                <div>
+                                    <span>
+                                        {{personObj.PersonName}}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span>
+                                        {{personObj.PersonEmail}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Avatar section -->
+                        </div>
+                    </div>
+                    <!-- End of Added list -->
+
+                    <!-- Temp Added list -->
+                    <div class="added_list">
+                        <div *ngFor="let personObj of tempPersonList">
+                            <!-- Avatar section -->
+                            <div class="added_each_person">
+                                <div>
+                                    <span>
+                                        {{personObj.FullName}} (Pending)
+                                    </span>
+                                </div>
+                                <div>
+                                    <span>
+                                        {{personObj.Email}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Avatar section -->
+                        </div>
+                    </div>
+                    <!-- End of Temp Added list -->
+
+                    <!-- Select members -->
+                    <div *ngIf="!displayAllMembers">
+                        <button *ngIf="selectedType!=='VIEW_INFO'" class="update_btn" (click)="selectMembers()"
+                            [disabled]="chatRoom.ChatRoomTypeId == 1 && (chatRoom.ChatRoomMembersList.length + tempPersonList.length) == 2">Select
+                            Members</button>
+
+                        <button *ngIf="selectedType!=='VIEW_INFO'" class="update_btn"
+                            (click)="inviteExternalUserOnClick()"
+                            [disabled]="chatRoom.ChatRoomTypeId == 1 && (chatRoom.ChatRoomMembersList.length + tempPersonList.length) == 2">Invite
+                            External</button>
+                    </div>
+                    <div *ngIf="displayAllMembers">
+                        <button class="reset_btn" (click)="cancelSelectMembers()">Cancel</button>
+                    </div>
+                    <!-- End of Select members -->
+
+                    <!-- Display all the members -->
+                    <div *ngIf="displayAllMembers">
+                        <!-- Loop through the person list -->
+                        <div class="col-12" *ngFor="let personObj of contactUserDetails" class="each_row_person">
+                            <div class="tick_icon" *ngIf="returnUserObject(personObj.UserId).PersonId != 0">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            </div>
+
+                            <!-- Avatar section -->
+                            <div class="avatar_person" *ngIf="personObj.Avatar != ''">
+                                <img [src]="personObj.Avatar">
+                            </div>
+                            <div class="default_avatar_person" *ngIf="personObj.Avatar == ''">
+                                <span>
+                                    {{personObj.FirstName[0].trim().toUpperCase()}}{{personObj.LastName[0].trim().toUpperCase()}}
+                                </span>
+                            </div>
+                            <!-- Avatar section -->
+
+                            <span>{{personObj.FirstName}} {{personObj.LastName}} ({{personObj.Email}})</span>
+
+                            <i class="fa fa-times-circle-o close_icon" aria-hidden="true"
+                                (click)="removeUserToChatRoom(personObj)"
+                                *ngIf="returnUserObject(personObj.UserId).PersonId != 0 && personObj.UserId != chatRoom.PersonOwnerId"></i>
+
+                            <i class="fa fa-plus add_icon" aria-hidden="true" (click)="addUserToChatRoom(personObj)"
+                                *ngIf="(chatRoom.ChatRoomTypeId == 2 && ((returnUserObject(personObj.UserId).PersonId == 0) || (returnUserObject(personObj.UserId).PersonId == 0 && personObj.UserId != overallCookieInterface.GetUserId()))) 
+                                ||
+                                (chatRoom.ChatRoomTypeId == 1 && returnUserObject(personObj.UserId).PersonId == 0 && (personObj.UserId != overallCookieInterface.GetUserId()) && (chatRoom.ChatRoomMembersList.length < 2))"></i>
+                        </div>
+                        <!-- End of Loop through the person list -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_new-task_paginator_section" class="paginator_sec" #modulePaginator
+                            *ngIf="contactUserDetails && contactUserDetails.length > 0 && contactUserDetails[0].TotalRecords > currentFilter.RecordsPerPage"
+                            [ngClass]="(contactUserDetails && contactUserDetails.length > 0 && contactUserDetails[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                            [totalRecords]="(contactUserDetails.length>0)? contactUserDetails[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Display all the members -->
+                </div>
+            </div>
+            <!-- End of Each row section -->
+
+
+            <!-- Buttons section -->
+            <div class="col-12 each_row">
+                <button class="update_btn" [disabled]="(chatRoom.RoomName.trim() == '')"
+                    *ngIf="selectedType!=='VIEW_INFO'"
+                    [title]="(chatRoom.RoomName.trim() == '')?'Name is mandatory':'Click to save'"
+                    (click)="createChatRoomOnClick()">Save</button>
+                <button class="reset_btn" (click)="CloseOnClick()">Cancel</button>
+            </div>
+            <!-- End of Buttons section -->
+
+        </div>
+        <!-- End of Content section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Invite external user section -->
+    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="inviteExternalUser" [style]="{ width: '25rem' }"
+        [draggable]="false" header="Invite User Details">
+        <!-- Inner content section -->
+        <div class="invite_user_body">
+            <!-- Body section -->
+            <div>
+                <!-- Each section -->
+                <div class="each_section_invite">
+                    <div class="prompt_label">
+                        <span>Invitee Email:</span>
+                    </div>
+                    <div>
+                        <input type="text" class="full_width" [(ngModel)]="userDetails.Email">
+                    </div>
+                </div>
+                <!-- End of Each section -->
+
+                <!-- Error Message -->
+                <div class="col-12 no-side-padding error_message" *ngIf="inviteeAlreadyExists">
+                    <span>This email already exists in the system</span>
+                </div>
+                <!-- End of Error Message -->
+
+                <!-- Error Message -->
+                <div class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$FIRST$NAME')">
+                    <span>{{CheckErrorCode('EMPTY$FIRST$NAME')!.ErrorMessage}}</span>
+                </div>
+                <!-- End of Error Message -->
+
+                <!-- Each section -->
+                <div class="each_section_invite">
+                    <div class="prompt_label">
+                        <span>Invitee First Name:</span>
+                    </div>
+                    <div>
+                        <input type="text" class="full_width" [(ngModel)]="userDetails.FirstName">
+                    </div>
+                </div>
+                <!-- End of Each section -->
+
+                <!-- Error Message -->
+                <div class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$FIRST$NAME')">
+                    <span>{{CheckErrorCode('EMPTY$FIRST$NAME')!.ErrorMessage}}</span>
+                </div>
+                <!-- End of Error Message -->
+
+                <!-- Each section -->
+                <div class="each_section_invite">
+                    <div class="prompt_label">
+                        <span>Invitee Last Name:</span>
+                    </div>
+                    <div>
+                        <input type="text" class="full_width" [(ngModel)]="userDetails.LastName">
+                    </div>
+                </div>
+                <!-- End of Each section -->
+
+                <!-- Error Message -->
+                <div class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$LAST$NAME')">
+                    <span>{{CheckErrorCode('EMPTY$LAST$NAME')!.ErrorMessage}}</span>
+                </div>
+                <!-- End of Error Message -->
+
+                <!-- Each section -->
+                <div class="each_section_invite">
+                    <div class="prompt_label">
+                        <span>Invitee User Type:</span>
+                    </div>
+                    <div class="custom_template">
+                        <p-dropdown id="managerX-create_account_form-role_dropdown" class="full_width_dropdown"
+                            [options]="userRoleList" [(ngModel)]="userDetails.RoleId" [appendTo]="'body'" />
+                    </div>
+                </div>
+                <!-- End of Each section -->
+            </div>
+            <!-- End of Body section -->
+
+            <!-- Buttons section -->
+            <div class="button_section">
+                <button class="update_btn" (click)="saveInvitee()">Save</button>
+                <button class="reset_btn" (click)="cancelInvitee()">Cancel</button>
+            </div>
+            <!-- End of Buttons section -->
+        </div>
+        <!-- End of Inner content section -->
+    </p-dialog>
+    <!-- End of Invite external user section -->
+</ion-content>

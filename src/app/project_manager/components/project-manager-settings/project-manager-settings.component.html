@@ -1,0 +1,208 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 settings">
+        <!-- Top bar section -->
+        <div class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_project-manager-settings_top-bar_title" class="page_title">Settings</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Top bar section -->
+        <div class="custom-padding-5px bg-content">
+            <!-- Sub heading section -->
+            <div class="row col-12">
+                <!-- Title section -->
+                <div id="managerX_project-manager-settings_sub-heading_title" class="sub_page_title">Account Settings
+                </div>
+                <!-- End of Title section -->
+            </div>
+            <!-- End of Sub heading section -->
+
+            <!-- Avatar and name section -->
+            <div class="col-12 display_user_section ">
+                <!-- Avatar section -->
+                <div id="managerX_project-manager-settings_avatar_section" class="avatar_section">
+                    <img id="managerX_project-manager-settings_avatar_default" *ngIf="!userBasicDetails.Avatar"
+                        src="../../../../assets/Images/default_avatar.png">
+                    <img id="managerX_project-manager-settings_avatar_image" *ngIf="userBasicDetails.Avatar"
+                        [src]="userBasicDetails.Avatar">
+                </div>
+                <!-- End of Avatar section -->
+                <!-- Name and role section -->
+                <div class="name_role_section">
+                    <!-- Name section -->
+                    <div id="managerX_project-manager-settings_name_section" class="content_div">
+                        <span class="content_val name_section">
+                            <span *ngIf="userBasicDetails.FirstName != ''">{{userBasicDetails.FirstName}} </span>
+                            <span *ngIf="userBasicDetails.FirstName == ''">--</span>
+                            <span *ngIf="userBasicDetails.LastName != ''">{{userBasicDetails.LastName}}</span>
+                            <span *ngIf="userBasicDetails.LastName == ''">--</span>
+                        </span>
+                    </div>
+                    <!-- End of Name section -->
+
+                    <!-- Role name section -->
+                    <div id="managerX_project-manager-settings_role_name_section" class="content_div">
+                        <span class="content_val role_name">{{userBasicDetails.Email}}</span>
+                    </div>
+                    <!-- End of Role name section -->
+                </div>
+                <!-- End of Avatar and name section -->
+
+                <!-- Edit profile button -->
+                <div id="managerX_project-manager-settings_edit_profile-section" class="edit_profile_section">
+                    <button id="managerX_project-manager-settings_edit_profile-button" (click)="editProfileOnClick()"
+                        class="btn bt align-self-start align-items-center custom-button">Edit
+                        Profile</button>
+                </div>
+                <!-- End of Edit profile button -->
+            </div>
+            <!-- End of Main content section -->
+
+            <!-- Name section -->
+            <div id="managerX_project-manager-settings_name_section-container" class="col-12 each_content_row_section">
+                <!-- Title section -->
+                <div id="managerX_project-manager-settings_name_title-section" class="col-12 title_section">
+                    <span class="title_lbl">Name</span>
+                </div>
+                <!-- End of Title section -->
+
+                <!-- User prompt section -->
+                <div class="col-12 display_flex_center">
+                    <!-- First name section -->
+                    <div id="managerX_project-manager-settings_first-name_section" class="col-6 padding_right_6">
+                        <input id="managerX_project-manager-settings_first-name_input" type="text"
+                            [(ngModel)]="userBasicDetails.FirstName">
+                        <!-- Error Message -->
+                        <div id="managerX_project-manager-settings_first-name_error-message"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$FIRST_NAME')">
+                            <span>{{CheckErrorCode('EMPTY$FIRST_NAME')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+                    </div>
+                    <!-- End of First name section -->
+
+                    <!-- Last name section -->
+                    <div id="managerX_project-manager-settings_last-name_section" class="col-6 padding_left_6">
+                        <input id="managerX_project-manager-settings_last-name_input" type="text"
+                            [(ngModel)]="userBasicDetails.LastName">
+                        <!-- Error Message -->
+                        <div id="managerX_project-manager-settings_last-name_error-message"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$LAST_NAME')">
+                            <span>{{CheckErrorCode('EMPTY$LAST_NAME')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+                    </div>
+                    <!-- End of Last name section -->
+                </div>
+                <!-- End of User prompt section -->
+            </div>
+            <!-- End of Name section -->
+
+            <!-- Contact number section -->
+            <div id="managerX_project-manager-settings_contact-number_section" class="col-12 each_content_row_section">
+                <!-- Title section -->
+                <div id="managerX_project-manager-settings_contact-number_title-section" class="col-12 title_section">
+                    <span class="title_lbl">Contact Number</span>
+                </div>
+                <!-- End of Title section -->
+
+                <!-- User prompt section -->
+                <div class="col-12">
+                    <!-- Contact number section -->
+                    <div id="managerX_project-manager-settings_contact-number_input-section" class="col-12">
+                        <input id="managerX_project-manager-settings_contact-number_input" type="text"
+                            [(ngModel)]="userBasicDetails.ContactNumber">
+                        <!-- Error Message -->
+                        <div id="managerX_project-manager-settings_contact-number_error-message"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$CONTACT_NUMBER')">
+                            <span>{{CheckErrorCode('EMPTY$CONTACT_NUMBER')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+                    </div>
+                    <!-- End of Contact number section -->
+                </div>
+                <!-- End of User prompt section -->
+            </div>
+            <!-- End of Contact number section -->
+
+            <!-- Email address section -->
+            <div id="managerX_project-manager-settings_email-address_section" class="col-12 each_content_row_section">
+                <!-- Title section -->
+                <div id="managerX_project-manager-settings_email-address_title-section" class="col-12 title_section">
+                    <span class="title_lbl">Email Address</span>
+                </div>
+                <!-- End of Title section -->
+
+                <!-- User prompt section -->
+                <div class="col-12">
+                    <!-- Contact number section -->
+                    <div id="managerX_project-manager-settings_email-address_input-section" class="col-12">
+                        <input id="managerX_project-manager-settings_email-address_input" type="text"
+                            [(ngModel)]="userBasicDetails.Email" disabled>
+                    </div>
+                    <!-- End of Contact number section -->
+                </div>
+                <!-- End of User prompt section -->
+            </div>
+            <!-- End of Email address section -->
+
+            <!-- Builder company name section -->
+            <div id="managerX_project-manager-settings_builder-company_section" class="col-12 each_content_row_section">
+                <!-- Title section -->
+                <div id="managerX_project-manager-settings_builder-company_title-section" class="col-12 title_section">
+                    <span class="title_lbl">Builder Company Name</span>
+                </div>
+                <!-- End of Title section -->
+
+                <!-- User prompt section -->
+                <div class="col-12">
+                    <!-- Contact number section -->
+                    <div id="managerX_project-manager-settings_builder-company_input-section" class="col-12">
+                        <input id="managerX_project-manager-settings_builder-company_input" type="text"
+                            [(ngModel)]="userBasicDetails.CompanyName">
+                        <!-- Error Message -->
+                        <div id="managerX_project-manager-settings_builder-company_error-message"
+                            class="col-12 no-side-padding error_message" *ngIf="CheckErrorCode('EMPTY$COMPANY_NAME')">
+                            <span>{{CheckErrorCode('EMPTY$COMPANY_NAME')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+                    </div>
+                    <!-- End of Contact number section -->
+                </div>
+                <!-- End of User prompt section -->
+            </div>
+            <!-- End of Builder company name section -->
+
+            <!-- Sub heading section -->
+            <div id="managerX_project-manager-settings_manage-notifications_section"
+                class="row col-12 manage_notification_title">
+                <!-- Title section -->
+                <div class="sub_page_title">Manage Notifications</div>
+                <!-- End of Title section -->
+            </div>
+            <!-- End of Sub heading section -->
+
+            <!-- Manage notification types -->
+            <div id="managerX_project-manager-settings_manage-notifications_container" class="row col-12">
+                <div id="managerX_project-manager-settings_manage-notifications_email" class="each_notification_row">
+                    <input id="managerX_project-manager-settings_manage-notifications_email-checkbox" type="checkbox"
+                        class="custom-cursor" [(ngModel)]="userBasicDetails.ManageNotificationViaEmail">
+                    <span>Receive Notifications of project updates via Email</span>
+                </div>
+                <div id="managerX_project-manager-settings_manage-notifications_sms" class="each_notification_row">
+                    <input id="managerX_project-manager-settings_manage-notifications_sms-checkbox" type="checkbox"
+                        class="custom-cursor" [(ngModel)]="userBasicDetails.ManageNotificationViaSms">
+                    <span>Receive Notifications of project updates via SMS</span>
+                </div>
+                <div id="managerX_project-manager-settings_manage-notifications_section" class="each_notification_row">
+                    <input id="managerX_project-manager-settings_manage-notifications_inapp-checkbox" type="checkbox"
+                        class="custom-cursor" [(ngModel)]="userBasicDetails.ManageNotificationViaInApp">
+                    <span>Receive Notifications of project updates via in-App notification</span>
+                </div>
+            </div>
+            <!-- End of Manage notification types -->
+        </div>
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

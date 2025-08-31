@@ -1,0 +1,326 @@
+<ion-content [fullscreen]="true">
+<!-- Main content section -->
+<div class="container-lg-12 md-12 access_level">
+    <!-- Top bar section -->
+    <div class="top_bar_section">
+        <!-- Title section -->
+        <div  id="managerX_access-level_page-title_label" class="page_title">Access Level Settings</div>
+        <!-- End of Title section -->
+    </div>
+    <!-- End of Top bar section -->
+
+    <!-- Sub heading section -->
+    <div class="row col-12">
+        <!-- Title section -->
+        <div id="managerX_access-level_user-type-management_label" class="sub_page_title">User Type Management</div>
+        <!-- End of Title section -->
+    </div>
+    <!-- End of Sub heading section -->
+
+    <!-- User type name management section -->
+    <div class="col-12 role_management">
+        <!-- Current prime ng table section -->
+        <p-table id="managerX_access-level_user-type-table_table" [value]="userTypeNameList">
+            <!-- Headers section -->
+            <ng-template pTemplate="header">
+                <tr class="table_header_section">
+                    <th class="header_label_span person_col">
+                        <span id="managerX_access-level_original-name_header">Original Name</span>
+                    </th>
+                    <th id="managerX_access-level_name-code_header" class="header_label_span role_name_col">Name Code</th>
+                    <th id="managerX_access-level_current-name_header" class="header_label_span role_name_col">Current Name</th>
+                    <th id="managerX_access-level_last-modified_header" class="header_label_span role_name_col">Last Modified</th>
+                    <th id="managerX_access-level_action_header" class="header_label_span contact_email_col">Action</th>
+                </tr>
+            </ng-template>
+            <!-- End of Headers section -->
+
+            <!-- Table body content section -->
+            <ng-template  id="managerX_access-level_ngTable_table" pTemplate="body" let-userType>
+                <tr class="current-tr">
+                    <td class="person_col">
+                        <span id="managerX_access-level_original-name_label">{{userType.OriginalName}}</span>
+                    </td>
+                    <td class="role_name_col">
+                        <span id="managerX_access-level_name-code_label">{{userType.NameCode}}</span>
+                    </td>
+                    <td class="role_name_col">
+                        <span>
+                            <input id="managerX_access-level_current-name_input" class="access-level-input" type="text" [(ngModel)]='userType.CurrentName'>
+                        </span>
+                    </td>
+                    <td class="role_name_col">
+                        <span id="managerX_access-level_last-modified_label">{{userType.LastModified | date: 'dd MMM yyyy '}}</span>
+                    </td>
+                    <td class="role_name_col">
+                        <button id="managerX_access-level_update_button" class="create_btn" (click)="updateUserTypeOnClick(userType)">Update</button>
+                        <button  id="managerX_access-level_restore_button" class="cancel_btn" (click)="restoreUserTypeOnClick(userType)">Restore</button>
+                    </td>
+                </tr>
+            </ng-template>
+            <!-- End of Table body content section -->
+        </p-table>
+        <!-- End of Current prime ng table section -->
+    </div>
+    <!-- End of User type name management section -->
+
+    <!-- Sub heading section -->
+    <div class="row col-12">
+        <!-- Title section -->
+        <div  id="managerX_access-level_role-name-management_label" class="sub_page_title">Role Name Management</div>
+        <!-- End of Title section -->
+    </div>
+    <!-- End of Sub heading section -->
+
+    <!-- Role name management section -->
+    <div class="col-12 role_management">
+        <!-- Label section -->
+        <div class="col-12 custom-dropdown-checklist display_flex_center"
+            *ngIf="displayUserTypeList && selectedUserTypeForRoleDetails">
+            <span id="managerX_access-level_select-user-type_label" class="label_header">Select User Type: </span>
+            <p-dropdown id="managerX_access-level_user-type_dropdown" [options]="displayUserTypeList" [(ngModel)]="selectedUserTypeForRoleDetails"
+                class="custom-dropdown-checklist" (onChange)="userTypeRoleDetailsOnChange()">
+            </p-dropdown>
+        </div>
+        <!-- End of Label section -->
+
+        <!-- Current prime ng table section -->
+        <p-table id="managerX_access-level_role-table_table" [value]="roleDetailsList">
+            <!-- Headers section -->
+            <ng-template pTemplate="header">
+                <tr class="table_header_section">
+                    <th class="header_label_span person_col">
+                        <span id="managerX_access-level_role-original-name_header">Original Name</span>
+                    </th>
+                    <th id="managerX_access-level_role-name-code_header" class="header_label_span role_name_col">Name Code</th>
+                    <th id="managerX_access-level_role-current-name_header" class="header_label_span role_name_col">Current Name</th>
+                    <th id="managerX_access-level_role-last-modified_header" class="header_label_span role_name_col">Last Modified</th>
+                    <th id="managerX_access-level_role-action_header" class="header_label_span contact_email_col">Action</th>
+                </tr>
+            </ng-template>
+            <!-- End of Headers section -->
+
+            <!-- Table body content section -->
+            <ng-template pTemplate="body" let-role>
+                <tr class="current-tr">
+                    <td class="person_col">
+                        <i id="managerX_access-level_edit-role_button" class="fa fa-pencil role_edit_icon" aria-hidden="true" (click)="editRoleDetails(role.Id)"
+                            *ngIf="selectedEditRoleId !== role.Id"></i>
+
+                        <span id="managerX_access-level_role-original-name_label" *ngIf="selectedEditRoleId !== role.Id">{{role.OriginalName}}</span>
+
+                        <input id="managerX_access-level_role-original-name_input" class="access-level-input-2" *ngIf="selectedEditRoleId == role.Id" type="text" [(ngModel)]='role.OriginalName'>
+                        <button id="managerX_access-level_role-update_button" *ngIf="selectedEditRoleId == role.Id" class="create_btn marginLeft5"
+                            (click)="updateRoleEdit()">Update</button>
+                        <button id="managerX_access-level_role-cancel_button" *ngIf="selectedEditRoleId == role.Id" class="cancel_btn"
+                            (click)="cancelRoleEdit()">Cancel</button>
+                    </td>
+                    <td class="role_name_col">
+                        <span id="managerX_access-level_role-name-code_label">{{role.NameCode}}</span>
+                    </td>
+                    <td class="role_name_col">
+                        <span>
+                            <input id="managerX_access-level_role-current-name_input" class="access-level-input" type="text" [(ngModel)]='role.CurrentName'>
+                        </span>
+                    </td>
+                    <td class="role_name_col">
+                        <span id="managerX_access-level_role-last-modified_label">{{role.LastModified | date: 'dd MMM yyyy '}}</span>
+                    </td>
+                    <td class="role_name_col">
+                        <button id="managerX_access-level_role-update_button" class="create_btn" (click)="updateOnClick(role)">Update</button>
+                        <button id="managerX_access-level_role-restore_button" class="cancel_btn" (click)="restoreOnClick(role)">Restore</button>
+                    </td>
+                </tr>
+            </ng-template>
+            <!-- End of Table body content section -->
+        </p-table>
+        <!-- End of Current prime ng table section -->
+
+        <p-table [value]="tempRoleDetailsList" *ngIf="addNewRoleState">
+            <!-- Adding the new record -->
+            <ng-template pTemplate="body">
+                <tr class="current-tr">
+                    <td class="person_col">
+                        <input id="managerX_access-level_original-name_input" type="text" [(ngModel)]='newRoleDetailsList.OriginalName'>
+                    </td>
+                    <td class="role_name_col">
+                        <span id="managerX_access-level_role_code_text">-- Role Code --</span>
+                    </td>
+                    <td class="role_name_col">
+                        <span id="managerX_access-level_current_name_text">
+                            -- Current Name --
+                        </span>
+                    </td>
+                    <td class="role_name_col">
+                        <span id="managerX_access-level_newRole-DetailsList_text">{{newRoleDetailsList.LastModified | date: 'dd MMM yyyy '}}</span>
+                    </td>
+                    <td class="role_name_col">
+                        <button id="managerX_access-level_submit_button" [disabled]="newRoleDetailsList.OriginalName.trim() == ''" class="create_btn" (click)="submitNewRoleDetails()">Submit</button>
+                        <button id="managerX_access-level_cancel_button" class="cancel_btn" (click)="cancelNewRoleDetails()">Cancel</button>
+                    </td>
+                </tr> 
+            </ng-template>
+            <!-- End of Adding the new record -->
+        </p-table>
+
+        <!-- Pagination section -->
+        <p-paginator id="managerX_access-level_role-pagination_section" class="paginator_sec" #modulePaginator
+            *ngIf="roleDetailsList && roleDetailsList.length > 0 && roleDetailsList[0].TotalRecords > roleNameFilter.RecordsPerPage"
+            [ngClass]="(roleDetailsList && roleDetailsList.length > 0 && roleDetailsList[0].TotalRecords > roleNameFilter.RecordsPerPage)?'':'display_hide'"
+            [rows]="roleNameFilter.RecordsPerPage" (onPageChange)="onPageRoleNameManagementChange($event)"
+            [totalRecords]="(roleDetailsList.length>0)? roleDetailsList[0].TotalRecords:0"></p-paginator>
+        <!-- End of Pagination section -->
+
+        <!-- Add new button -->
+        <div class="col-12" style="margin-top:5px">
+            <button id="managerX_access-level_add-new_button" class="create_btn marginLeft5" (click)="addNewRoleOnClick()">Add new</button>
+        </div>
+        <!-- End of Add new button -->
+    </div>
+    <!-- End of Role name management section -->
+
+    <!-- Sub heading section -->
+    <div class="row col-12 margin_top_20">
+        <!-- Title section -->
+        <div id="managerX_access-level_PM-appUpdate-UserType_button" class="sub_page_title">({{'PM' | appUpdateUserType}} - {{'PM' | appUpdateUserType}}) Management</div>
+        <!-- End of Title section -->
+    </div>
+    <!-- End of Sub heading section -->
+
+    <!-- Project managers management section -->
+    <div class="col-12 role_management custom-padding-5px bg-content">
+        <!-- Label section -->
+        <div id="managerX_access-level_pm-selection_dropdown" class="col-12 custom-dropdown-checklist display_flex_center" *ngIf="allDisplayProjectManagerList">
+            <span id="managerX_access-level_appUpdate-UserType_label" class="label_header">Select {{'PM' | appUpdateUserType}}: </span>
+            <p-dropdown  id="managerX_access-level_appUpdate-UserType_dropdown" [options]="allDisplayProjectManagerList" [(ngModel)]="selectedProjectManagerId"
+                class="custom-dropdown-checklist" (onChange)="projectManagerOnSelect()">
+            </p-dropdown>
+        </div>
+        <!-- End of Label section -->
+
+        <!-- Label section -->
+        <div class="col-12 custom-dropdown-checklist display_flex_baseline"
+            *ngIf="allDisplayProjectManagerList && selectedProjectManagerId != 0">
+            <span class="label_header">Select Managing Project Managers: </span>
+            <div class="display_users_box">
+                <!-- Loop through the project managers -->
+                <div class="display_flex_center display_user_section"
+                    *ngFor="let projectManager of manageableProjectManagers">
+                    <!-- Tick box section -->
+                    <input id="managerX_access-level_manage-notifications_input"  type="checkbox" class="custom-cursor" [(ngModel)]="projectManager.ManageNotificationViaEmail"
+                        (change)="manageProjectManagerOnChange($event, projectManager.UserId)">
+                    <!-- End ofTick box section -->
+
+                    <!-- Avatar section -->
+                    <div id="managerX_access-level_pm-avatar_section"  class="avatar_section">
+                        <img id="managerX_access-level_pm-avatar_img"  *ngIf="!projectManager.Avatar"
+                            src="../../../../assets/Images/default_avatar.png">
+                        <img id="managerX_access-level_def-avatar_img" *ngIf="projectManager.Avatar" [src]="projectManager.Avatar">
+                    </div>
+                    <!-- End of Avatar section -->
+                    <!-- Name and role section -->
+                    <div class="name_role_section">
+                        <!-- Name section -->
+                        <div id="managerX_access-level_pm-name_section" class="content_div">
+                            <span id="managerX_access-level_pm-name_section-value_text" class="content_val name_section">{{projectManager.FirstName}}
+                                {{projectManager.LastName}}</span>
+                        </div>
+                        <!-- End of Name section -->
+                    </div>
+                    <!-- End of Name and role section -->
+                </div>
+                <!-- End of Loop through the project managers -->
+
+                <!--End of Client list table-->
+                <div *ngIf="manageableProjectManagers.length == 0">
+                    <div id="managerX_access-level_client-list_text" colspan="9" class="empty_content">
+                        There are no records to display
+                    </div>
+                </div>
+                <!-- Pagination section -->
+                <p-paginator id="managerX_access-level_paginator_section"  class="paginator_sec" #modulePaginator
+                    *ngIf="manageableProjectManagers && manageableProjectManagers.length > 0 && manageableProjectManagers[0].TotalRecords > projectManagerFilter.RecordsPerPage"
+                    [ngClass]="(manageableProjectManagers && manageableProjectManagers.length > 0 && manageableProjectManagers[0].TotalRecords > projectManagerFilter.RecordsPerPage)?'':'display_hide'"
+                    [rows]="projectManagerFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                    [totalRecords]="(manageableProjectManagers.length>0)? manageableProjectManagers[0].TotalRecords:0"></p-paginator>
+                <!-- End of Pagination section -->
+            </div>
+        </div>
+        <!-- End of Label section -->
+    </div>
+    <!-- End of Project managers management section -->
+
+    <!-- Sub heading section -->
+    <div class="row col-12 margin_top_20">
+        <!-- Title section -->
+        <div id="managerX_access-level_SP-appUpdate-UserType_button" class="sub_page_title">({{'PM' | appUpdateUserType}} - {{'SP' | appUpdateUserType}}) Management</div>
+        <!-- End of Title section -->
+    </div>
+    <!-- End of Sub heading section -->
+
+    <!-- Project managers management section -->
+    <div class="col-12 role_management custom-padding-5px bg-content">
+        <!-- Label section -->
+        <div id="managerX_access-level_Project-ManagerList_section" class="col-12 custom-dropdown-checklist display_flex_center" *ngIf="allDisplayProjectManagerList">
+            <span id="managerX_access-level_Project-ManagerList_button" class="label_header">Select {{'PM' | appUpdateUserType}}: </span>
+            <p-dropdown [options]="allDisplayProjectManagerList" [(ngModel)]="selectedProjectManagerIdContractor"
+                class="custom-dropdown-checklist" (onChange)="GetAllContractors()">
+            </p-dropdown>
+        </div>
+        <!-- End of Label section -->
+
+        <!-- Label section -->
+        <div class="col-12 custom-dropdown-checklist display_flex_center"
+            *ngIf="allDisplayContractorsList && selectedProjectManagerIdContractor != 0">
+            <span class="label_header">Select Managing Contractors: </span>
+            <div class="display_users_box">
+                <!-- Loop through the project managers -->
+                <div class="display_flex_center display_user_section" *ngFor="let projectManager of allContractorsList">
+                    <!-- Tick box section -->
+                    <input id="managerX_access-level_manage-notifications_input" type="checkbox" class="custom-cursor" [(ngModel)]="projectManager.ManageNotificationViaEmail"
+                        (change)="manageContractorOnChange($event, projectManager.UserId)"
+                        [disabled]="projectManager.ManageNotificationViaInApp">
+                    <!-- End ofTick box section -->
+
+                    <!-- Avatar section -->
+                    <div id="managerX_access-level_avatar_section" class="avatar_section">
+                        <img id="managerX_access-level_projectManager_img" *ngIf="!projectManager.Avatar"
+                            src="../../../../assets/Images/default_avatar.png">
+                        <img id="managerX_access-level_projectManager-avatar_img" *ngIf="projectManager.Avatar" [src]="projectManager.Avatar">
+                    </div>
+                    <!-- End of Avatar section -->
+                    <!-- Name and role section -->
+                    <div class="name_role_section">
+                        <!-- Name section -->
+                        <div class="content_div">
+                            <span id="managerX_access-level_pm-value-name_input"  class="content_val name_section">{{projectManager.FirstName}}
+                                {{projectManager.LastName}}</span>
+                        </div>
+                        <!-- End of Name section -->
+                    </div>
+                    <!-- End of Name and role section -->
+                </div>
+                <!-- End of Loop through the project managers -->
+
+                <!--End of Client list table-->
+                <div *ngIf="allContractorsList.length == 0">
+                    <div id="managerX_access-level_empty_content_text"  colspan="9" class="empty_content">
+                        There are no records to display
+                    </div>
+                </div>
+                <!-- Pagination section -->
+                <p-paginator id="managerX_access-level_pm-pagination_section" class="paginator_sec" #modulePaginator
+                    *ngIf="allContractorsList && allContractorsList.length > 0 && allContractorsList[0].TotalRecords > contractorFilter.RecordsPerPage"
+                    [ngClass]="(allContractorsList && allContractorsList.length > 0 && allContractorsList[0].TotalRecords > contractorFilter.RecordsPerPage)?'':'display_hide'"
+                    [rows]="contractorFilter.RecordsPerPage" (onPageChange)="onPageContractorChange($event)"
+                    [totalRecords]="(allContractorsList.length>0)? allContractorsList[0].TotalRecords:0"></p-paginator>
+                <!-- End of Pagination section -->
+            </div>
+        </div>
+        <!-- End of Label section -->
+    </div>
+    <!-- End of Project managers management section -->
+
+</div>
+<!-- End of Main content section -->
+ </ion-content>

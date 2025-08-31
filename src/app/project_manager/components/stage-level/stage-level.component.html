@@ -1,0 +1,237 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="row col-12 stage_level">
+        <!-- Top bar section -->
+        <div class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_stage-level-component_page_title" class="page_title">Stage Level Management</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Content section -->
+        <div class="col-12">
+            <!-- Stage level Group section -->
+            <div class="col-12 stage_level_management">
+                <!-- Stage list section -->
+                <div class="col-4 col_section">
+                    <!-- Header section -->
+                    <div id="managerX_stage-level-component_stage-list_header" class="col-12 header_title">
+                        <span>Stage List</span>
+                    </div>
+                    <!-- End of Header section -->
+
+                    <!-- Loop through stage list -->
+                    <div id="managerX_stage-level-component_stage_stageObjList" class="each_row"
+                        *ngFor="let stageObj of stageList" (click)="stageOnClickFunction(stageObj.Id)"
+                        [ngClass]="(stageObj.Id == selectedStageId)?'selected_stage':''">
+                        <span>{{stageObj.Name}}</span>
+                        <!-- Delete icon -->
+                        <div id="managerX_stage-level-component_stage_stageObjdelete-icon" class="delete_icon"
+                            (click)="$event.stopPropagation();deleteStage(stageObj.Id,'SD')">
+                            <i id="managerX_stage-level-component_stage_delete-icon" class="fa fa-trash"
+                                aria-hidden="true"></i>
+                        </div>
+                        <!-- End of Delete icon -->
+                    </div>
+                    <!-- End of Loop through stage list -->
+
+                    <!-- When sub stages are empty -->
+                    <div id="managerX_stage-level-component_no-stages_displayMessage" class="col-12 placeholder_section"
+                        *ngIf="stageList.length == 0">
+                        <span>There are no records to display</span>
+                    </div>
+                    <!-- End of When sub stages are empty -->
+
+                    <!-- Add stage button -->
+                    <div id="managerX_stage-level-component_add-stage-button_section" class="col-12 buttons_section"
+                        *ngIf="!stageAddSection">
+                        <button id="managerX_stage-level-component_add-stage-button" class="create_btn"
+                            (click)="addButtonOnClick('SD')">Add New Stage</button>
+                    </div>
+                    <!-- End of Add stage button -->
+
+                    <!-- Adding the stage section -->
+                    <div id="managerX_stage-level-component_add-stage_section" class="col-12" *ngIf="stageAddSection">
+                        <div class="col-12 add_stage_section">
+                            <input id="managerX_stage-level-component_stage-name_input" type="text"
+                                [(ngModel)]="stageNewName">
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="managerX_stage-level-component_stage-name_error" class="col-12 error_message"
+                            *ngIf="CheckErrorCode('EMPTY$STAGE_NAME')">
+                            <span
+                                id="managerX_stage-level-component_stage-name_errorMessage">{{CheckErrorCode('EMPTY$STAGE_NAME')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Add stage button -->
+                        <div class="col-12 buttons_section">
+                            <button id="managerX_stage-level-component_create-stage_button" class="create_btn"
+                                (click)="createOnClick('SD')">Create</button>
+                            <button id="managerX_stage-level-component_cancel-stage_button" class="cancel_btn"
+                                (click)="cancelOnClick('SD')">Cancel</button>
+                        </div>
+                        <!-- End of Add stage button -->
+                    </div>
+                    <!-- End of Adding the stage section -->
+                </div>
+                <!-- End of Stage list section -->
+
+                <!-- Sub Stage list section -->
+                <div class="col-4 col_section">
+                    <!-- Header section -->
+                    <div id="managerX_stage-level-component_sub-stage_list-header" class="col-12 header_title">
+                        <span>Sub Stage List</span>
+                    </div>
+                    <!-- End of Header section -->
+
+                    <!-- Loop through stage list -->
+                    <div id="managerX_stage-level-component_sub-stage_subStageObj" class="each_row"
+                        *ngFor="let subStageObj of subStageList" (click)="subStageOnClickFunction(subStageObj.Id)"
+                        [ngClass]="(subStageObj.Id == selectedSubStageId)?'selected_stage':''">
+                        <span>{{subStageObj.Name}}</span>
+                        <!-- Delete icon -->
+                        <div id="managerX_stage-level-component_sub-stage_delete-icon-section" class="delete_icon"
+                            (click)="$event.stopPropagation();deleteStage(subStageObj.Id,'SSD')">
+                            <i id="managerX_stage-level-component_sub-stage_delete-icon" class="fa fa-trash"
+                                aria-hidden="true"></i>
+                        </div>
+                        <!-- End of Delete icon -->
+                    </div>
+                    <!-- End of Loop through stage list -->
+
+                    <!-- When stage is not selected -->
+                    <div id="managerX_stage-level-component_no-sub-stages-selected_text"
+                        class="col-12 placeholder_section" *ngIf="selectedStageId == 0 && subStageList.length == 0">
+                        <span>Please select the stage</span>
+                    </div>
+                    <!-- End of When stage is not selected -->
+
+                    <!-- When sub stages are empty -->
+                    <div id="managerX_stage-level-component_no-sub-stages_text" class="col-12 placeholder_section"
+                        *ngIf="selectedStageId != 0 && subStageList.length == 0">
+                        <span>There are no records to display</span>
+                    </div>
+                    <!-- End of When sub stages are empty -->
+
+                    <!-- Add stage button -->
+                    <div id="managerX_stage-level-component_add-sub-stage-button_section" class="col-12 buttons_section"
+                        *ngIf="selectedStageId != 0 && !subStageAddSection">
+                        <button id="managerX_stage-level-component_add-sub-stage_button" class="create_btn"
+                            (click)="addButtonOnClick('SSD')">Add New Sub Stage</button>
+                    </div>
+                    <!-- End of Add stage button -->
+
+                    <!-- Adding the stage section -->
+                    <div id="managerX_stage-level-component_add-sub-stage_section" class="col-12"
+                        *ngIf="subStageAddSection">
+                        <div class="col-12 add_stage_section">
+                            <input id="managerX_stage-level-component_sub-stage-name_input" type="text"
+                                [(ngModel)]="subStageNewName">
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="managerX_stage-level-component_sub-stage-name_error" class="col-12 error_message"
+                            *ngIf="CheckErrorCode('EMPTY$SUB_STAGE_NAME')">
+                            <span>{{CheckErrorCode('EMPTY$SUB_STAGE_NAME')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Add stage button -->
+                        <div class="col-12 buttons_section">
+                            <button id="managerX_stage-level-component_create-sub-stage_button" class="create_btn"
+                                (click)="createOnClick('SSD')">Create</button>
+                            <button id="managerX_stage-level-component_cancel-sub-stage_button" class="cancel_btn"
+                                (click)="cancelOnClick('SSD')">Cancel</button>
+                        </div>
+                        <!-- End of Add stage button -->
+                    </div>
+                    <!-- End of Adding the stage section -->
+                </div>
+                <!-- End of Sub Stage list section -->
+
+                <!-- Sub Stage Category list section -->
+                <div class="col-4 col_section">
+                    <!-- Header section -->
+                    <div id="managerX_stage-level-component_sub-stage-category-list_header" class="col-12 header_title">
+                        <span>Sub Stage Category List</span>
+                    </div>
+                    <!-- End of Header section -->
+
+                    <!-- Loop through stage list -->
+                    <div id="managerX_stage-level-component_sub-stage-category_subStageCategoryObj" class="each_row"
+                        *ngFor="let subStageCategoryObj of subStageCategoryList">
+                        <span>{{subStageCategoryObj.Name}}</span>
+                        <!-- Delete icon -->
+                        <div id="managerX_stage-level-component_sub-stage-category_subStageCategoryObjdelete-icon"
+                            class="delete_icon"
+                            (click)="$event.stopPropagation();deleteStage(subStageCategoryObj.Id,'SSDC')">
+                            <i id="managerX_stage-level-component_sub-stage-category_delete-icon" class="fa fa-trash"
+                                aria-hidden="true"></i>
+                        </div>
+                        <!-- End of Delete icon -->
+                    </div>
+                    <!-- End of Loop through stage list -->
+
+                    <!-- When stage is not selected -->
+                    <div id="managerX_stage-level-component_no-sub-stage-category-selected_text"
+                        class="col-12 placeholder_section"
+                        *ngIf="selectedSubStageId == 0 && subStageCategoryList.length == 0">
+                        <span>Please select the sub-stage</span>
+                    </div>
+                    <!-- End of When stage is not selected -->
+
+                    <!-- When sub stages are empty -->
+                    <div id="managerX_stage-level-component_no-sub-stage-categories_text"
+                        class="col-12 placeholder_section"
+                        *ngIf="selectedSubStageId != 0 && subStageCategoryList.length == 0">
+                        <span>There are no records to display</span>
+                    </div>
+                    <!-- End of When sub stages are empty -->
+
+                    <!-- Add stage button -->
+                    <div id="managerX_stage-level-component_add-sub-stage-category-button_section"
+                        class="col-12 buttons_section" *ngIf="selectedSubStageId != 0 && !subStageCategoryAddSection">
+                        <button id="managerX_stage-level-component_add-sub-stage-category_button" class="create_btn"
+                            (click)="addButtonOnClick('SSDC')">Add New Sub Stage Category</button>
+                    </div>
+                    <!-- End of Add stage button -->
+
+                    <!-- Adding the stage section -->
+                    <div id="managerX_stage-level-component_add-sub-stage-category_section" class="col-12"
+                        *ngIf="subStageCategoryAddSection">
+                        <div class="col-12 add_stage_section">
+                            <input id="managerX_stage-level-component_sub-stage-category-name_input" type="text"
+                                [(ngModel)]="subStageCategoryNewName">
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="managerX_stage-level-component_sub-stage-category-name_error"
+                            class="col-12 error_message" *ngIf="CheckErrorCode('EMPTY$SUB_STAGE_CAT_NAME')">
+                            <span
+                                id="managerX_stage-level-component_sub-stage-category-name_errorMessage">{{CheckErrorCode('EMPTY$SUB_STAGE_CAT_NAME')!.ErrorMessage}}</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Add stage button -->
+                        <div class="col-12 buttons_section">
+                            <button id="managerX_stage-level-component_create-sub-stage-category_button"
+                                class="create_btn" (click)="createOnClick('SSDC')">Create</button>
+                            <button id="managerX_stage-level-component_cancel-sub-stage-category_button"
+                                class="cancel_btn" (click)="cancelOnClick('SSDC')">Cancel</button>
+                        </div>
+                        <!-- End of Add stage button -->
+                    </div>
+                    <!-- End of Adding the stage section -->
+                </div>
+                <!-- End of Sub Stage Category list section -->
+            </div>
+            <!-- End of Stage level Group section -->
+        </div>
+        <!-- End of Content section -->
+
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

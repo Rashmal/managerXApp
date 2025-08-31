@@ -1,0 +1,25 @@
+<ion-content [fullscreen]="true">
+    <!--delete confirmation-->
+    <div id="managerX_delete-confirmation_popup_Content" class="popup_content">
+        <!--Message-->
+        <div id="managerX_delete-confirmation_message"
+            class="flex flex-column align-items-center w-full gap-3 p-3 mb-3">
+
+            <p>Are you sure want to download?</p>
+        </div>
+        <!--End of Message-->
+        <!--Button panel outer div-->
+        <div id="managerX_delete-confirmation_buttonPanelOuter_section" class="button_panel_outer">
+            <!--Button panel-->
+            <div id="managerX_delete-confirmation_button_panel" class="button_panel">
+                <button id="managerX_delete-confirmation_cancel_button" class="button_blue"
+                    (click)="confirmDeleteItem(false)">Cancel</button>
+                <button id="managerX_delete-confirmation_delete_button" class="button_red"
+                    (click)="confirmDeleteItem(true)">Download</button>
+            </div>
+            <!--End of Button panel-->
+        </div>
+        <!--End of Button panel outer div-->
+    </div>
+    <!--End of delete confirmation-->
+</ion-content>

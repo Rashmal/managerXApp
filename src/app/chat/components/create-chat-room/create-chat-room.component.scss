@@ -1,0 +1,206 @@
+.create_chat_room {
+    padding: 10px;
+    .top_bar_section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .page_title {
+        font-size: 17pt;
+        font-weight: 600;
+    }
+
+    .margin_left_flex {
+        margin-right: auto;
+    }
+
+    .margin_right_flex {
+        margin-left: auto;
+    }
+
+    .main_content {
+        padding: 15px;
+    }
+
+    .each_row {
+        min-height: 40px;
+        padding: 15px;
+        display: flex;
+        align-items: flex-start;
+        font-size: 10pt;
+        border: solid 2px #afafaf;
+
+        input,
+        textarea {
+            width: 100%;
+        }
+
+        input {
+            height: 28px;
+            border-radius: 7px;
+            border-color: #e0e0e0;
+            border-width: 1px;
+            padding: 12px;
+            font-size: 10pt !important;
+            border-style: solid;
+        }
+
+        textarea {
+            border-radius: 7px;
+            border-color: #e0e0e0;
+            border-width: 1px;
+            padding: 12px;
+            font-size: 10pt !important;
+            border-style: solid;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .prompt {
+            .default {
+                color: darkgray;
+            }
+        }
+    }
+
+    .each_row_person {
+        border: solid thin #ccc;
+        padding: 10px;
+        margin-top: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .default_avatar_person {
+        height: 30px;
+        width: 30px;
+        background: #125dcb;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100px;
+        margin-right: 10px;
+    }
+
+    .avatar_person {
+        height: 30px;
+        width: 30px;
+        overflow: hidden;
+        border-radius: 100px;
+        margin-right: 10px;
+
+        img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .close_icon {
+        margin-left: auto;
+        color: #f44336;
+        font-size: 14pt;
+        cursor: pointer;
+    }
+
+    .red_color {
+        color: #f44336;
+    }
+
+    .add_icon {
+        margin-left: auto;
+        color: #125dcb;
+        font-size: 14pt;
+        cursor: pointer;
+    }
+
+    .tick_icon {
+        font-size: 15pt;
+        position: absolute;
+        margin-top: -30px;
+        margin-left: -8px;
+        color: #1ea177;
+    }
+
+    .added_list {
+        display: flex;
+        flex-wrap: wrap;
+        .added_each_person {
+            border: solid thin #ccc;
+            font-size: 8pt;
+            text-align: center;
+            padding: 3px;
+            margin-left: 10px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+}
+
+.update_btn {
+    height: 25px;
+    border-radius: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 10pt;
+    margin-left: 5px;
+    border: solid 1px #4d86d8;
+    color: #4d86d8;
+}
+
+.reset_btn {
+    height: 25px;
+    border-radius: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 10pt;
+    margin-left: 5px;
+    border: solid 1px #f44336;
+    color: #f44336;
+    margin-left: 10px;
+}
+
+::ng-deep .create_chat_room .p-ripple {
+    height: 35px;
+    font-size: 10pt;
+}
+
+.invite_user_body {
+    padding: 5px;
+    font-size: 10pt;
+
+    .error_message {
+        font-size: 10pt;
+    }
+
+    input {
+        outline: none;
+        border-radius: 3px;
+        border: 1px solid #d1d5db;
+        font-size: 10pt !important;
+        padding: 5px;
+        height: 28px;
+    }
+
+    .each_section_invite {
+        .prompt_label {
+            font-weight: bold;
+        }
+    }
+
+    .button_section {
+        margin-top: 5px;
+
+        .update_btn {
+            margin-left: 0 !important;
+        }
+    }
+}

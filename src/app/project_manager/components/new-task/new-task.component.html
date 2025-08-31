@@ -1,0 +1,679 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="row col-12 new_client_details_section">
+        <!-- Top row section -->
+        <div class="d-flex align-items-center header_row">
+            <div>
+                <i id="managerX_new-task_cancel_icon" class="fa fa-chevron-left" style="cursor: pointer;"
+                    aria-hidden="true" (click)="cancelOnClickFunction()"></i>
+            </div>
+            <div class="header_title">
+                <span id="managerX_new-task_add-new-task_header" class="my-0" *ngIf="TaskId == 0">Add New Task</span>
+                <span id="managerX_new-task_update-task_header" class="my-0"
+                    *ngIf="TaskId != 0 && viewTaskState!=='VIEW'">Update Task</span>
+                <span id="managerX_new-task_update-task_header" class="my-0"
+                    *ngIf="TaskId != 0 && viewTaskState=='VIEW'">View Task</span>
+            </div>
+        </div>
+        <!-- End of Top row section -->
+
+        <!-- Sub heading section -->
+        <div class="row col-12 sub_title">
+            <!-- Title section -->
+            <div id="managerX_new-task_subheading_text" class="sub_page_title">Basic Task Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div class="col-12 task_details_section" *ngIf="taskDetails">
+            <!-- Each row section -->
+            <div class="col-12 each_row_section">
+                <!-- Label section -->
+                <div class="content_lbl">
+                    <span id="managerX_new-task_name_label">Name</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-task_name_input" class="input_box" type="text"
+                                [(ngModel)]="taskDetails.Name" (input)="taskNameInput()"
+                                [disabled]="viewTaskState=='VIEW'">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-task_error_Message" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$TASK_NAME')">
+                        <span>{{CheckErrorCode('EMPTY$TASK_NAME')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row_section display_flex_baseline">
+                <!-- Label section -->
+                <div id="managerX_new-task_description_label" class="content_lbl">
+                    <span>Description</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <textarea id="managerX_new-task_description_input" [(ngModel)]="taskDetails.Description"
+                                (input)="taskDescriptionInput()" [disabled]="viewTaskState=='VIEW'"></textarea>
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-task_error_Message2" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$TASK_DESCRIPTION')">
+                        <span>{{CheckErrorCode('EMPTY$TASK_DESCRIPTION')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row_section display_flex_baseline" *ngIf="TaskId !== 0">
+                <!-- Label section -->
+                <div class="content_lbl">
+                    <span id="managerX_new-task_status_label">Status</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div class="popup_task" *ngIf="taskDetails.StatusId && displayStatusDetailsList.length > 0">
+                    <!-- Status dropdown -->
+                    <p-dropdown id="managerX_new-task_status_dropdown" [options]="displayStatusDetailsList"
+                        [disabled]="viewTaskState=='VIEW'" [(ngModel)]="taskDetails.StatusId"
+                        [ngClass]="taskDetails.StatusCode" appendTo="body"
+                        (onChange)="taskStatusOnChange(taskDetails.Id,taskDetails.StatusId)">
+                        <ng-template let-status pTemplate="selectedItem">
+                            <div class='userItem' [ngClass]="status.StatusCode">
+                                {{status.label}}</div>
+                        </ng-template>
+
+                        <ng-template let-status pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div [ngClass]="status.StatusCode">
+                                    {{ status.label }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                    <!-- End of Status dropdown -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row_section">
+                <!-- Label section -->
+                <div class="content_lbl">
+                    <span id="managerX_new-task_start-date_label">Start Date</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-task_display-start_date" class="content_value_lbl"
+                    (click)="(viewTaskState!=='VIEW')?opSD.toggle($event):''">
+                    <span>{{taskDetails.AddedDate| date: 'dd MMM yyyy'}}</span>
+                </div>
+                <!-- End of Content section -->
+
+                <p-overlayPanel #opSD>
+                    <p-calendar id="managerX_new-task_start-date_calendar" class="max-w-full"
+                        [(ngModel)]="taskDetails.AddedDate" [inline]="true"
+                        (onSelect)="startDateOnSelect();opSD.hide();" />
+                </p-overlayPanel>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row_section">
+                <!-- Label section -->
+                <div class="content_lbl">
+                    <span id="managerX_new-task_due-date_label">Due Date</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-task_display-due_date" class="content_value_lbl"
+                    (click)="(viewTaskState!=='VIEW')?opED.toggle($event):''">
+                    <span>{{taskDetails.DueDate| date: 'dd MMM yyyy'}}</span>
+                </div>
+                <!-- End of Content section -->
+
+                <p-overlayPanel #opED>
+                    <p-calendar id="managerX_new-task_due-date_calendar" class="max-w-full"
+                        [(ngModel)]="taskDetails.DueDate" [inline]="true" (onSelect)="dueDateOnSelect();opED.hide();" />
+                </p-overlayPanel>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div class="col-12 each_row_section display_flex_baseline">
+                <!-- Label section -->
+                <div class="content_lbl">
+                    <span id="managerX_new-task_user-Type_label">{{'SP' | appUpdateUserType}}</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div class="content_value_lbl select_person_list">
+                    <!-- Display the user section -->
+                    <div id="managerX_new-task_user_section" class="display_flex_center display_user_section"
+                        *ngFor="let personObject of taskDetails.PersonList">
+                        <!-- Avatar section -->
+                        <div class="avatar_section">
+                            <img id="managerX_new-task_avatar-url_avatar" *ngIf="!personObject.Avatar"
+                                src="../../../../assets/Images/default_avatar.png">
+                            <img id="managerX_new-task_avatar_image" *ngIf="personObject.Avatar"
+                                [src]="personObject.Avatar">
+                        </div>
+                        <!-- End of Avatar section -->
+                        <!-- Name and role section -->
+                        <div class="name_role_section">
+                            <!-- Name section -->
+                            <div class="content_div">
+                                <span id="managerX_new-task_name_text" class="content_val name_section"
+                                    *ngIf="taskDetails.PersonList.length > 0 && personObject.FirstName && personObject.FirstName != ''">{{personObject.FirstName}}
+                                    {{personObject.LastName}}</span>
+                                <span id="managerX_new-task_name-value_text" class="content_val name_section"
+                                    *ngIf="!(taskDetails.PersonList.length > 0 && personObject.FirstName && personObject.FirstName != '')">-</span>
+                            </div>
+                            <!-- End of Name section -->
+
+                            <!-- Role section -->
+                            <div class="content_div">
+                                <span id="managerX_new-task_role-name_text" class="content_val name_section role_name"
+                                    *ngIf="personObject.RoleName && personObject.RoleName != ''">{{personObject.RoleName}}</span>
+                                <span id="managerX_new-task_role-name-empty_text"
+                                    class="content_val name_section role_name"
+                                    *ngIf="!(personObject.RoleName && personObject.RoleName != '')">-</span>
+                            </div>
+                            <!-- End of Role section -->
+                        </div>
+                        <!-- End of Name and role section -->
+
+                        <!-- Remove icon -->
+                        <div class="remove_person_icon" *ngIf="viewTaskState!=='VIEW'"
+                            (click)="removePersonFromList(personObject.UserId)">
+                            <i id="managerX_new-task_remove-person_icon" class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                        <!-- End of Remove icon -->
+                    </div>
+                    <!-- End of Display the user section -->
+
+                    <!-- Plus icon section -->
+                    <div *ngIf="viewTaskState!=='VIEW'" id="managerX_new-task_add-person_icon" class="add_new_person"
+                        (click)="onToggleDisplayPerson()">
+                        <i id="managerX_new-task_add-person_icon" *ngIf="!displayAddPersons" class="fa fa-plus"
+                            aria-hidden="true"></i>
+                        <i id="managerX_new-task_minus-person_icon" *ngIf="displayAddPersons" class="fa fa-minus"
+                            aria-hidden="true"></i>
+                    </div>
+                    <!-- End of Plus icon section -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Select the contacts to assign section -->
+            <div class="col-12" *ngIf="displayAddPersons">
+                <div id="managerX_new-task_select-person_list" class="col-12 select_person_list">
+                    <!-- Display the user section -->
+                    <div id="managerX_new-task_display-user_section" class="display_flex_center display_user_section"
+                        *ngFor="let personObject of contactUserDetails"
+                        [ngClass]="(isAlreadyAdded(personObject.UserId)?'disabled_box':'')"
+                        (click)="addPersonOnClick(personObject)">
+                        <!-- Avatar section -->
+                        <div id="managerX_new-task_avatar_section" class="avatar_section">
+                            <img id="managerX_new-task_avatar-default_image" *ngIf="!personObject.Avatar"
+                                src="../../../../assets/Images/default_avatar.png">
+                            <img id="managerX_new-task_avatar-custom_image" *ngIf="personObject.Avatar"
+                                [src]="personObject.Avatar">
+                        </div>
+                        <!-- End of Avatar section -->
+                        <!-- Name and role section -->
+                        <div class="name_role_section" id="managerX_new-task_name_role_section">
+                            <!-- Name section -->
+                            <div id="managerX_new-task_name_section" class="content_div">
+                                <span id="managerX_new-task_name-value_text" class="content_val name_section"
+                                    *ngIf="personObject.FirstName && personObject.FirstName != ''">{{personObject.FirstName}}
+                                    {{personObject.LastName}}</span>
+                                <span id="managerX_new-task_name-empty_text" class="content_val name_section"
+                                    *ngIf="!(personObject.FirstName && personObject.FirstName != '')">-</span>
+                            </div>
+                            <!-- End of Name section -->
+
+                            <!-- Role section -->
+                            <div id="managerX_new-task_role_section" class="content_div">
+                                <span id="managerX_new-task_role-name_text" class="content_val name_section role_name"
+                                    *ngIf="personObject.RoleName && personObject.RoleName != ''">{{personObject.RoleName}}</span>
+                                <span id="managerX_new-task_role-empty_text" class="content_val name_section role_name"
+                                    *ngIf="!(personObject.RoleName && personObject.RoleName != '')">-</span>
+                            </div>
+                            <!-- End of Role section -->
+                        </div>
+                        <!-- End of Name and role section -->
+                    </div>
+                    <!-- End of Display the user section -->
+
+                    <!-- When the list is empty -->
+                    <div id="managerX_new-task_persons_empty" class="task_persons_empty"
+                        *ngIf="contactUserDetails.length == 0">
+                        <div id="managerX_new-task_empty_content" class="empty_content">
+                            There are no records to display
+                        </div>
+                    </div>
+                    <!-- End of When the list is empty -->
+                </div>
+                <!-- End of Select the contacts to assign section -->
+
+                <!-- Pagination section -->
+                <p-paginator id="managerX_new-task_paginator_section" class="paginator_sec" #modulePaginator
+                    *ngIf="contactUserDetails && contactUserDetails.length > 0 && contactUserDetails[0].TotalRecords > currentFilter.RecordsPerPage"
+                    [ngClass]="(contactUserDetails && contactUserDetails.length > 0 && contactUserDetails[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                    [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                    [totalRecords]="(contactUserDetails.length>0)? contactUserDetails[0].TotalRecords:0"></p-paginator>
+                <!-- End of Pagination section -->
+            </div>
+            <!-- End of Select the contacts to assign section -->
+
+            <!-- Subtasks section -->
+            <div id="managerX_new-task_subtasks_section" class="col-12 each_row_section display_flex_baseline"
+                *ngIf="TaskId != 0">
+                <!-- Label section -->
+                <div id="managerX_new-task_subtasks_label" class="content_lbl">
+                    <span>Subtasks</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-task_subtasks_content" class="content_value_lbl">
+                    <!-- Content section when its empty -->
+                    <div id="managerX_new-task_subtasks-empty_content" class="content_value_lbl"
+                        *ngIf="taskDetails.SubTaskDetailsList.length == 0">
+                        <span>-</span>
+                    </div>
+                    <!-- End of Content section when its empty -->
+
+                    <!-- Loop through the sub tasks list -->
+                    <div id="managerX_new-task_subtask" *ngFor="let subtask of taskDetails.SubTaskDetailsList">
+                        <!-- Task name section -->
+                        <div id="managerX_new-task_subtask-task-name_section" class="display_flex_center">
+                            <!-- Green tick icon -->
+                            <input id="managerX_new-task_subtask_checkbox" type="checkbox" class="custom-cursor"
+                                [(ngModel)]="getStatusCodeValue(subtask.StatusCode).value"
+                                (change)="subTaskStatusCodeCompleteOnChange($event, subtask.Id)"
+                                (click)="$event.stopPropagation();" [disabled]="viewTaskState=='VIEW'">
+                            <!-- End of Green tick icon -->
+
+                            <!-- Label section -->
+                            <div id="managerX_new-task_subtask-label_section" class="value_content_lbl_table">
+                                <span id="managerX_new-task_subtask-name_label" class="stage_name_lbl"
+                                    *ngIf="subtask.Id !== editSubTaskId && subtask.Name">{{subtask.Name}}</span>
+                                <span id="managerX_new-task_subtask-name-empty_label" class="stage_name_lbl"
+                                    *ngIf="subtask.Id !== editSubTaskId && subtask.Name == ''">-</span>
+                                <!-- <input id="managerX_new-task_subtask-name_input" type="text"
+                                *ngIf="subtask.Id == editSubTaskId" [(ngModel)]="subtask.Name" class="sub_task_input"> -->
+                                <textarea id="managerX_new-task_subtask-name_input" type="text"
+                                    *ngIf="subtask.Id == editSubTaskId" [(ngModel)]="subtask.Name"
+                                    class="sub_task_input"></textarea>
+                            </div>
+                            <!-- End of Label section -->
+
+                            <!-- Edit icon -->
+                            <i *ngIf="viewTaskState!=='VIEW'" id="managerX_new-task_subtask-edit_icon"
+                                class="fa fa-pencil edit_icon" aria-hidden="true"
+                                (click)="editSubTaskSection(subtask.Id)"></i>
+                            <!-- End of Edit icon -->
+
+                            <!-- Remove icon -->
+                            <i *ngIf="viewTaskState!=='VIEW'" id="managerX_new-task_subtask-remove_icon"
+                                class="fa fa-trash edit_icon" aria-hidden="true"
+                                (click)="removeSubTaskOnClick(subtask.Id)"></i>
+                            <!-- End of Remove icon -->
+
+                            <!-- Buttons section -->
+                            <div id="managerX_new-task_subtask-buttons_section" class="display_flex_center"
+                                *ngIf="viewTaskState!=='VIEW' && subtask.Id == editSubTaskId">
+                                <button id="managerX_new-task_subtask-submit_button" class="create_btn"
+                                    (click)="submitSubTaskOnClick(subtask.Id)">Submit</button>
+                                <button id="managerX_new-task_subtask-cancel_button" class="cancel_btn"
+                                    (click)="cancelSubTaskOnClick()">Cancel</button>
+                            </div>
+                            <!-- End of Buttons section -->
+                        </div>
+                        <!-- End of Task name section -->
+                    </div>
+                    <!-- End of Loop through the sub tasks list -->
+
+                    <!-- New note section -->
+                    <div id="managerX_new-task_new-note_section" class="col-12" *ngIf="addSubtaskState">
+                        <!-- Text area section -->
+                        <textarea id="managerX_new-task_new-note_textarea" [(ngModel)]="newSubTask.Name"></textarea>
+                        <!-- End of Text area section -->
+
+                        <!-- Error Message -->
+                        <div id="managerX_new-task_new-note-error_message" class="col-12 no-side-padding error_message"
+                            *ngIf="displaySubTaskError">
+                            <span>Sub task name is mandatory</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Buttons section -->
+                        <div id="managerX_new-task_new-note-buttons_section" class="buttons_section">
+                            <button id="managerX_new-task_new-note-create_button" class="create_btn"
+                                (click)="createNewSubtask(taskDetails.Id)">Create</button>
+                            <button id="managerX_new-task_new-note-cancel_button" class="cancel_btn"
+                                (click)="cancelNewSubtask()">Cancel</button>
+                        </div>
+                        <!-- End of Buttons section -->
+                    </div>
+                    <!-- End of New note section -->
+
+                    <!-- Add note button -->
+                    <div *ngIf="viewTaskState!=='VIEW' && !addSubtaskState">
+                        <!-- Button section -->
+                        <button id="managerX_new-task_add-subtask_button" class="add_note_btn"
+                            (click)="addSubtaskOnClick()">
+                            <span class="icon_lbl">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </span>
+                            <span>Add a subtask</span>
+                        </button>
+                        <!-- End of Button section -->
+                    </div>
+                    <!-- End of Add note button -->
+
+                    <!-- Pagination section -->
+                    <p-paginator id="managerX_new-task_paginator_section" class="paginator_sec"
+                        *ngIf="taskDetails.SubTaskDetailsList && taskDetails.SubTaskDetailsList.length > 0 && taskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage"
+                        [ngClass]="(taskDetails.SubTaskDetailsList && taskDetails.SubTaskDetailsList.length > 0 && taskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage)?'':'display_hide'"
+                        [rows]="displaySubTasksFilter.RecordsPerPage"
+                        (onPageChange)="onChangeDisplaySubTasksPaginator($event)"
+                        [totalRecords]="(taskDetails.SubTaskDetailsList.length>0)? taskDetails.SubTaskDetailsList[0].TotalRecords:0"></p-paginator>
+                    <!-- End of Pagination section -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Subtasks section -->
+
+            <!-- Notes section -->
+            <div id="managerX_new-task_notes_section" class="col-12 each_row_section display_flex_baseline"
+                *ngIf="TaskId != 0">
+                <!-- Label section -->
+                <div id="managerX_new-task_notes-label_label" class="content_lbl">
+                    <span>Notes</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-task_notes-content_section" class="content_value_lbl">
+                    <!-- Content section when its empty -->
+                    <div id="managerX_new-task_notes-empty_section" class="content_value_lbl"
+                        *ngIf="taskDetails.SubTaskNoteList.length == 0">
+                        <span>-</span>
+                    </div>
+                    <!-- End of Content section when its empty -->
+
+
+                    <!-- Loop through the notes -->
+                    <div *ngFor="let note of taskDetails.SubTaskNoteList">
+                        <!-- Note section -->
+                        <div id="managerX_new-task_note_section">
+                            <span *ngIf="note.Id !== editSubNoteId">{{note.Description}}</span>
+
+                            <input id="managerX_new-task_note_input" type="text" *ngIf="note.Id == editSubNoteId"
+                                [(ngModel)]="note.Description" class="sub_task_input">
+
+                            <!-- Edit icon -->
+                            <i *ngIf="viewTaskState!=='VIEW'" id="managerX_new-task_note-edit_button"
+                                class="fa fa-pencil edit_icon" aria-hidden="true"
+                                (click)="editSubNoteSection(note.Id)"></i>
+                            <!-- End of Edit icon -->
+
+                            <!-- Remove icon -->
+                            <i *ngIf="viewTaskState!=='VIEW'" id="managerX_new-task_note-remove_button"
+                                class="fa fa-trash edit_icon" aria-hidden="true"
+                                (click)="removeSubNoteOnClick(note.Id)"></i>
+                        </div>
+                        <!-- End of Note section -->
+
+                        <!-- Buttons section -->
+                        <div id="managerX_new-task_note-buttons_section" class="display_flex_center update_note_btn"
+                            *ngIf="note.Id == editSubNoteId">
+                            <button id="managerX_new-task_note-submit_button" class="create_btn"
+                                (click)="submitSubNoteOnClick(note.Id)">Submit</button>
+                            <button id="managerX_new-task_note-cancel_button" class="cancel_btn"
+                                (click)="cancelSubNoteOnClick()">Cancel</button>
+                        </div>
+                        <!-- End of Buttons section -->
+
+                        <!-- Date of note section -->
+                        <div id="managerX_new-task_note-date_section" class="display_flex_center note_date_lbl">
+                            <span id="managerX_new-task_note-time_label" class="time_lbl">{{note.AddedDate | date:
+                                'hh:mm'}}</span>
+                            <span id="managerX_new-task_note-date_label">{{note.AddedDate | date: 'dd MMM yyyy'}}</span>
+                            <!-- Delete icon -->
+                            <span id="managerX_new-task_note-delete_icon" class="delete_note_icon"
+                                *ngIf="viewTaskState!=='VIEW'" (click)="deleteNoteOnClick(note.Id)">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <!-- End of Delete icon -->
+                        </div>
+                        <!-- End of Date of note section -->
+                    </div>
+                    <!-- End of Loop through the notes -->
+
+                    <!-- New note section -->
+                    <div id="managerX_new-task_new-note_section" class="col-12" *ngIf="addNoteState">
+                        <!-- Text area section -->
+                        <textarea id="managerX_new-task_note_textarea"
+                            [(ngModel)]="newSubTaskNote.Description"></textarea>
+                        <!-- End of Text area section -->
+
+                        <!-- Error Message -->
+                        <div id="managerX_new-task_note-error_message" class="col-12 no-side-padding error_message"
+                            *ngIf="displayNoteError">
+                            <span>Note is mandatory</span>
+                        </div>
+                        <!-- End of Error Message -->
+
+                        <!-- Buttons section -->
+                        <div id="managerX_new-task_note-buttons_section" class="buttons_section">
+                            <button id="managerX_new-task_note-create_button" class="create_btn"
+                                (click)="createNewNote(taskDetails.Id)">Create</button>
+                            <button id="managerX_new-task_note-cancel_button" class="cancel_btn"
+                                (click)="cancelNewNote()">Cancel</button>
+                        </div>
+                        <!-- End of Buttons section -->
+                    </div>
+                    <!-- End of New note section -->
+
+                    <!-- Add note button -->
+                    <div id="managerX_new-task_add-note-button_section" *ngIf="viewTaskState!=='VIEW' && !addNoteState">
+                        <!-- Button section -->
+                        <button id="managerX_new-task_add-note_button" class="add_note_btn" (click)="addNoteOnClick()">
+                            <span class="icon_lbl">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </span>
+                            <span>Add a note</span>
+                        </button>
+                        <!-- End of Button section -->
+                    </div>
+                    <!-- End of Add note button -->
+
+                    <!-- Pagination section -->
+                    <p-paginator id="managerX_new-task_notes-paginator_section" class="paginator_sec"
+                        *ngIf="taskDetails.SubTaskNoteList && taskDetails.SubTaskNoteList.length > 0 && taskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage"
+                        [ngClass]="(taskDetails.SubTaskNoteList && taskDetails.SubTaskNoteList.length > 0 && taskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage)?'':'display_hide'"
+                        [rows]="displayTaskNotesFilter.RecordsPerPage"
+                        (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                        [totalRecords]="(taskDetails.SubTaskNoteList.length>0)? taskDetails.SubTaskNoteList[0].TotalRecords:0"></p-paginator>
+                    <!-- End of Pagination section -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Notes section -->
+
+            <!-- Attachments section -->
+            <div id="managerX_new-task_attachments_section" class="col-12 each_row_section display_flex_baseline"
+                *ngIf="TaskId != 0">
+                <!-- Label section -->
+                <div id="managerX_new-task_attachments-label_label" class="content_lbl margin_bottom_auto">
+                    <span>Attachments</span>
+                </div>
+                <!-- End of Label section -->
+
+
+
+                <!-- Content section -->
+                <div id="managerX_new-task_attachments-content_section" class="content_value_lbl attachments_list">
+                    <!-- Content section when its empty -->
+                    <div id="managerX_new-task_attachments-empty_message" class="content_value_lbl"
+                        *ngIf="taskDetails.AttachmentList.length == 0">
+                        <span>-</span>
+                    </div>
+                    <!-- End of Content section when its empty -->
+
+                    <!-- Loop through the attachments -->
+                    <div class="" *ngFor="let image of taskDetails.AttachmentList"
+                        (click)="downloadAttachment(image.FileUrl)">
+                        <!-- Remove icon -->
+                        <div *ngIf="viewTaskState!=='VIEW'" id="managerX_new-task_attachment-remove_icon"
+                            class="remove_attachment_icon"
+                            (click)="$event.stopPropagation();removeAttachmentOnClick(image.Id)">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                        <!-- End of Remove icon -->
+
+                        <!-- If the file is an image -->
+                        <div id="managerX_new-task_attachment-image_container" class="image_container"
+                            *ngIf="image.FileType == 'IMAGE'">
+                            <img id="managerX_new-task_attachment_image" *ngIf="!image.FileUrl"
+                                src="../../../../assets/Images/construction.jpg">
+                            <img id="managerX_new-task_attachmenturl_image" *ngIf="image.FileUrl" [src]="image.FileUrl">
+                        </div>
+                        <!-- End of If the file is an image -->
+
+                        <!-- If the file is not an image -->
+                        <div id="managerX_new-task_attachment-file_container" class="image_container"
+                            *ngIf="image.FileType !== 'IMAGE'">
+                            <img id="managerX_new-task_attachment-file_icon"
+                                src="../../../../assets/Images/file_icon.png">
+                        </div>
+                        <!-- End of If the file is not an image -->
+                    </div>
+                    <!-- End of Loop through the attachments -->
+
+                    <!-- Add new attachment section -->
+                    <div id="managerX_new-task_add-attachment_section" *ngIf="viewTaskState!=='VIEW'">
+                        <div id="managerX_new-task_add-attachment_icon" class="image_container add_new_attachment"
+                            (click)="addNewAttachment(taskDetails.Id)">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <!-- End of Add new attachment section -->
+
+                    <!-- Pagination section -->
+                    <p-paginator class="paginator_sec" id="managerX_new-task_attachments-paginator_section"
+                        *ngIf="taskDetails.AttachmentList && taskDetails.AttachmentList.length > 0 && taskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage"
+                        [ngClass]="(taskDetails.AttachmentList && taskDetails.AttachmentList.length > 0 && taskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage)?'':'display_hide'"
+                        [rows]="displayTaskAttachmentsFilter.RecordsPerPage"
+                        (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                        [totalRecords]="(taskDetails.AttachmentList.length>0)? taskDetails.AttachmentList[0].TotalRecords:0"></p-paginator>
+                    <!-- End of Pagination section -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Attachments section -->
+        </div>
+        <!-- End of Content section -->
+
+        <!-- Sub heading section -->
+        <div id="managerX_new-task_sub-heading_section" class="row col-12 sub_title">
+            <!-- Title section -->
+            <div id="managerX_new-task_stage-details_title" class="sub_page_title">Stage Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div id="managerX_new-task_content_section" class="col-12 stage_selection">
+            <!-- Select the stage dropdown list -->
+            <div id="managerX_new-task_stage-dropdown_container" class="col-12">
+                <div class="col-12">
+                    Stage Selection
+                </div>
+                <div id="managerX_new-task_stage_dropdown" class="col-6">
+                    <p-dropdown class="full_width_dropdown" [options]="displayStageList" [(ngModel)]="selectedStageId"
+                        (onChange)="onChangeStageDetails('SD')" [disabled]="viewTaskState=='VIEW'" />
+                </div>
+            </div>
+            <!-- End of Select the stage dropdown list -->
+
+            <!-- Select the sub stage dropdown list -->
+            <div id="managerX_new-task_sub-stage-dropdown_container" class="col-12 margin_top5"
+                *ngIf="displaySubStageList.length > 0">
+                <div id="managerX_new-task_sub-stage_label" class="col-12">
+                    Sub Stage Selection
+                </div>
+                <div id="managerX_new-task_sub-stage_dropdown" class="col-6">
+                    <p-dropdown id="managerX_new-task_sub-stage-dropdown_list" class="full_width_dropdown"
+                        [options]="displaySubStageList" [(ngModel)]="selectedSubStageId"
+                        (onChange)="onChangeStageDetails('SSD')" [disabled]="viewTaskState=='VIEW'" />
+                </div>
+            </div>
+            <!-- End of Select the sub stage dropdown list -->
+
+            <!-- Select the sub stage category dropdown list -->
+            <div id="managerX_new-task_sub-stage-category-dropdown_container" class="col-12 margin_top5"
+                *ngIf="displaySubStageCategoryList.length > 0">
+                <div id="managerX_new-task_sub-stage-category_label" class="col-12">
+                    Sub Stage Category Selection
+                </div>
+                <div id="managerX_new-task_sub-stage-category_dropdown" class="col-6"
+                    *ngIf="displaySubStageCategoryList.length > 0">
+                    <p-dropdown id="managerX_new-task_sub-stage-category_dropdown-list" class="full_width_dropdown"
+                        [options]="displaySubStageCategoryList" [(ngModel)]="selectedSubStageCategoryId"
+                        (onChange)="onChangeStageDetails('SSDC')" [disabled]="viewTaskState=='VIEW'" />
+                </div>
+            </div>
+            <!-- End of Select the sub stage  category dropdown list -->
+
+            <!-- Error Message -->
+            <div id="managerX_new-task_error_Message3" class="col-12 no-side-padding error_message"
+                *ngIf="CheckErrorCode('EMPTY$CATEGORY')">
+                <span>{{CheckErrorCode('EMPTY$CATEGORY')!.ErrorMessage}}</span>
+            </div>
+            <!-- End of Error Message -->
+        </div>
+        <!-- End of Content section -->
+
+        <!-- Buttons section -->
+        <div class="col-12 buttons_section">
+            <button id="managerX_new-task_create_button" *ngIf="TaskId == 0" class="create_btn"
+                (click)="onClickSubmit()">Submit</button>
+            <button id="managerX_new-task_cancel_button" class="cancel_btn margin_right_10"
+                (click)="cancelOnClickFunction()" *ngIf="TaskId == 0">Cancel</button>
+            <button id="managerX_new-task_cancel_button" class="create_btn margin_right_10"
+                (click)="cancelOnClickFunction()" *ngIf="viewTaskState!=='VIEW' && TaskId !== 0">Update/Cancel</button>
+            <button id="managerX_new-task_remove_button" class="cancel_btn margin_right_10"
+                *ngIf="viewTaskState!=='VIEW'" (click)="removeOnClickFunction()">Remove</button>
+        </div>
+        <!-- End of Buttons section -->
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

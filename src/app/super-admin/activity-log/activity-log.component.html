@@ -1,0 +1,120 @@
+<ion-content [fullscreen]="true">
+    <!-- Main container for the Activity Log page -->
+    <div class="container-lg-12 md-12 contacts">
+
+        <!-- Top bar section including title and search -->
+        <div class="top_bar_section">
+
+            <!-- Page title -->
+            <div id="managerX_admin-contacts_title_text" class="page_title">
+                Activity Log
+            </div>
+
+            <!-- Search input -->
+            <div>
+                <input [(ngModel)]="currentFilter.SearchQuery" type="text" class="form-control"
+                    (input)="GetStripeSubscriptionList(0,16);searchResetFunction();"
+                    style="background-color: aliceblue;" placeholder="search here" autocomplete="off" maxlength="50"
+                    appAllowEmailCharacters>
+                <!-- Custom directive to restrict input characters -->
+            </div>
+
+        </div>
+        <!-- End of Top bar section -->
+
+        <div class="">
+
+            <!-- Data table section -->
+            <div class="col-12">
+
+                <!-- PrimeNG Table -->
+                <p-table [value]="LoginLogList">
+
+                    <!-- Table Header -->
+                    <ng-template pTemplate="header">
+                        <tr class="table_header_section">
+                            <th class="header_label_span">No</th>
+                            <th class="header_label_span" (click)="sortOnClick('FirstName')">Person Name
+
+                                <i class="pi" [ngClass]="{
+                                  'pi-sort-alpha-down': currentFilter.SortCol === 'FirstName' && currentFilter.SortAsc,
+                                  'pi-sort-alpha-up': currentFilter.SortCol === 'FirstName' && !currentFilter.SortAsc,
+                                  'pi-sort': currentFilter.SortCol !== 'FirstName'
+                               }"></i>
+                            </th>
+                            <th class="header_label_span">User Type</th>
+                            <!-- Email column with sort icon -->
+                            <th class="header_label_span" (click)="sortOnClick('Email')">
+                                Email Address
+                                <i class="pi" [ngClass]="{
+                                  'pi-sort-alpha-down': currentFilter.SortCol === 'Email' && currentFilter.SortAsc,
+                                  'pi-sort-alpha-up': currentFilter.SortCol === 'Email' && !currentFilter.SortAsc,
+                                  'pi-sort': currentFilter.SortCol !== 'Email'
+                               }"></i>
+                            </th>
+
+                            <!-- Logged Date column with sort icon -->
+                            <th class="header_label_span" (click)="sortOnClick('AddedDateDate')">
+                                Logged Date
+                                <i class="pi" [ngClass]="{
+                                  'pi-sort-numeric-down': currentFilter.SortCol === 'AddedDateDate' && currentFilter.SortAsc,
+                                  'pi-sort-numeric-up': currentFilter.SortCol === 'AddedDateDate' && !currentFilter.SortAsc,
+                                  'pi-sort': currentFilter.SortCol !== 'AddedDateDate'
+                               }"></i>
+                            </th>
+
+                            <!-- Static Columns -->
+
+                            <th class="header_label_span" (click)="sortOnClick('AddedDateTime')">Logged Time <i
+                                    class="pi" [ngClass]="{
+                                  'pi-sort-numeric-down': currentFilter.SortCol === 'AddedDateTime' && currentFilter.SortAsc,
+                                  'pi-sort-numeric-up': currentFilter.SortCol === 'AddedDateTime' && !currentFilter.SortAsc,
+                                  'pi-sort': currentFilter.SortCol !== 'AddedDateTime'
+                               }"></i></th>
+                            <th class="header_label_span">Company Name</th>
+                        </tr>
+                    </ng-template>
+
+                    <!-- Table Body -->
+                    <ng-template pTemplate="body" let-log let-i="rowIndex">
+                        <tr class="current-tr">
+                            <td>
+                                <p class="text-xs font-weight-bold mb-0">{{ startingIndex + i + 1 }}</p>
+                            </td>
+                            <td>{{ log.FirstName }} {{ log.LastName }}</td>
+                            <td>{{ log.UserTypeName }}</td>
+                            <td>{{ log.EmailAddress }}</td>
+                            <td>{{ log.TokenAddedDate | date: 'yyyy-MM-dd' }}</td>
+                            <td>{{ log.TokenAddedDate | date: 'hh:mm:ss a' }}</td>
+                            <td>{{ log.CompanyName || '-' }}</td>
+
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <!-- End of PrimeNG table -->
+
+                <!-- No records message -->
+                <div id="managerX_admin-contacts_no-records_text" *ngIf="LoginLogList.length == 0">
+                    <div colspan="9" class="empty_content">
+                        There are no records to display
+                    </div>
+                </div>
+
+                <!-- PrimeNG Paginator -->
+                <p-paginator id="managerX_admin-contacts_paginator_sections" class="paginator_sec" #modulePaginator
+                    *ngIf="LoginLogList && LoginLogList.length > 0 && LoginLogList[0].TotalRecords > currentFilter.RecordsPerPage"
+                    [ngClass]="(LoginLogList && LoginLogList.length > 0 && LoginLogList[0].TotalRecords > currentFilter.RecordsPerPage) ? '' : 'display_hide'"
+                    [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                    [totalRecords]="(LoginLogList.length > 0) ? LoginLogList[0].TotalRecords : 0">
+                </p-paginator>
+                <!-- End of Paginator -->
+
+            </div>
+            <!-- End of Table Section -->
+
+        </div>
+        <!-- End of Main Content Inner Wrapper -->
+
+    </div>
+    <!-- End of Main Container -->
+</ion-content>

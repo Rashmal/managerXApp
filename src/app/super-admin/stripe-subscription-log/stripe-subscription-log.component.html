@@ -1,0 +1,93 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+
+    <div class="container-lg-12 md-12 contacts">
+        <!-- Top bar section -->
+        <div class="top_bar_section">
+            <!-- Title section -->
+            <div *ngIf="!isAddNewProductVisible" id="managerX_admin-contacts_title_text" class="page_title">
+                Subscriptions
+            </div>
+
+            <div *ngIf="isAddNewProductVisible" id="managerX_admin-contacts_title_text" class="page_title"><i
+                    class=" fa fa-chevron-left " style="cursor: pointer;" (click)="backFunction()"></i> Payment Log
+            </div>
+
+            <!-- End of Title section -->
+
+
+        </div>
+        <!-- End of Top bar section -->
+        <div class="" *ngIf="!isAddNewProductVisible">
+
+
+            <!-- Contacts table section -->
+            <div class="col-12">
+                <!-- Current prime ng table section -->
+                <p-table [value]="StripeSubscriptionList">
+                    <!-- Headers section -->
+                    <ng-template pTemplate="header">
+                        <tr class="table_header_section">
+                            <th class="header_label_span">Subscription ID</th>
+                            <th class="header_label_span">Email Address</th>
+                            <th class="header_label_span">Stripe Customer ID</th>
+
+                            <th class="header_label_span">Started Date</th>
+
+                            <th class="header_label_span">Person Name</th>
+                            <th class="header_label_span">Contact Number</th>
+                            <th class="header_label_span">Company Name</th>
+                            <th class="header_label_span">Status</th>
+                            <th class="header_label_span">Actions</th>
+                        </tr>
+                    </ng-template>
+                    <!-- End of Headers section -->
+
+                    <!-- Table body content section -->
+                    <ng-template pTemplate="body" let-subscription>
+                        <tr class="current-tr">
+                            <td>{{ subscription.SubscriptionId }}</td>
+                            <td>{{ subscription.Email }}</td>
+                            <td>{{ subscription.StripeCustomerId }}</td>
+                            <td>{{ subscription.StartedDate | date:'yyyy-MM-dd' }}</td>
+                            <td>{{ subscription.Person?.First_Name }} {{ subscription.Person?.Last_Name }}</td>
+                            <td>{{ subscription.Person?.Contact_Number }}</td>
+                            <td>{{ subscription.Person?.Company_Name }}</td>
+                            <td>{{ subscription.StripeStatusName }}</td>
+                            <td> <i (click)="OpenPaymentLog(subscription.SubscriptionId,subscription.Email,subscription.Person.First_Name )"
+                                    style="cursor: pointer;" class="fa fa-eye"></i></td>
+                        </tr>
+                    </ng-template>
+                    <!-- End of Table body content section -->
+                </p-table>
+                <!-- End of Current prime ng table section -->
+
+                <!--End of Client list table   -->
+                <div id="managerX_admin-contacts_no-records_text" *ngIf="StripeSubscriptionList.length == 0">
+                    <div colspan="9" class="empty_content">
+                        There are no records to display
+                    </div>
+
+                </div>
+
+                <p-paginator id="managerX_admin-contacts_paginator_sections" class="paginator_sec" #modulePaginator
+                    *ngIf="StripeSubscriptionList && StripeSubscriptionList.length > 0 && StripeSubscriptionList[0].TotalRecords > currentFilter.RecordsPerPage"
+                    [ngClass]="(StripeSubscriptionList && StripeSubscriptionList.length > 0 && StripeSubscriptionList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                    [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                    [totalRecords]="(StripeSubscriptionList.length>0)? StripeSubscriptionList[0].TotalRecords:0"></p-paginator>
+
+
+
+            </div>
+            <!-- End of Contacts table section -->
+        </div>
+        <!-- End of Main content section -->
+
+        <app-stripe-payment-log (closeSlideInPopup)="closeSlideInPopup($event)" *ngIf="isAddNewProductVisible"
+            [SelectedProductItemId]="SelectedProductItemId" [selectedEmail]="selectedEmail"
+            [selectedName]="selectedName">
+
+        </app-stripe-payment-log>
+
+    </div>
+</ion-content>

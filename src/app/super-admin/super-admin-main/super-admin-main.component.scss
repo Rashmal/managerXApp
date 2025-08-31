@@ -1,0 +1,215 @@
+.wrapper {
+    align-items: stretch;
+    display: flex;
+    width: 100%;
+    height: 100%;
+
+    .logged_username {
+        width: 100%;
+        color: #e9ecef !important;
+        text-align: center;
+        padding-bottom: 10px;
+        font-size: 10pt;
+    }
+
+    .hr_line {
+        width: 100%;
+        padding: 15px;
+        padding-top: 21px;
+        color: #e9ecef !important;
+        position: relative;
+        display: flex;
+        font-size: 10pt;
+        align-items: center;
+        .div_line_fill {
+            width: 100%;
+            background: #393b41;
+            height: 2px;
+        }
+    }
+
+    #sidebarSuper {
+        max-width: 100%;
+        min-width: 100%;
+        height: 100%;
+        background: #1e222d;
+        transition: all 0.35s ease-in-out;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        min-width: 0;
+        overflow: hidden;
+        transition: all 0.35s ease-in-out;
+        background: var(--AllPageBackgroundColor);
+        // background: #a5a5a7;
+        // background: #cccccc;
+        width: 100%;
+    }
+
+    .sidebarSuper-nav {
+        flex-grow: 1;
+        list-style: none;
+        margin-bottom: 0;
+        padding-left: 0;
+        margin-left: 0;
+        // height: 100vh;
+    }
+
+    .sidebarSuper-header {
+        color: #e9ecef;
+        font-size: 0.75rem;
+        padding: 15px !important;
+        padding-top: 36px !important;
+        margin-bottom: 10px;
+    }
+
+    a.sidebarSuper-link {
+        padding: 15px;
+        color: #e9ecef !important;
+        position: relative;
+        display: flex;
+        font-size: 10pt;
+        align-items: center;
+        padding-top: 13px;
+        padding-bottom: 13px;
+
+        i {
+            font-size: 15pt;
+            padding-right: 15px;
+        }
+
+        span {
+            font-size: 10pt;
+        }
+    }
+
+    .sidebarSuper-link:hover {
+        background: #125dcb;
+    }
+
+    .sidebarSuper-item {
+        margin-top: 0;
+    }
+
+    .active-custom {
+        background-color: #125dcb;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .custom-sidebarSuper-item {
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .ownerContact-style {
+        /* Add your styles here */
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .ownerSetting-style {
+        /* Add your styles here */
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .builderCheckList-style {
+        /* Add your styles here */
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+    .ownerCalender-style {
+        /* Add your styles here */
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .ownerNotification-style {
+        /* Add your styles here */
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .builderCalendar-style {
+        /* Add your styles here */
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .builderProjectOverview-style {
+        /* Add your styles here */
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .contractorTask-style {
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .builderSetting-style {
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+
+    .contractorSetting-style {
+        background-color: rgb(255, 255, 255); /* Example style */
+    }
+}
+
+::ng-deep .custom-main-dropdown .p-dropdown {
+    background: none;
+    border: none;
+    color: white !important;
+    width: 100%;
+}
+
+::ng-deep .custom-main-dropdown .p-dropdown .p-dropdown-label {
+    color: white !important;
+    font-size: 10pt;
+    padding: 0;
+}
+
+::ng-deep .address-item {
+    display: flex;
+    flex-direction: column;
+}
+
+::ng-deep .custom-main-dropdown .p-dropdown-item {
+    font-size: 10pt;
+    padding: 10px;
+}
+
+::ng-deep .custom-main-dropdown .p-dropdown-label {
+    white-space: normal;
+    overflow: unset;
+}
+
+::ng-deep .custom-main-dropdown .p-dropdown-trigger {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .burgerMenu {
+        max-width: 100% !important;
+        width: 100%;
+        max-height: 100%;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .wrapper {
+        flex-direction: column !important;
+    }
+}
+
+.unread_count_master {
+    background: #f44336;
+    color: white;
+    font-size: 10pt;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    margin-left: auto;
+}
+
+::ng-deep .menu-content-open {
+    pointer-events: inherit !important;
+}

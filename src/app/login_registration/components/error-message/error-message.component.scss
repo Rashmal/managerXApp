@@ -1,0 +1,111 @@
+.error_message {
+    background-image: linear-gradient(to right, #ffde59, #ff914d);
+    height: 100vh;
+
+    .title_section {
+        color: white;
+        text-align: center;
+        padding-top: 20pt;
+    }
+
+    .image_section {
+        display: flex;
+        justify-content: center;
+        padding-top: 20pt;
+        img {
+            width: 9vw;
+        }
+    }
+
+    .error_message_box {
+        color: black;
+        background: white;
+        border: solid thin white;
+        width: fit-content;
+        max-width: 50vw;
+        padding: 10px;
+        border-radius: 5px;
+        margin: auto;
+        margin-top: 20pt;
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+
+    .bold_text {
+        font-weight: bold;
+    }
+
+    .user_image {
+        img {
+            position: fixed;
+            height: 19vw;
+            right: 2vw;
+        }
+    }
+
+    .login_button_section {
+        display: flex;
+        justify-content: center;
+        button {
+            background-image: linear-gradient(to right, #ffde59, #ff914d);
+            border: none;
+            width: auto;
+            height: 40px;
+            border-radius: 15px;
+            color: white;
+            border: solid 2px #fff;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+}
+
+/* -------------------------------- Snapzing style -------------------------------- */
+.divLoadingContent {
+    padding: 10px;
+    background-color: #fff;
+    border: 3px #aeaeae solid;
+    display: inline-block;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 10;
+    text-align: center;
+    left: 47%;
+    margin-left: -41px;
+    top: 50%;
+    margin-top: -35px;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+}
+.divLoadingContent > img {
+    width: 100px;
+}
+.divLoadingContent > span {
+    display: block;
+    font-size: 7pt;
+    padding-top: 10px;
+    font-weight: 600;
+    color: #066558;
+}
+.divLoadingBg {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.5;
+}
+.divLoadingWrapper {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100003;
+    text-align: center;
+}
+/* -------------------------------- End of Snapzing style -------------------------------- */

@@ -1,0 +1,142 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="chat-container" (click)="closeEmoji()">
+        <!-- Header section -->
+        <div class="chat_room_header_section">
+            <div class="room_avatar">{{ GetChatRoomLogoLetters(selectedRoom!.RoomName) }}</div>
+
+            <div class="header_label_sec">
+                <!-- Label section -->
+                <div class="flex_align_left">
+                    <div class="room_header">
+                        <span>{{selectedRoom!.RoomName}}</span>
+                    </div>
+                    <!-- <div class="room_description">
+                <span>{{selectedRoom.RoomDescription}}</span>
+            </div> -->
+                    <div class="room_participants">
+                        <span>{{selectedRoom!.ChatRoomMembersList.length}} participant(s)</span>
+                    </div>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Icon section -->
+                <div class="flex_align_right header_more_options">
+                    <i class="fa fa-ellipsis-v cursor_pointer" aria-hidden="true" (click)="op.toggle($event)"></i>
+                </div>
+                <!-- End of Icon section -->
+
+                <!-- Room header options -->
+                <p-overlayPanel #op>
+                    <div class="room_options">
+                        <div class="each_option" (click)="roomOptionsOnClick('VIEW_INFO')">
+                            <span>View info</span>
+                        </div>
+                        <div class="each_option" (click)="roomOptionsOnClick('EDIT_ROOM')"
+                            *ngIf="selectedRoom?.PersonOwnerId == overallCookieInterface.GetUserId()">
+                            <span>Edit room</span>
+                        </div>
+                        <div class="each_option" (click)="roomOptionsOnClick('DELETE_CHAT')"
+                            *ngIf="selectedRoom?.PersonOwnerId == overallCookieInterface.GetUserId()">
+                            <span>Delete chat</span>
+                        </div>
+                        <div class="each_option" (click)="roomOptionsOnClick('ARCHIVE_CHAT')"
+                            *ngIf="!viewAllArchiveList">
+                            <span>Archive chat</span>
+                        </div>
+                        <div class="each_option" (click)="roomOptionsOnClick('UNARCHIVE_CHAT')"
+                            *ngIf="viewAllArchiveList">
+                            <span>Unarchive chat</span>
+                        </div>
+                        <div class="each_option" (click)="roomOptionsOnClick('LEAVE_CHAT')">
+                            <span>Leave chat</span>
+                        </div>
+                    </div>
+                </p-overlayPanel>
+                <!-- End of Room header options -->
+            </div>
+        </div>
+        <!-- End of Header section -->
+
+        <!-- Default message -->
+        <div class="default_message" *ngIf="chatMessageList.length == 0">
+            <div class="icon_default">
+                <i class="fa fa-users" aria-hidden="true"></i>
+            </div>
+            <div class="title_default">
+                <span>Select a Chat Room</span>
+            </div>
+            <div class="sub_title_default">
+                <span>Connect, Chat, Create: Choose Your Space</span>
+            </div>
+        </div>
+        <!-- End of Default message -->
+
+        <div class="message-list" (scroll)="onScroll($event)">
+
+            <div *ngFor="let msg of chatMessageList" class="each_message"
+                [ngClass]="{'message-left': msg.SenderId !== overallCookieInterface.GetUserId(), 'message-right': msg.SenderId === overallCookieInterface.GetUserId()}">
+                <div class="message-avatar">
+                    <img *ngIf="msg.SenderAvatar" [src]="msg.SenderAvatar" alt="Avatar">
+                    <div *ngIf="!msg.SenderAvatar" class="avatar-placeholder">{{ GetChatRoomLogoLetters(msg.SenderName)
+                        }}
+                    </div>
+                </div>
+                <div class="message-content">
+                    <div class="message-sender" *ngIf="selectedRoom!.ChatRoomTypeId == 2">{{ msg.SenderName }}</div>
+
+                    <div *ngFor="let msgFile of msg.ChatFileList">
+                        <img [src]="msgFile.LocalPath" (click)="previewImage(msgFile.LocalPath)">
+                    </div>
+
+                    <div class="message-text">{{ decodeMessage(msg.Message) }}</div>
+                    <div class="message-time">{{ msg.AddedDate | date: 'shortTime' }}
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </div>
+                    <div class="message-time-full">{{ msg.AddedDate | date: 'yyyy MMM dd hh:mm' }}
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="selectedImageUrl" class="image-overlay">
+            <div class="overlay-content">
+                <img [src]="selectedImageUrl" alt="Preview">
+                <div class="overlay-actions">
+                    <button class="close-button" (click)="closePreview()">Close</button>
+                    <a [href]="selectedImageUrl" download class="download-button">Download</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="message-input">
+            <!-- Loop through the images -->
+            <div class="message_files_prompt_section">
+                <div *ngFor="let msgFile of messageFiles; let i = index" class="message_files_preview">
+                    <!-- Close icon -->
+                    <i class="fa fa-times-circle close_icon" aria-hidden="true" (click)="removeImageOnClick(i)"></i>
+                    <!-- End of Close icon -->
+                    <img [src]="msgFile.LocalPath">
+                </div>
+            </div>
+            <!-- End of Loop through the images -->
+
+            <!-- Prompt section -->
+            <div class="message_prompt_section" (click)="$event.stopPropagation();">
+                <textarea [(ngModel)]="newMessage" placeholder="Type a message..."
+                    (keydown.enter)="sendMessageOnClick($event)">
+        </textarea>
+                <i class="fa fa-smile-o message-emoji" aria-hidden="true"
+                    (click)="$event.stopPropagation();toggleEmojiPicker()"></i>
+                <emoji-mart (emojiClick)="addEmoji($event)" *ngIf="emojiPickerVisible"></emoji-mart>
+                <i class="fa fa-picture-o message-attachment" aria-hidden="true" (click)="triggerFileInput()"></i>
+                <input id="managerX_upload-files_fileInput_input" accept="image/*" type="file" id="fileInput"
+                    (change)="onFileSelected($event)" class="file-input-hidden" style="display: none;">
+                <button (click)="sendMessageOnClick($event)"
+                    [disabled]="!(newMessage.trim() || messageFiles.length > 0)">Send</button>
+            </div>
+        </div>
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

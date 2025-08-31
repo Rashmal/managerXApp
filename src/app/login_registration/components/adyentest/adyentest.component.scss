@@ -1,0 +1,387 @@
+.stripe_page {
+  .error-placeholder-label {
+    label {
+      top: 32% !important;
+    }
+  }
+
+  .eye-password-label {
+    .fa.fa-eye,
+    .fa.fa-eye-slash {
+      margin-top: -18px;
+      position: absolute;
+    }
+  }
+
+  // input,
+  // button {
+  //     height: 45px;
+  // }
+
+  input {
+    height: 45px;
+  }
+
+  .or_label {
+    font-size: 10.5pt;
+  }
+
+  .banner_image {
+    width: 100%;
+    height: 100vh;
+    object-fit: fill;
+  }
+
+  .top_para {
+    font-weight: 500;
+    font-size: 11pt;
+  }
+
+  .label_colors {
+    color: rgb(167, 167, 167);
+  }
+
+  .custom-login-btn {
+    color: black;
+    border-color: rgb(224 224 224);
+    transition: color 0.3s ease; /* Adding transition for smooth hover effect */
+    font-size: 15px;
+  }
+
+  .custom-login-btn:hover {
+    color: white; /* Change color to white on hover */
+  }
+
+  /* CSS */
+  .form-group {
+    position: relative;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .form-group label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: #666;
+  }
+
+  .form-group input:focus + label,
+  .form-group input:not(:placeholder-shown) + label {
+    top: 8px;
+    font-size: 12px;
+    color: #666;
+  }
+
+  /* Password input field */
+  /* Password input field */
+  .password-group input {
+    width: calc(100% - 40px); /* Adjust for eye icon width */
+    padding-right: 40px; /* Adjust for eye icon width */
+  }
+
+  /* Password label */
+  .password-group label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: #666;
+  }
+
+  /* Adjust label position */
+  .password-group input:not(:focus) + label {
+    top: 50%; /* Keep label centered when input is not focused */
+    font-size: 16px; /* Adjust label font size as needed */
+  }
+
+  /* Eye icon for password visibility */
+  .password-toggle-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust as needed */
+    transform: translateY(-50%);
+  }
+
+  /* Adjust error message position */
+  .password-group .text-danger {
+    position: absolute;
+    bottom: -20px; /* Adjust as needed */
+    left: 10px;
+    font-size: 12px;
+    color: #ff0000; /* Red color for error message */
+  }
+
+  /* Style the select dropdown */
+  select {
+    width: 100%;
+    padding: 12px;
+    // border: 2px solid #007bff;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+  }
+
+  select:focus {
+    border-color: #6e6e6e;
+    box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+  }
+
+  /* Custom dropdown arrow */
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' fill='%23007bff'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
+  }
+
+  /* Stripe Card Element Container */
+  #card-element {
+    border: 2px solid #cacaca;
+    padding: 12px;
+    border-radius: 6px;
+    background: white;
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* When card details are being entered */
+  #card-element.StripeElement--focus {
+    border-color: #868686;
+    box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+  }
+
+  /* Card errors */
+  #card-errors {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  /* Submit button */
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    border-color: rgb(82, 71, 71);
+    border: none;
+    color: black;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  button[type="submit"]:hover {
+    color: #4085cf;
+    background-color: #badbff;
+  }
+
+  /* Card design */
+  .pricing-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Plan titles */
+  .plan-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #004085;
+    margin-bottom: 15px;
+  } /* Plan titles */
+  .plan-title-2 {
+    font-size: 23px;
+    font-weight: bold;
+    color: #012c5a;
+    margin-bottom: 15px;
+  }
+
+  /* tot Price styling */
+  .tot-price {
+    font-size: 28px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 15px;
+  }
+
+  /* price styling */
+  .extra-price {
+    font-size: 25px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 15px;
+  }
+
+  /* extra price p styling */
+  .extra-price-p {
+    font-size: 25px;
+    font-weight: bold;
+    color: #232724;
+    margin-bottom: 15px;
+  }
+
+  /*tot price p styling */
+  .tot-price-p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #232724;
+    margin-bottom: 15px;
+  }
+  /* make each <p> a flex row, full width */
+  .extra-price-p,
+  .tot-price-p {
+    display: flex;
+    justify-content: space-between; /* label left, span right */
+    align-items: center; /* vertical centering */
+    margin-bottom: 15px; /* your spacing */
+  }
+
+  /* styling for the amount spans */
+  .extra-price,
+  .tot-price {
+    /* your existing styles: */
+    font-size: inherit; /* or 25px/28px if you want to keep them different */
+    font-weight: bold;
+    color: #28a745;
+  }
+
+  /* ratio styling */
+  .extra-ratio {
+    font-size: 15px;
+    color: #b41a1a;
+    margin-bottom: 15px;
+  }
+
+  /* Features list */
+  .plan-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .plan-features li {
+    font-size: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .plan-features li:last-child {
+    border-bottom: none;
+  }
+
+  /* Buttons */
+  .pricing-card button {
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    transition: background 0.3s ease;
+  }
+
+  .btn-primary {
+    background: #004085;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #002752;
+  }
+
+  .btn-warning {
+    background: #ffae00;
+    color: white;
+  }
+
+  .btn-warning:hover {
+    background: #d08900;
+  }
+
+  .btn-success {
+    background: #28a745;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #1e7e34;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .pricing-card {
+      margin-bottom: 20px;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between spinner and text */
+  }
+  .success-message {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text */
+    padding: 12px 16px;
+    border-left: 5px solid #28a745; /* Green left border */
+    border-radius: 5px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .failed-message {
+    background-color: #d4edda; /* Light green background */
+    color: #a5241b; /* Dark green text */
+    padding: 12px 16px;
+    border-left: 5px solid #a73728; /* Green left border */
+    border-radius: 5px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .message-text {
+    font-size: 14px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

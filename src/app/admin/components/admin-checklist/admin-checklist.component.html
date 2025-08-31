@@ -1,0 +1,1115 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div id="managerX_admin-checklist_main_content" class="container-lg-12 md-12 project_checklist"
+        [ngClass]="(!DisplayTopBar)?'no_gap':''">
+        <!-- Top bar section -->
+        <div id="managerX_admin-checklist_top_bar" class="top_bar_section" *ngIf="DisplayTopBar">
+            <!-- Title section -->
+            <div id="managerX_admin-checklist_title_text" class="page_title">Project Checklist</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_admin-checklist_search-icon_box" class="custom-icon-field">
+                <div class="input-container">
+                    <p-inputIcon id="managerX_admin-checklist_search_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_admin-checklist_search_input" type="text"
+                        [(ngModel)]="currentSubStageFilter.SearchQuery" pInputText placeholder="Search"
+                        class="custom-search-box" (input)="currentSubStageFilter.CurrentPage=1;GetAllStageDetails();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Stage dropdown section -->
+        <div id="managerX_admin-checklist_stage-dropdown_section" class="row col-12">
+            <!-- Dropdown section for the stages list -->
+            <p-dropdown id="managerX_admin-checklist_stage_dropdown" [options]="displayStageList"
+                [(ngModel)]="selectedStageId" placeholder="Select Stage" class="custom-dropdown-checklist"
+                (onChange)="onChangeStageSelection()">
+                <!-- Customized dropdown item -->
+                <ng-template let-stage pTemplate="item">
+                    <!-- Display the label -->
+                    <div>
+                        <span id="managerX_admin-checklist_stage-dropdown_item">{{ stage.label }}</span>
+
+                        <!-- Selected tick icon -->
+                        <div *ngIf="selectedStageId && selectedStageId === stage.value" style="float: right;">
+                            <i id="managerX_admin-checklist_stage-dropdown_tick"
+                                class="fa fa-check custom-icon-checklist"></i>
+                        </div>
+                        <!-- End of Selected tick icon -->
+                    </div>
+                    <!-- End of Display the label -->
+                </ng-template>
+                <!-- End of Customized dropdown item -->
+            </p-dropdown>
+            <!-- End of Dropdown section for the stages list -->
+
+            <!-- When the list is empty -->
+            <div class="col-12">
+                <!-- <div *ngIf="!isAnyRecords" style="text-align: center;">
+                No records available
+            </div> -->
+            </div>
+            <!-- End of When the list is empty -->
+        </div>
+        <!-- End of Stage dropdown section -->
+
+        <!-- Sub stages section -->
+        <div id="managerX_admin-checklist_sub-stages_section" class="col-12">
+            <!-- Sub stages accordion -->
+            <p-accordion id="managerX_admin-checklist_sub-stages_accordion" [multiple]="true" [activeIndex]="[0]">
+                <!-- Loop through the sub stages for the accordion -->
+                <p-accordionTab id="managerX_admin-checklist_sub-stage-accordion_tab"
+                    *ngFor="let subStage of subStageList; let i = index" class="custom-accordion-checklist-1">
+                    <!-- Custom template for the accordion header -->
+                    <ng-template pTemplate="header">
+                        <!-- Display the icon box -->
+                        <span class="icon-box">
+                            <img id="managerX_admin-checklist_sub-stage_icon" class="box-pic "
+                                [src]="'../../../assets/Images/books_519118.png'" />
+                        </span>
+                        <!-- End of Display the icon box -->
+
+                        <!-- Display the header content -->
+                        <div id="managerX_admin-checklist_sub-stage-header_content" class="stage-info">
+                            <!-- Sub stage name -->
+                            <span id="managerX_admin-checklist_sub-stage_name" class="stage-name">Stage {{ i + 1 }}: {{
+                                subStage.Name }}</span>
+                            <!-- End of Sub stage name -->
+
+                            <!-- Sub task count -->
+                            <span id="managerX_admin-checklist_sub-stage-task_count" class="sub-task-count">{{
+                                subStage.TotalSubTasks }} Subtasks</span>
+                            <!-- End of Sub task count -->
+                        </div>
+                        <!-- End of Display the header content -->
+                    </ng-template>
+                    <!-- End of Custom template for the accordion header -->
+
+                    <!-- Loop through the sub stage category list -->
+                    <ng-container id="managerX_admin-checklist_sub-stage-category_container"
+                        class="custom-accordion-checklist-2 ">
+                        <div id="managerX_admin-checklist_sub-stage-category_table" class="col-12 task_table_list">
+                            <!-- Sub stage category accordion -->
+                            <p-accordion id="managerX_admin-checklist_sub-stage-category_accordion"
+                                class="custom_accordion_sub_stage_category" [multiple]="true" [activeIndex]="[]">
+                                <!-- Loop through the sub stage categories for the accordion -->
+                                <p-accordionTab id="managerX_admin-checklist_sub-stage-category_accordion_tab"
+                                    *ngFor="let subStageCategory of subStage.SubStageCategoryDetailsList"
+                                    class="sub-stage-category-custom sub-stage-task-category-custom">
+                                    <!-- Custom template for the accordion header -->
+                                    <ng-template pTemplate="header">
+                                        <!-- Display the header content -->
+                                        <div id="managerX_admin-checklist_sub-stage-category_header"
+                                            class="sub_stage_category_info">
+                                            <!-- Sub stage name -->
+                                            <span class="stage-name" style="font-size:8pt">{{ subStageCategory.Name }}
+                                                <i id="managerX_admin-checklist_sub-stage-category_status"
+                                                    class="fa fa-circle overall_status"
+                                                    [ngClass]="subStageCategory.OverallStatusCode.toUpperCase()"
+                                                    aria-hidden="true"></i>
+                                            </span>
+                                            <!-- End of Sub stage name -->
+
+                                            <!-- Sub task count -->
+                                            <span id="managerX_admin-checklist_sub-stage-category-task_count"
+                                                class="sub-task-count">{{subStageCategory.TotalCompletedTasks}}/{{subStageCategory.TotalTasks}}
+                                                TASKS COMPLETED</span>
+                                            <!-- End of Sub task count -->
+                                        </div>
+                                        <!-- End of Display the header content -->
+                                    </ng-template>
+                                    <!-- End of Custom template for the accordion header -->
+
+                                    <!-- Task details section -->
+                                    <ng-container id="managerX_admin-checklist_sub-stage-category-task_details"
+                                        class="custom-accordion-checklist-2">
+                                        <!-- Display table section -->
+                                        <div class="col-12">
+                                            <!-- Current prime ng table section -->
+                                            <p-table id="managerX_admin-checklist_sub-stage-category_table"
+                                                [value]="subStageCategory.TaskDetailsList">
+                                                <!-- Headers section -->
+                                                <ng-template pTemplate="header">
+                                                    <tr id="managerX_admin-checklist_table_header"
+                                                        class="table_header_section">
+                                                        <th id="managerX_admin-checklist_table-header-task_name"
+                                                            class="header_label_span task_name_col">TASK NAME</th>
+                                                        <th id="managerX_admin-checklist_table-header_status"
+                                                            class="header_label_span status_col">STATUS</th>
+                                                        <th id="managerX_admin-checklist_table-header_person"
+                                                            class="header_label_span person_col">PERSON</th>
+                                                        <th id="managerX_admin-checklist_table-header-due_date"
+                                                            class="header_label_span due_date_col">DUE DATE</th>
+                                                        <th id="managerX_admin-checklist_table-header_attachments"
+                                                            class="header_label_span attachments_col">ATTACHMENTS</th>
+                                                    </tr>
+                                                </ng-template>
+                                                <!-- End of Headers section -->
+
+                                                <!-- Table body content section -->
+                                                <ng-template pTemplate="body" let-task>
+                                                    <tr id="managerX_admin-checklist_table-body_row" class="current-tr"
+                                                        (click)="showTaskDetails(task.Id)">
+                                                        <td id="managerX_admin-checklist_table-body-task_name"
+                                                            class="task_name_col">
+                                                            <!-- Task name section -->
+                                                            <div class="display_flex_center custom-pointer ">
+                                                                <!-- Green tick icon -->
+                                                                <i id="managerX_admin-checklist_table-body-task_icon"
+                                                                    class="fa" [ngClass]="{'fa-check-circle': task.StatusCode === 'COM',
+                                         'fa-check-circle-o ': task.StatusCode !== 'COM'  }"
+                                                                    [ngStyle]="{'color': task.StatusCode === 'COM' ? '#44AA00' : '#a3a3a3' }"></i>
+                                                                <!-- End of Green tick icon -->
+
+                                                                <!-- Label section -->
+                                                                <div class="value_content_lbl_table">
+                                                                    <span
+                                                                        id="managerX_admin-checklist_table-body-task-name_label"
+                                                                        class="stage_name_lbl"
+                                                                        *ngIf="task.Name">{{task.Name}}</span>
+                                                                    <span
+                                                                        id="managerX_admin-checklist_table-body-task-name_empty"
+                                                                        class="stage_name_lbl"
+                                                                        *ngIf="task.Name == ''">-</span>
+                                                                </div>
+                                                                <!-- End of Label section -->
+                                                            </div>
+                                                            <!-- End of Task name section -->
+                                                        </td>
+                                                        <td id="managerX_admin-checklist_table_body-status"
+                                                            class="status_col">
+                                                            <!-- Status section -->
+                                                            <div
+                                                                class="display_flex_center value_content_lbl_table custom-pointer ">
+                                                                <div class="value_content_lbl status_div_section"
+                                                                    [ngClass]="task.StatusCode">
+                                                                    <span id="managerX_admin-checklist_task_status"
+                                                                        *ngIf="task.StatusName">{{task.StatusName}}</span>
+                                                                    <span id="managerX_admin-checklist_task_statusname"
+                                                                        *ngIf="task.StatusName == ''">-</span>
+                                                                </div>
+                                                            </div>
+                                                            <!-- End of Status section -->
+                                                        </td>
+                                                        <td class="person_col">
+                                                            <!-- Display the user section -->
+                                                            <div
+                                                                class="display_flex_center display_user_section custom-pointer ">
+                                                                <!-- Avatar section -->
+                                                                <div class="avatar_section">
+                                                                    <img id="managerX_admin-checklist_task-user_avatar"
+                                                                        *ngIf="!task.PersonList[0].Avatar"
+                                                                        src="../../../../assets/Images/default_avatar.png">
+                                                                    <img id="managerX_admin-checklist_task-user-image_avatar"
+                                                                        *ngIf="task.PersonList[0].Avatar"
+                                                                        [src]="task.PersonList[0].Avatar">
+                                                                </div>
+                                                                <!-- End of Avatar section -->
+                                                                <!-- Name and role section -->
+                                                                <div class="name_role_section">
+                                                                    <!-- Name section -->
+                                                                    <div class="content_div">
+                                                                        <span
+                                                                            id="managerX_admin-checklist_task-user_name"
+                                                                            class="content_val name_section"
+                                                                            *ngIf="task.PersonList.length > 0 && task.PersonList[0].FirstName && task.PersonList[0].FirstName != ''">{{task.PersonList[0].FirstName}}
+                                                                            {{task.PersonList[0].LastName}}</span>
+                                                                        <span
+                                                                            id="managerX_admin-checklist_taskdefault-user_name"
+                                                                            class="content_val name_section"
+                                                                            *ngIf="!(task.PersonList.length > 0 && task.PersonList[0].FirstName && task.PersonList[0].FirstName != '')">-</span>
+                                                                    </div>
+                                                                    <!-- End of Name section -->
+
+                                                                    <!-- Role name section -->
+                                                                    <div class="content_div">
+                                                                        <span
+                                                                            id="managerX_admin-checklist_task-user_role"
+                                                                            id="managerX_admin-checklist_task_user_role_{{task.Id}}"
+                                                                            class="content_val role_name"
+                                                                            *ngIf="task.PersonList.length > 0 && task.PersonList[0].RoleName && task.PersonList[0].RoleName != ''">{{task.PersonList[0].RoleName}}</span>
+                                                                        <span
+                                                                            id="managerX_admin-checklist_task-val-def-user_role"
+                                                                            class="content_val role_name"
+                                                                            *ngIf="!(task.PersonList.length > 0 && task.PersonList[0].RoleName && task.PersonList[0].RoleName != '')">-</span>
+                                                                    </div>
+                                                                    <!-- End of Role name section -->
+                                                                </div>
+                                                                <!-- End of Name and role section -->
+                                                            </div>
+                                                            <!-- End of Display the user section -->
+                                                        </td>
+                                                        <td class="due_date_col">
+                                                            <!-- Due date section -->
+                                                            <div
+                                                                class="display_flex_center value_content_lbl_table custom-pointer ">
+                                                                <span id="managerX_admin-checklist_task-due_date"
+                                                                    class="date_lbl" *ngIf="task.DueDate">
+                                                                    {{ task.DueDate | date: 'dd MMM yyyy' }}
+                                                                </span>
+                                                                <span id="managerX_admin-checklist_task-due_date"
+                                                                    class="date_lbl" *ngIf="!task.DueDate">
+                                                                    -
+                                                                </span>
+                                                            </div>
+                                                            <!-- End of Due date section -->
+                                                        </td>
+                                                        <td class="attachments_col">
+                                                            <div class="value_content_lbl_table">
+                                                                <!-- Files section -->
+                                                                <div class="each_attachment_section"
+                                                                    *ngIf="task.NoOfFiles != 0">
+                                                                    <!-- File icon section -->
+                                                                    <i id="managerX_admin-checklist_task_icon"
+                                                                        class="fa fa-file-text-o"></i>
+                                                                    <!-- End of File icon section -->
+
+                                                                    <!-- No section -->
+                                                                    <span
+                                                                        id="managerX_admin-checklist_task_NoOfFiles">{{task.NoOfFiles}}</span>
+                                                                    <!-- End of No section -->
+                                                                </div>
+                                                                <!-- End of Files section -->
+
+                                                                <!-- Images section -->
+                                                                <div id="managerX_admin-checklist_task_images"
+                                                                    class="each_attachment_section"
+                                                                    *ngIf="task.NoOfImages != 0">
+                                                                    <!-- Images icon section -->
+                                                                    <i class="fa fa-paperclip"></i>
+                                                                    <!-- End of Images icon section -->
+
+                                                                    <!-- No section -->
+                                                                    <span
+                                                                        id="managerX_admin-checklist_task_NoOfImages">{{task.NoOfImages}}</span>
+                                                                    <!-- End of No section -->
+                                                                </div>
+                                                                <!-- End of Images section -->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                                <!-- End of Table body content section -->
+                                            </p-table>
+                                            <!-- End of Current prime ng table section -->
+
+                                            <!--End of Client list table-->
+                                            <div *ngIf="subStageCategory.TaskDetailsList.length == 0">
+                                                <div id="managerX_admin-checklist_empty_content" colspan="9"
+                                                    class="empty_content">
+                                                    There are no records to display
+                                                </div>
+
+                                            </div>
+                                            <!-- Pagination section -->
+                                            <p-paginator id="managerX_admin-checklist_sub-stage-category_paginator"
+                                                class="paginator_sec" #modulePaginator
+                                                *ngIf="subStageCategory.TaskDetailsList && subStageCategory.TaskDetailsList.length > 0 && subStageCategory.TaskDetailsList[0].TotalRecords > currentTaskCategoryFilter.RecordsPerPage"
+                                                [ngClass]="(subStageCategory.TaskDetailsList && subStageCategory.TaskDetailsList.length > 0 && subStageCategory.TaskDetailsList[0].TotalRecords > currentTaskCategoryFilter.RecordsPerPage)?'':'display_hide'"
+                                                [rows]="currentTaskCategoryFilter.RecordsPerPage"
+                                                (onPageChange)="onChangeTaskPaginator($event,subStage.Id,subStageCategory.Id)"
+                                                [totalRecords]="(subStageCategory.TaskDetailsList.length>0)? subStageCategory.TaskDetailsList[0].TotalRecords:0"></p-paginator>
+                                            <!-- End of Pagination section -->
+                                        </div>
+                                        <!-- End of Display table section -->
+                                    </ng-container>
+                                    <!-- End of Task details section -->
+                                </p-accordionTab>
+                                <!-- End of Loop through the sub stage categories for the accordion -->
+                            </p-accordion>
+                            <!-- End of Sub stage category accordion -->
+
+                            <!--When the sub stages list is empty-->
+                            <div *ngIf="subStage.SubStageCategoryDetailsList.length == 0">
+                                <div id="managerX_admin-checklist_empty-SubStageCategoryDetails_content" colspan="9"
+                                    class="empty_content">
+                                    There are no records to display
+                                </div>
+                            </div>
+                            <!--End of When the sub stages list is empty-->
+
+                            <!-- Pagination section -->
+                            <p-paginator id="managerX_admin-checklist_sub-stage-category-list_paginator"
+                                class="paginator_sec"
+                                *ngIf="subStage.SubStageCategoryDetailsList && subStage.SubStageCategoryDetailsList.length > 0 && subStage.SubStageCategoryDetailsList[0].TotalRecords > currentSubStageCategoryFilter.RecordsPerPage"
+                                [ngClass]="(subStage.SubStageCategoryDetailsList && subStage.SubStageCategoryDetailsList.length > 0 && subStage.SubStageCategoryDetailsList[0].TotalRecords > currentSubStageCategoryFilter.RecordsPerPage)?'':'display_hide'"
+                                [rows]="currentSubStageCategoryFilter.RecordsPerPage"
+                                (onPageChange)="onChangeSubStageCategoryPaginator($event, subStage.Id)"
+                                [totalRecords]="(subStage.SubStageCategoryDetailsList.length>0)? subStage.SubStageCategoryDetailsList[0].TotalRecords:0"></p-paginator>
+                            <!-- End of Pagination section -->
+                        </div>
+                    </ng-container>
+                    <!-- End of Loop through the sub stage category list -->
+
+                </p-accordionTab>
+                <!-- End of Loop through the sub stages for the accordion -->
+            </p-accordion>
+            <!-- End of Sub stages accordion -->
+
+            <!--When the sub stages list is empty-->
+            <div *ngIf="subStageList.length == 0">
+                <div id="managerX_admin-checklist_empty-subStageList_content" colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+                <div colspan="9" class="empty_content" *ngIf="SelectedClientId == 0">
+                    You haven't created any clients yet. Go to the Client Menu to add a new
+                    client and start managing your options.
+                </div>
+            </div>
+            <!--End of When the sub stages list is empty-->
+
+            <!-- Pagination section -->
+            <p-paginator id="managerX_admin-checklist_main-list_paginator" class="paginator_sec"
+                *ngIf="subStageList && subStageList.length > 0 && subStageList[0].TotalRecords > currentSubStageFilter.RecordsPerPage"
+                [ngClass]="(subStageList && subStageList.length > 0 && subStageList[0].TotalRecords > currentSubStageFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentSubStageFilter.RecordsPerPage" (onPageChange)="onChangeSubStagePaginator($event)"
+                [totalRecords]="(subStageList.length>0)? subStageList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+        </div>
+        <!-- End of Sub stages section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Display side panel -->
+    <p-sidebar [(visible)]="isTaskDetailsVisible" [position]="'right'" [modal]="true">
+        <!-- Main content section -->
+        <div class="row col-12 task_details_section" *ngIf="displayTaskDetails && DisplayTopBar==true">
+            <!-- Top row section -->
+            <div class="d-flex align-items-center header_row">
+                <div>
+                    <i id="managerX_admin-checklist_task-details_close-button" class="fa fa-chevron-left"
+                        style="cursor: pointer;" aria-hidden="true" (click)="closeTaskDetails()"></i>
+                </div>
+                <div class="header_title">
+                    <span id="managerX_admin-checklist_task-details_text"
+                        class="my-0">{{displayTaskDetails.Name}}</span>
+                </div>
+            </div>
+            <!-- End of Top row section -->
+
+            <!-- Content section -->
+            <div class="col-12">
+                <!-- Status section -->
+                <div class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span>Status</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Status label section -->
+                    <div>
+
+
+                        <!-- Status section -->
+                        <div class="display_flex_center value_content_lbl_table custom-pointer ">
+                            <div class="value_content_lbl status_div_section" [ngClass]="displayTaskDetails.StatusCode">
+                                <span id="managerX_admin-checklist_task_status"
+                                    *ngIf="displayTaskDetails.StatusName">{{displayTaskDetails.StatusName}}</span>
+                                <span id="managerX_admin-checklist_task_statusname"
+                                    *ngIf="displayTaskDetails.StatusName == ''">-</span>
+                            </div>
+                        </div>
+                        <!-- End of Status section -->
+
+
+
+                    </div>
+                    <!-- End of Status label section -->
+                </div>
+                <!-- End of Status section -->
+
+                <!-- Due date section -->
+                <div class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span>Due Date</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <span id="managerX_admin-checklist_task-details_due-date">
+                            {{displayTaskDetails.DueDate| date: 'dd MMM yyyy'}}
+                        </span>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Due date section -->
+
+                <!-- Person section section -->
+                <div class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-checklist_person_text">Person</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-checklist_content_section" class="content_value_lbl">
+                        <!-- Display the user section -->
+                        <div class="display_flex_center display_user_section">
+                            <!-- Avatar section -->
+                            <div class="avatar_section">
+                                <img id="managerX_admin-checklist_task-details_avatar"
+                                    *ngIf="!displayTaskDetails.PersonList[0].Avatar"
+                                    src="../../../../assets/Images/default_avatar.png">
+                                <img id="managerX_admin-checklist_task-details-list_avatar"
+                                    *ngIf="displayTaskDetails.PersonList[0].Avatar"
+                                    [src]="displayTaskDetails.PersonList[0].Avatar">
+                            </div>
+                            <!-- End of Avatar section -->
+                            <!-- Name and role section -->
+                            <div class="name_role_section">
+                                <!-- Name section -->
+                                <div id="managerX_admin-checklist_task-details_section" class="content_div">
+                                    <span id="managerX_admin-checklist_task-details_person_name"
+                                        class="content_val name_section"
+                                        *ngIf="displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].FirstName && displayTaskDetails.PersonList[0].FirstName != ''">{{displayTaskDetails.PersonList[0].FirstName}}
+                                        {{displayTaskDetails.PersonList[0].LastName}}</span>
+                                    <span id="managerX_admin-checklist_task-def-details_person_name"
+                                        class="content_val name_section"
+                                        *ngIf="!(displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].FirstName && displayTaskDetails.PersonList[0].FirstName != '')">-</span>
+                                </div>
+                                <!-- End of Name section -->
+
+                                <!-- Role name section -->
+                                <div class="content_div">
+                                    <span id="managerX_admin-checklist_task-details_person_role"
+                                        class="content_val role_name"
+                                        *ngIf="displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].RoleName && displayTaskDetails.PersonList[0].RoleName != ''">{{displayTaskDetails.PersonList[0].RoleName}}</span>
+                                    <span id="managerX_admin-checklist_task-details_person-value_role"
+                                        class="content_val role_name"
+                                        *ngIf="!(displayTaskDetails.PersonList.length > 0 && displayTaskDetails.PersonList[0].RoleName && displayTaskDetails.PersonList[0].RoleName != '')">-</span>
+                                </div>
+                                <!-- End of Role name section -->
+                            </div>
+                            <!-- End of Name and role section -->
+                        </div>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Person section section -->
+
+                <!-- Category section -->
+                <div class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-checklist_category_label">Category</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <span id="managerX_admin-checklist_category_value">{{displayTaskDetails.Category}}</span>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Category section -->
+
+                <!-- Description section -->
+                <div class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-checklist_description_label">Description</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <span id="managerX_admin-checklist_description_value">{{displayTaskDetails.Description}}</span>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Description section -->
+
+                <!-- Subtasks section -->
+                <div class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-checklist_subtasks_label">Subtasks</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <!-- Content section when its empty -->
+                        <div class="content_value_lbl" *ngIf="displayTaskDetails.SubTaskDetailsList.length == 0">
+                            <span id="managerX_admin-checklist_subtasks_empty">-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+                        <!-- Loop through the sub tasks list -->
+                        <div *ngFor="let subtask of displayTaskDetails.SubTaskDetailsList">
+                            <!-- Task name section -->
+                            <div class="display_flex_center">
+                                <!-- Green tick icon -->
+                                <i id="managerX_admin-checklist_subtask_icon" class="fa" [ngClass]="{'fa-check-circle': subtask.StatusCode === 'COM',
+         'fa-check-circle-o ': subtask.StatusCode !== 'COM'  }"
+                                    [ngStyle]="{'color': subtask.StatusCode === 'COM' ? '#44AA00' : '#a3a3a3' }"></i>
+                                <!-- End of Green tick icon -->
+
+                                <!-- Label section -->
+                                <div class="value_content_lbl_table">
+                                    <span id="managerX_admin-checklist_subtask_name" class="stage_name_lbl"
+                                        *ngIf="subtask.Name">{{subtask.Name}}</span>
+                                    <span id="managerX_admin-checklist_subtask_name_empty" class="stage_name_lbl"
+                                        *ngIf="subtask.Name == ''">-</span>
+                                </div>
+                                <!-- End of Label section -->
+                            </div>
+                            <!-- End of Task name section -->
+                        </div>
+                        <!-- End of Loop through the sub tasks list -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-checklist_subtasks_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.SubTaskDetailsList && displayTaskDetails.SubTaskDetailsList.length > 0 && displayTaskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.SubTaskDetailsList && displayTaskDetails.SubTaskDetailsList.length > 0 && displayTaskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displaySubTasksFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplaySubTasksPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.SubTaskDetailsList.length>0)? displayTaskDetails.SubTaskDetailsList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Subtasks section -->
+
+                <!-- Notes section -->
+                <div class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div id="managerX_admin-checklist_notes_label" class="content_lbl">
+                        <span>Notes</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <!-- Content section when its empty -->
+                        <div class="content_value_lbl" *ngIf="displayTaskDetails.SubTaskNoteList.length == 0">
+                            <span id="managerX_admin-checklist_notes_empty">-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+
+                        <!-- Loop through the notes -->
+                        <div *ngFor="let note of displayTaskDetails.SubTaskNoteList">
+                            <!-- Note section -->
+                            <div id="managerX_admin-checklist_note_description">
+                                <span>{{note.Description}}</span>
+                            </div>
+                            <!-- End of Note section -->
+
+                            <!-- Date of note section -->
+                            <div class="display_flex_center note_date_lbl">
+                                <span id="managerX_admin-checklist_note_time" class="time_lbl">{{note.AddedDate | date:
+                                    'hh:mm'}}</span>
+                                <span id="managerX_admin-checklist_note_date">
+                                    {{note.AddedDate | date: 'dd MMM yyyy'}}
+                                </span>
+                            </div>
+                            <!-- End of Date of note section -->
+                        </div>
+                        <!-- End of Loop through the notes -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-checklist_notes_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.SubTaskNoteList && displayTaskDetails.SubTaskNoteList.length > 0 && displayTaskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.SubTaskNoteList && displayTaskDetails.SubTaskNoteList.length > 0 && displayTaskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displayTaskNotesFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.SubTaskNoteList.length>0)? displayTaskDetails.SubTaskNoteList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Notes section -->
+
+                <!-- Attachments section -->
+                <div id="managerX_admin-checklist_attachments_section"
+                    class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div id="managerX_admin-checklist_attachments_label" class="content_lbl margin_bottom_auto">
+                        <span>Attachments</span>
+                    </div>
+                    <!-- End of Label section -->
+
+
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-checklist_attachments_content" class="content_value_lbl attachments_list">
+                        <!-- Content section when its empty -->
+                        <div id="managerX_admin-checklist_attachments_empty" class="content_value_lbl"
+                            *ngIf="displayTaskDetails.AttachmentList.length == 0">
+                            <span>-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+                        <!-- Loop through the attachments -->
+                        <div class="" *ngFor="let image of displayTaskDetails.AttachmentList">
+                            <!-- If the file is an image -->
+                            <div id="managerX_admin-checklist_image_container" class="image_container"
+                                *ngIf="image.FileType == 'IMAGE'">
+                                <img id="managerX_admin-checklist_image_default" *ngIf="!image.FileUrl"
+                                    src="../../../../assets/Images/construction.jpg">
+                                <img id="managerX_admin-checklist_image_url" *ngIf="image.FileUrl"
+                                    [src]="image.FileUrl">
+                            </div>
+                            <!-- End of If the file is an image -->
+
+                            <!-- If the file is not an image -->
+                            <div id="managerX_admin-checklist_non-image_container" class="image_container"
+                                *ngIf="image.FileType !== 'IMAGE'">
+                                <img id="managerX_admin-checklist_file_icon"
+                                    src="../../../../assets/Images/file_icon.png">
+                            </div>
+                            <!-- End of If the file is not an image -->
+                        </div>
+                        <!-- End of Loop through the attachments -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-checklist_attachments_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.AttachmentList && displayTaskDetails.AttachmentList.length > 0 && displayTaskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.AttachmentList && displayTaskDetails.AttachmentList.length > 0 && displayTaskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displayTaskAttachmentsFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.AttachmentList.length>0)? displayTaskDetails.AttachmentList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Attachments section -->
+            </div>
+            <!-- End of Content section -->
+        </div>
+        <!-- End of Main content section -->
+
+        <!-- Main content section -->
+        <div class="row col-12 task_details_section contacts" *ngIf="displayTaskDetails  && DisplayTopBar==false">
+            <!-- Top row section -->
+            <div id="managerX_admin-checklist_header_row" class="d-flex align-items-center header_row">
+                <div>
+                    <i id="managerX_admin-checklist_back_button" class="fa fa-chevron-left" style="cursor: pointer;"
+                        aria-hidden="true" (click)="closeTaskDetails()"></i>
+                </div>
+                <div id="managerX_admin-checklist_header_title" class="header_title">
+                    <span class="my-0">{{displayTaskDetails.Name}}</span>
+                </div>
+            </div>
+            <!-- End of Top row section -->
+
+            <!-- Content section -->
+            <div class="col-12">
+                <!-- Status section -->
+                <div id="managerX_admin-checklist_status_section" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div id="managerX_admin-checklist_status_label" class="content_lbl">
+                        <span>Status</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Status label section -->
+                    <div class="popup_task" *ngIf="displayStatusDetailsList && displayTaskDetails.StatusId">
+                        <!-- Status dropdown -->
+                        <p-dropdown id="managerX_admin-checklist_status_dropdown_select"
+                            [options]="displayStatusDetailsList" [(ngModel)]="displayTaskDetails.StatusId"
+                            (onChange)="taskStatusOnChange(displayTaskDetails.Id,displayTaskDetails.StatusId)"
+                            [ngClass]="displayTaskDetails.StatusCode" appendTo="body">
+                            <ng-template let-status pTemplate="selectedItem">
+                                <div class='userItem'>
+                                    {{status.label}}</div>
+                            </ng-template>
+
+                            <ng-template let-status pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>
+                                        {{ status.label }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <!-- End of Status dropdown -->
+                    </div>
+                    <!-- End of Status label section -->
+                </div>
+                <!-- End of Status section -->
+
+                <!-- Due date section -->
+                <div id="managerX_admin-checklist_due-date_section" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div id="managerX_admin-checklist_due-date_label" class="content_lbl">
+                        <span>Due Date</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-checklist_due-date_value" class="content_value_lbl due_date_clickable"
+                        (click)="op.toggle($event)">
+                        <span>{{displayTaskDetails.DueDate| date: 'dd MMM yyyy'}}</span>
+                    </div>
+                    <!-- End of Content section -->
+
+                    <p-overlayPanel id="managerX_admin-checklist_due-date_overlay" #op>
+                        <p-calendar id="managerX_admin-checklist_due-date_calendar" class="max-w-full"
+                            [(ngModel)]="displayTaskDetails.DueDate" [inline]="true"
+                            (onSelect)="dueDateOnSelect();op.hide();" />
+                    </p-overlayPanel>
+                </div>
+                <!-- End of Due date section -->
+
+                <!-- Person section section -->
+                <div id="managerX_admin-checklist_person_section" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div id="managerX_admin-checklist_person_label" class="content_lbl">
+                        <span>Person</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_admin-checklist_person_content" class="content_value_lbl">
+                        <!-- Display the user section -->
+                        <div id="managerX_admin-checklist_person_section"
+                            class="display_flex_center display_user_section"
+                            *ngFor="let personObject of displayTaskDetails.PersonList">
+                            <!-- Avatar section -->
+                            <div class="avatar_section">
+                                <img id="managerX_admin-checklist_person-default_avatar" *ngIf="!personObject.Avatar"
+                                    src="../../../../assets/Images/default_avatar.png">
+                                <img id="managerX_admin-checklist_person_avatar_url" *ngIf="personObject.Avatar"
+                                    [src]="personObject.Avatar">
+                            </div>
+                            <!-- End of Avatar section -->
+                            <!-- Name and role section -->
+                            <div id="managerX_admin-checklist_person-name_role" class="name_role_section">
+                                <!-- Name section -->
+                                <div class="content_div">
+                                    <span id="managerX_admin-checklist_personObject_text"
+                                        class="content_val name_section"
+                                        *ngIf="displayTaskDetails.PersonList.length > 0 && personObject.FirstName && personObject.FirstName != ''">{{personObject.FirstName}}
+                                        {{personObject.LastName}}</span>
+                                    <span id="managerX_admin-checklist_displayTaskDetailst_text"
+                                        class="content_val name_section"
+                                        *ngIf="!(displayTaskDetails.PersonList.length > 0 && personObject.FirstName && personObject.FirstName != '')">-</span>
+                                </div>
+                                <!-- End of Name section -->
+                            </div>
+                            <!-- End of Name and role section -->
+                        </div>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Person section section -->
+
+                <!-- Description section -->
+                <div class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div id="managerX_admin-checklist_description_section" class="content_lbl">
+                        <span>Description</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <textarea id="managerX_admin-checklist_description_textarea"
+                            [(ngModel)]="displayTaskDetails.Description" (input)="taskDescriptionInput()"></textarea>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Description section -->
+
+                <!-- Subtasks section -->
+                <div class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-checklist_Subtasks_text">Subtasks</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <!-- Content section when its empty -->
+                        <div id="managerX_admin-checklist_SubTaskDetailsList_label" class="content_value_lbl"
+                            *ngIf="displayTaskDetails.SubTaskDetailsList.length == 0">
+                            <span>-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+                        <!-- Loop through the sub tasks list -->
+                        <div *ngFor="let subtask of displayTaskDetails.SubTaskDetailsList">
+                            <!-- Task name section -->
+                            <div class="display_flex_center">
+                                <!-- Green tick icon -->
+                                <input id="managerX_admin-checklist_subtask_checkbox" type="checkbox"
+                                    class="custom-cursor" [(ngModel)]="getStatusCodeValue(subtask.StatusCode).value"
+                                    (change)="subTaskStatusCodeCompleteOnChange($event, subtask.Id)"
+                                    (click)="$event.stopPropagation();">
+                                <!-- End of Green tick icon -->
+
+                                <!-- Label section -->
+                                <div class="value_content_lbl_table">
+                                    <span id="managerX_admin-checklist_subtask_name" class="stage_name_lbl"
+                                        *ngIf="subtask.Id !== editSubTaskId && subtask.Name">{{subtask.Name}}</span>
+                                    <span id="managerX_admin-checklist_subtask-name_empty" class="stage_name_lbl"
+                                        *ngIf="subtask.Id !== editSubTaskId && subtask.Name == ''">-</span>
+                                    <input id="managerX_admin-checklist_subtask_input" type="text"
+                                        *ngIf="subtask.Id == editSubTaskId" [(ngModel)]="subtask.Name"
+                                        class="sub_task_input">
+                                </div>
+                                <!-- End of Label section -->
+
+                                <!-- Edit icon -->
+                                <i id="managerX_admin-checklist_subtask-edit_icon" class="fa fa-pencil edit_icon"
+                                    aria-hidden="true" (click)="editSubTaskSection(subtask.Id)"></i>
+                                <!-- End of Edit icon -->
+
+                                <!-- Remove icon -->
+                                <i id="managerX_admin-checklist_subtask-remove_icon" class="fa fa-trash edit_icon"
+                                    aria-hidden="true" (click)="removeSubTaskOnClick(subtask.Id)"></i>
+                                <!-- End of Remove icon -->
+
+                                <!-- Buttons section -->
+                                <div class="display_flex_center" *ngIf="subtask.Id == editSubTaskId">
+                                    <button id="managerX_admin-checklist_subtask-submit_button" class="create_btn"
+                                        (click)="submitSubTaskOnClick(subtask.Id)">Submit</button>
+                                    <button id="managerX_admin-checklist_subtask-cancel_button" class="cancel_btn"
+                                        (click)="cancelSubTaskOnClick()">Cancel</button>
+                                </div>
+                                <!-- End of Buttons section -->
+                            </div>
+                            <!-- End of Task name section -->
+                        </div>
+                        <!-- End of Loop through the sub tasks list -->
+
+                        <!-- New note section -->
+                        <div class="col-12" *ngIf="addSubtaskState">
+                            <!-- Text area section -->
+                            <textarea id="managerX_admin-checklist_new-subtask_textarea"
+                                [(ngModel)]="newSubTask.Name"></textarea>
+                            <!-- End of Text area section -->
+
+                            <!-- Buttons section -->
+                            <div class="buttons_section">
+                                <button id="managerX_admin-checklist_create-subtask_button" class="create_btn"
+                                    (click)="createNewSubtask(displayTaskDetails.Id)">Create</button>
+                                <button id="managerX_admin-checklist_cancel-new-subtask_button" class="cancel_btn"
+                                    (click)="cancelNewSubtask()">Cancel</button>
+                            </div>
+                            <!-- End of Buttons section -->
+                        </div>
+                        <!-- End of New note section -->
+
+                        <!-- Add note button -->
+                        <div *ngIf="!addSubtaskState">
+                            <!-- Button section -->
+                            <button id="managerX_admin-checklist_add-subtask_button" class="add_note_btn"
+                                (click)="addSubtaskOnClick()">
+                                <span class="icon_lbl">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </span>
+                                <span>Add a subtask</span>
+                            </button>
+                            <!-- End of Button section -->
+                        </div>
+                        <!-- End of Add note button -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-checklist_subtask_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.SubTaskDetailsList && displayTaskDetails.SubTaskDetailsList.length > 0 && displayTaskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.SubTaskDetailsList && displayTaskDetails.SubTaskDetailsList.length > 0 && displayTaskDetails.SubTaskDetailsList[0].TotalRecords > displaySubTasksFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displaySubTasksFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplaySubTasksPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.SubTaskDetailsList.length>0)? displayTaskDetails.SubTaskDetailsList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Subtasks section -->
+
+                <!-- Notes section -->
+                <div class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div class="content_lbl">
+                        <span id="managerX_admin-checklist_notes_label">Notes</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl">
+                        <!-- Content section when its empty -->
+                        <div class="content_value_lbl" *ngIf="displayTaskDetails.SubTaskNoteList.length == 0">
+                            <span id="managerX_admin-checklist_nonotes_text">-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+
+                        <!-- Loop through the notes -->
+                        <div *ngFor="let note of displayTaskDetails.SubTaskNoteList">
+                            <!-- Note section -->
+                            <div>
+                                <span id="managerX_admin-checklist_note_text"
+                                    *ngIf="note.Id !== editSubNoteId">{{note.Description}}</span>
+
+                                <input id="managerX_admin-checklist_note_edit" type="text"
+                                    *ngIf="note.Id == editSubNoteId" [(ngModel)]="note.Description"
+                                    class="sub_task_input">
+
+                                <!-- Edit icon -->
+                                <i id="managerX_admin-checklist_note-edit_icon" class="fa fa-pencil edit_icon"
+                                    aria-hidden="true" (click)="editSubNoteSection(note.Id)"></i>
+                                <!-- End of Edit icon -->
+
+                                <!-- Remove icon -->
+                                <i id="managerX_admin-checklist_note-remove_icon" class="fa fa-trash edit_icon"
+                                    aria-hidden="true" (click)="removeSubNoteOnClick(note.Id)"></i>
+                            </div>
+                            <!-- End of Note section -->
+
+                            <!-- Buttons section -->
+                            <div class="display_flex_center update_note_btn" *ngIf="note.Id == editSubNoteId">
+                                <button id="managerX_admin-checklist_note-submit_button" class="create_btn"
+                                    (click)="submitSubNoteOnClick(note.Id)">Submit</button>
+                                <button id="managerX_admin-checklist_note-cancel_button" class="cancel_btn"
+                                    (click)="cancelSubNoteOnClick()">Cancel</button>
+                            </div>
+                            <!-- End of Buttons section -->
+
+                            <!-- Date of note section -->
+                            <div class="display_flex_center note_date_lbl">
+                                <span id="managerX_admin-checklist_note_time" class="time_lbl">{{note.AddedDate | date:
+                                    'hh:mm'}}</span>
+                                <span id="managerX_admin-checklist_note_date">{{note.AddedDate | date: 'dd MMM
+                                    yyyy'}}</span>
+                                <!-- Delete icon -->
+                                <span id="managerX_admin-checklist_note-delete_icon" class="delete_note_icon"
+                                    (click)="deleteNoteOnClick(note.Id)">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </span>
+                                <!-- End of Delete icon -->
+                            </div>
+                            <!-- End of Date of note section -->
+                        </div>
+                        <!-- End of Loop through the notes -->
+
+                        <!-- New note section -->
+                        <div class="col-12" *ngIf="addNoteState">
+                            <!-- Text area section -->
+                            <textarea id="managerX_admin-checklist_new-note_textarea"
+                                [(ngModel)]="newSubTaskNote.Description"></textarea>
+                            <!-- End of Text area section -->
+
+                            <!-- Buttons section -->
+                            <div class="buttons_section">
+                                <button id="managerX_admin-checklist_new-note-create_button" class="create_btn"
+                                    (click)="createNewNote(displayTaskDetails.Id)">Create</button>
+                                <button id="managerX_admin-checklist_new-note-cancel_button" class="cancel_btn"
+                                    (click)="cancelNewNote()">Cancel</button>
+                            </div>
+                            <!-- End of Buttons section -->
+                        </div>
+                        <!-- End of New note section -->
+
+                        <!-- Add note button -->
+                        <div *ngIf="!addNoteState">
+                            <!-- Button section -->
+                            <button id="managerX_admin-checklist_add-note_button" class="add_note_btn"
+                                (click)="addNoteOnClick()">
+                                <span class="icon_lbl">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </span>
+                                <span>Add a note</span>
+                            </button>
+                            <!-- End of Button section -->
+                        </div>
+                        <!-- End of Add note button -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-checklist_notes_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.SubTaskNoteList && displayTaskDetails.SubTaskNoteList.length > 0 && displayTaskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.SubTaskNoteList && displayTaskDetails.SubTaskNoteList.length > 0 && displayTaskDetails.SubTaskNoteList[0].TotalRecords > displayTaskNotesFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displayTaskNotesFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.SubTaskNoteList.length>0)? displayTaskDetails.SubTaskNoteList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Notes section -->
+
+                <!-- Attachments section -->
+                <div class="col-12 each_row_section display_flex_baseline">
+                    <!-- Label section -->
+                    <div class="content_lbl margin_bottom_auto">
+                        <span id="managerX_admin-checklist_attachments_label">Attachments</span>
+                    </div>
+                    <!-- End of Label section -->
+
+
+
+                    <!-- Content section -->
+                    <div class="content_value_lbl attachments_list">
+                        <!-- Content section when its empty -->
+                        <div class="content_value_lbl" *ngIf="displayTaskDetails.AttachmentList.length == 0">
+                            <span id="managerX_admin-checklist_no_attachments">-</span>
+                        </div>
+                        <!-- End of Content section when its empty -->
+
+                        <!-- Loop through the attachments -->
+                        <div class="" *ngFor="let image of displayTaskDetails.AttachmentList"
+                            (click)="downloadAttachment(image.FileUrl)">
+                            <!-- Remove icon -->
+                            <div id="managerX_admin-checklist_attachment-remove_icon" class="remove_attachment_icon"
+                                (click)="$event.stopPropagation();removeAttachmentOnClick(image.Id)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </div>
+                            <!-- End of Remove icon -->
+
+                            <!-- If the file is an image -->
+                            <div class="image_container" *ngIf="image.FileType == 'IMAGE'">
+                                <img id="managerX_admin-checklist_attachment_image" *ngIf="!image.FileUrl"
+                                    src="../../../../assets/Images/construction.jpg">
+                                <img id="managerX_admin-checklist_def-attachment_image" *ngIf="image.FileUrl"
+                                    [src]="image.FileUrl">
+                            </div>
+                            <!-- End of If the file is an image -->
+
+                            <!-- If the file is not an image -->
+                            <div class="image_container" *ngIf="image.FileType !== 'IMAGE'">
+                                <img id="managerX_admin-checklist_attachment-file_icon"
+                                    src="../../../../assets/Images/file_icon.png">
+                            </div>
+                            <!-- End of If the file is not an image -->
+                        </div>
+                        <!-- End of Loop through the attachments -->
+
+                        <!-- Add new attachment section -->
+                        <div>
+                            <div id="managerX_admin-checklist_add-attachment_button"
+                                class="image_container add_new_attachment"
+                                (click)="addNewAttachment(displayTaskDetails.Id)">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <!-- End of Add new attachment section -->
+
+                        <!-- Pagination section -->
+                        <p-paginator id="managerX_admin-checklist_attachments_paginator" class="paginator_sec"
+                            *ngIf="displayTaskDetails.AttachmentList && displayTaskDetails.AttachmentList.length > 0 && displayTaskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage"
+                            [ngClass]="(displayTaskDetails.AttachmentList && displayTaskDetails.AttachmentList.length > 0 && displayTaskDetails.AttachmentList[0].TotalRecords > displayTaskAttachmentsFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="displayTaskAttachmentsFilter.RecordsPerPage"
+                            (onPageChange)="onChangeDisplayTaskNotesPaginator($event)"
+                            [totalRecords]="(displayTaskDetails.AttachmentList.length>0)? displayTaskDetails.AttachmentList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Attachments section -->
+            </div>
+            <!-- End of Content section -->
+        </div>
+        <!-- End of Main content section -->
+    </p-sidebar>
+    <!-- End of Display side panel -->
+</ion-content>

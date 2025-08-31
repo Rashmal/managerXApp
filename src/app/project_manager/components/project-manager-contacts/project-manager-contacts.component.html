@@ -1,0 +1,161 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div id="managerX_project-manager-contacts_main-content_container" class="container-lg-12 md-12 contacts">
+        <!-- Top bar section -->
+        <div id="managerX_project-manager-contacts_top-bar_section" class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_project-manager-contacts_page-title_label" class="page_title">Contacts</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_project-manager-contacts_search_icon-field" class="custom-icon-field">
+                <div id="managerX_project-manager-contacts_search_input-container" class="input-container">
+                    <p-inputIcon id="managerX_project-manager-contacts_search_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_project-manager-contacts_search_input" type="text" pInputText
+                        placeholder="Search" class="custom-search-box" [(ngModel)]="currentFilter.SearchQuery"
+                        (input)="currentFilter.CurrentPage=1;GetAllContactList();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Contacts table section -->
+        <div id="managerX_project-manager-contacts_contacts-table_section" class="col-12">
+            <!-- Current prime ng table section -->
+            <p-table id="managerX_project-manager-contacts_contacts_table" [value]="contactList">
+                <!-- Headers section -->
+                <ng-template pTemplate="header">
+                    <tr id="managerX_project-manager-contacts_table-header_row" class="table_header_section">
+                        <th id="managerX_project-manager-contacts_name-header_button"
+                            class="header_label_span person_col clickable" (click)="sortNameOnClick()"
+                            [ngClass]="(currentFilter.SortCol == 'NAME')?'clickable_lbl':''">
+                            <span>Name</span>
+                            <span id="managerX_project-manager-contacts_name-sort_icon" class="sort_icon"
+                                *ngIf="currentFilter.SortCol != '' && currentFilter.SortAsc"><i
+                                    class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
+                            <span id="managerX_project-manager-contacts_name-sort_icon-down" class="sort_icon"
+                                *ngIf="currentFilter.SortCol != '' && !currentFilter.SortAsc"><i
+                                    class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
+                        </th>
+                        <th id="managerX_project-manager-contacts_role-header_label"
+                            class="header_label_span role_name_col">Role</th>
+                        <th id="managerX_project-manager-contacts_contact-number-header_label"
+                            class="header_label_span contact_number_col">Contact Number</th>
+                        <th id="managerX_project-manager-contacts_email-header_label"
+                            class="header_label_span contact_email_col">Email Address</th>
+                    </tr>
+                </ng-template>
+                <!-- End of Headers section -->
+
+                <!-- Table body content section -->
+                <ng-template pTemplate="body" let-contact>
+                    <tr id="managerX_project-manager-contacts_contact_row" class="current-tr"
+                        (click)="$event.stopPropagation();clientOnClick(contact.UserId)">
+                        <td id="managerX_project-manager-contacts_contact_cell" class="person_col">
+                            <!-- Display the user section -->
+                            <div id="managerX_project-manager-contacts_user_display-section"
+                                class="display_flex_center display_user_section">
+                                <!-- Avatar section -->
+                                <div id="managerX_project-manager-contacts_user-avatar_section" class="avatar_section">
+                                    <img id="managerX_project-manager-contacts_default-avatar_image"
+                                        *ngIf="!contact.Avatar" src="../../../../assets/Images/default_avatar.png">
+                                    <img id="managerX_project-manager-contacts_avatar_image" *ngIf="contact.Avatar"
+                                        [src]="contact.Avatar">
+                                </div>
+                                <!-- End of Avatar section -->
+                                <!-- Name and role section -->
+                                <div id="managerX_project-manager-contacts_name-role_section" class="name_role_section">
+                                    <!-- Name section -->
+                                    <div id="managerX_project-manager-contacts_name_section" class="content_div">
+                                        <span id="managerX_project-manager-contacts_name_value"
+                                            class="content_val name_section">{{contact.FirstName}}
+                                            {{contact.LastName}}</span>
+                                    </div>
+                                    <!-- End of Name section -->
+                                </div>
+                                <!-- End of Name and role section -->
+                            </div>
+                            <!-- End of Display the user section -->
+                        </td>
+
+                        <td id="managerX_project-manager-contacts_role_cell" class="role_name_col"
+                            pTooltip="Update Contact" tooltipPosition="top" tooltipStyleClass="small-tooltip">
+                            <!-- Due date section -->
+                            <div id="managerX_project-manager-contacts_role-value_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_project-manager-contacts_role-value_label" class="content_lbl">{{
+                                    contact.RoleName}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_project-manager-contacts_contact-number_cell" class="contact_number_col"
+                            pTooltip="Update Contact" tooltipPosition="top" tooltipStyleClass="small-tooltip">
+                            <!-- Due date section -->
+                            <div id="managerX_project-manager-contacts_contact-number-value_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_project-manager-contacts_contact-number-value_label"
+                                    class="content_lbl">{{ contact.ContactNumber}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_project-manager-contacts_email_cell" class="contact_email_col"
+                            pTooltip="Update Contact" tooltipPosition="top" tooltipStyleClass="small-tooltip">
+                            <!-- Due date section -->
+                            <div id="managerX_project-manager-contacts_email-value_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_project-manager-contacts_email-value_label" class="content_lbl">{{
+                                    contact.Email}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+                    </tr>
+                </ng-template>
+                <!-- Table body content section -->
+            </p-table>
+            <!-- End of Current prime ng table section -->
+
+            <!--End of Client list table-->
+            <div id="managerX_project-manager-contacts_no-records_display" *ngIf="contactList.length == 0">
+                <div id="managerX_project-manager-contacts_no-records_message" colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+            </div>
+            <!-- Pagination section -->
+            <p-paginator id="managerX_project-manager-contacts_pagination_section" class="paginator_sec"
+                #modulePaginator
+                *ngIf="contactList && contactList.length > 0 && contactList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(contactList && contactList.length > 0 && contactList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                [totalRecords]="(contactList.length>0)? contactList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+
+            <!-- Add new contact button -->
+            <div id="managerX_project-manager-contacts_add-contact_button-section" class="col-12">
+                <button id="managerX_project-manager-contacts_add-contact_button" class="add_note_btn"
+                    (click)="addNewClientOnClick()">
+                    <span id="managerX_project-manager-contacts_add-contact_icon-label" class="icon_lbl">
+                        <i id="managerX_project-manager-contacts_add-contact_icon" class="fa fa-plus"
+                            aria-hidden="true"></i>
+                    </span>
+                    <span id="managerX_project-manager-contacts_add-contact_button_label">Add a new contact</span>
+                </button>
+            </div>
+            <!-- End of Add new contact button -->
+        </div>
+        <!-- End of Contacts table section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Display side panel -->
+    <p-sidebar id="managerX_project-manager-contacts_add-contact_sidebar" *ngIf="isAddNewClientDetailsVisible"
+        class="projects_slide" [(visible)]="isAddNewClientDetailsVisible" [position]="'right'" [modal]="true">
+        <app-new-contact id="managerX_project-manager-contacts_new-contact_component"
+            (closeSlideInPopup)="closeSlideInPopup($event)"
+            [SelectedPersonClientId]="SelectedPersonClientId"></app-new-contact>
+    </p-sidebar>
+    <!-- End of Display side panel -->
+</ion-content>

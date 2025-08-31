@@ -1,0 +1,32 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 calendar">
+        <!-- Top bar section -->
+        <div id="managerX_project-manager_calendar-top-bar_section" class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_project-manager_calendar-page_title" class="page_title">Calendar</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_project-manager_calendar-search-icon_field" class="custom-icon-field">
+                <div id="managerX_project-manager_calendar-search-input_container" class="input-container">
+                    <p-inputIcon id="managerX_project-manager_calendar-search_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_project-manager_calendar-search_input" type="text" pInputText
+                        placeholder="Search" class="custom-search-box" [(ngModel)]="searchQuery"
+                        (input)="GetAllTaskList();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Full calendar section -->
+        <div id="managerX_project-manager_calendar-full-calendar_section" class="col-12 custom-padding-5px bg-content">
+            <full-calendar id="managerX_project-manager_calendar-full_calendar"
+                [options]="calendarOptions"></full-calendar>
+        </div>
+        <!-- End of Full calendar section -->
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

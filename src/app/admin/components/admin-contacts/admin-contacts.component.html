@@ -1,0 +1,218 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 contacts">
+        <!-- Top bar section -->
+        <div class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_admin-contacts_title_text" class="page_title">Contacts</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField class="custom-icon-field">
+                <div class="input-container">
+                    <p-inputIcon id="managerX_admin-contacts_search-icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_admin-contacts_search_input" type="text" pInputText placeholder="Search"
+                        class="custom-search-box" [(ngModel)]="currentFilter.SearchQuery"
+                        (input)="currentFilter.CurrentPage = 1;GetAllContactList();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Contacts table section -->
+        <div class="col-12">
+            <!-- Current prime ng table section -->
+            <p-table [value]="contactList">
+                <!-- Headers section -->
+                <ng-template pTemplate="header">
+                    <tr class="table_header_section">
+                        <th id="managerX_admin-contacts_name-header" class="header_label_span person_col clickable"
+                            (click)="sortNameOnClick()"
+                            [ngClass]="(currentFilter.SortCol == 'NAME')?'clickable_lbl':''">
+                            <span>Name</span>
+                            <span class="sort_icon" *ngIf="currentFilter.SortCol != '' && currentFilter.SortAsc"><i
+                                    class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
+                            <span class="sort_icon" *ngIf="currentFilter.SortCol != '' && !currentFilter.SortAsc"><i
+                                    class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
+                        </th>
+                        <th id="managerX_admin-contacts_role_header" class="header_label_span role_name_col">Role</th>
+                        <th id="managerX_admin-contacts_contact-number_header"
+                            class="header_label_span contact_number_col">
+                            Contact Number</th>
+                        <th id="managerX_admin-contacts_contact-email_header"
+                            class="header_label_span contact_email_col">
+                            Email Address</th>
+                        <th id="managerX_admin-contacts_contact-email_header"
+                            class="header_label_span contact_email_col">
+                            Temporarily Disabled</th>
+                    </tr>
+                </ng-template>
+                <!-- End of Headers section -->
+
+                <!-- Table body content section -->
+                <ng-template pTemplate="body" let-contact>
+                    <tr class="current-tr"
+                        (click)="editClientOnClick(contact.UserId, contact.CreatorId, contact.UserType)">
+                        <td id="managerX_admin-contacts_person_col" class="person_col custom-cursor"
+                            pTooltip="Edit Contact" tooltipPosition="top"
+                            [tooltipStyleClass]="(contact.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Display the user section -->
+                            <div class="display_flex_center display_user_section">
+                                <!-- info icon -->
+                                <i id="managerX_admin-contacts_info_icon" class="fa fa-info-circle info_icon"
+                                    aria-hidden="true" (click)="$event.stopPropagation();opInfo.toggle($event)"></i>
+                                <!-- End of info icon -->
+
+                                <!-- Avatar section -->
+                                <div class="avatar_section">
+                                    <img id="managerX_admin-contacts_avatar-default_image" *ngIf="!contact.Avatar"
+                                        src="../../../../assets/Images/default_avatar.png">
+                                    <img id="managerX_admin-contacts_avatar_image" *ngIf="contact.Avatar"
+                                        [src]="contact.Avatar">
+                                </div>
+                                <!-- End of Avatar section -->
+                                <!-- Name and role section -->
+                                <div class="name_role_section">
+                                    <!-- Name section -->
+                                    <div class="content_div">
+                                        <span id="managerX_admin-contacts_name_text"
+                                            class="content_val name_section">{{contact.FirstName}}
+                                            {{contact.LastName}}</span>
+                                        <!-- Edit icon -->
+                                        <i id="managerX_admin-contacts_edit_icon"
+                                            *ngIf="contact.CreatorId == overallCookieInterface.GetUserId() || overallCookieInterface.GetUserId() < 0"
+                                            class="fa fa-pencil edit_icon" aria-hidden="true"></i>
+                                        <!-- End of Edit icon -->
+                                    </div>
+                                    <!-- End of Name section -->
+                                </div>
+                                <!-- End of Name and role section -->
+                            </div>
+                            <!-- End of Display the user section -->
+                        </td>
+
+                        <td class="role_name_col custom-cursor">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-contacts_role-name_text"
+                                class="display_flex_center value_content_lbl_table">
+                                <span class="content_lbl">{{ contact.RoleName}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td class="contact_number_col custom-cursor">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-contacts_contact-number_text"
+                                class="display_flex_center value_content_lbl_table">
+                                <span class="content_lbl">{{ contact.ContactNumber}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td class="contact_email_col custom-cursor">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-contacts_contact-email_text"
+                                class="display_flex_center value_content_lbl_table">
+                                <span class="content_lbl">{{ contact.Email}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td class="contact_email_col custom-cursor">
+                            <!-- Due date section -->
+                            <div id="managerX_admin-contacts_contact-email_text"
+                                class="display_flex_center value_content_lbl_table">
+                                <span class="content_lbl color_red" *ngIf="contact.TempDisabled">Disabled</span>
+                                <span class="content_lbl" *ngIf="!contact.TempDisabled">Not Disabled</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+                    </tr>
+                </ng-template>
+                <!-- Table body content section -->
+            </p-table>
+            <!-- End of Current prime ng table section -->
+
+            <!--End of Client list table-->
+            <div id="managerX_admin-contacts_no-records_text" *ngIf="contactList.length == 0">
+                <div colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+                <div colspan="9" class="empty_content" *ngIf="SelectedClientId == 0">
+                    <span *ngIf="userType=='AD'"> You haven't created any clients yet. Go to the Client Menu to add a
+                        new
+                        client and start managing your options.</span>
+                    <span *ngIf="userType!=='AD'"> You haven't been assigned a client yet. Please contact the admin to
+                        have
+                        a client assigned to you.</span>
+                </div>
+            </div>
+            <!-- Pagination section -->
+            <p-paginator id="managerX_admin-contacts_paginator_sections" class="paginator_sec" #modulePaginator
+                *ngIf="contactList && contactList.length > 0 && contactList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(contactList && contactList.length > 0 && contactList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                [totalRecords]="(contactList.length>0)? contactList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+
+            <!-- Add new contact button -->
+            <div class="col-12 " style="margin-top:5px"
+                *ngIf="SelectedClientId && creatingTotalCountLimit != 0 ||  overallCookieInterface.GetUserId() < 0">
+
+                <button id="managerX_admin-contacts_add-new-contact_button" class="add_note_btn"
+                    (click)="addNewClientOnClick()">
+                    <span class="icon_lbl">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    <span *ngIf="overallCookieInterface.GetUserId() > 0">Add a new contact
+                        ({{restCreatingTotal}})</span>
+                    <span *ngIf="overallCookieInterface.GetUserId() < 0">Add a new contact </span>
+                </button>
+
+                &nbsp;
+
+                <!-- Add Purchase more users button -->
+                <button *ngIf="IsShowPurchaseButton" id="managerX_admin-contacts_Purchase-nore-user_button"
+                    class="add_note_btn" (click)="addPurchaseClick()">
+                    <span class="icon_lbl">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    <span>Purchase more users</span>
+                </button>
+                <!-- End of Add new contact button -->
+            </div>
+        </div>
+        <!-- End of Contacts table section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Display side panel -->
+    <p-sidebar *ngIf="isAddNewClientDetailsVisible" class="projects_slide" [(visible)]="isAddNewClientDetailsVisible"
+        [position]="'right'" [modal]="true">
+        <app-new-contact (closeSlideInPopup)="closeSlideInPopup($event)"
+            [SelectedPersonContactId]="SelectedPersonContactId" [overallDisplayState]="addNewOverallDisplayState"
+            [SelectedPersonClientId]="SelectedClientId" [addedByState]="'ADC'" (refreshList)="refreshList($event)"
+            [IsShowPurchaseButton]="IsShowPurchaseButton"></app-new-contact>
+    </p-sidebar>
+    <!-- End of Display side panel -->
+
+    <!-- Display side panel -->
+    <p-sidebar id="managerX_admin-contacts_sidebar-panel_panel2" *ngIf="isEditClientDetailsVisible"
+        class="projects_slide" [(visible)]="isEditClientDetailsVisible" [position]="'right'" [modal]="true">
+        <app-new-client (closeSlideInPopup)="closeSlideInPopup($event)" [addedByState]="'ADC'"
+            [SelectedPersonClientId]="SelectedPersonContactId"></app-new-client>
+    </p-sidebar>
+    <!-- End of Display side panel -->
+
+    <!-- Overlay panel -->
+    <p-overlayPanel #opInfo id="managerX_admin-contacts_overlay_panel">
+        <div class="col-12 info_section">
+            <span>Only the creator can edit this contact.</span>
+        </div>
+    </p-overlayPanel>
+    <!-- End of Overlay panel -->
+
+    <!-- <p-toast></p-toast> -->
+</ion-content>

@@ -1,0 +1,80 @@
+.upload_file_section {
+    margin: 0;
+    padding: 20px;
+    .display_flex_center {
+        display: flex;
+        align-items: center;
+    }
+
+    .top_row_section {
+        margin-left: auto;
+        padding: 0;
+        justify-content: end;
+        .fa-times {
+            font-size: 15pt;
+            cursor: pointer;
+        }
+    }
+
+    .title_section {
+        text-align: center;
+        font-weight: 650;
+        position: relative;
+        margin-top: -10px;
+        font-size: 13pt;
+    }
+
+    .sub_title_section {
+        text-align: center;
+        font-size: 10pt;
+        font-weight: 600;
+    }
+
+    /* Style for the upload area */
+    .upload-area {
+        border: 1px dotted #cacaca;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-icon {
+        margin-bottom: 10px;
+        margin-top: 15px;
+    }
+
+    p {
+        font-size: 10pt !important;
+    }
+
+    .upload-area p {
+        margin: 0 0 10px;
+    }
+
+    .file-input-hidden {
+        display: none;
+    }
+
+    .box-pic {
+        height: 30px;
+        width: 40px;
+    }
+
+    .browse_file_btn {
+        background-color: #125dcb;
+        width: 100%;
+        font-size: 10pt;
+        height: 30px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .or_label {
+        font-weight: 600;
+    }
+}

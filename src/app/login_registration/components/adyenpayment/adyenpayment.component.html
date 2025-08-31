@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true">
+  <p>adyenpayment works!</p>
+
+
+  <div class="container">
+    <h2>Subscribe with Adyen</h2>
+
+    <form (ngSubmit)="startPayment()" #subscriptionForm="ngForm">
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="userEmail" name="email" required />
+
+      <label>Plan:</label>
+      <select [(ngModel)]="selectedPlanId" name="planId" required>
+        <option value="">Select a Plan</option>
+        <option value="basic">Plan 500</option>
+        <option value="pro">Plan 100</option>
+      </select>
+
+      <button type="submit" [disabled]="!subscriptionForm.form.valid">Start Payment</button>
+    </form>
+
+    <div #dropinContainer style="margin-top: 20px;"></div>
+
+    <div *ngIf="message" class="message">{{ message }}</div>
+  </div>
+</ion-content>

@@ -1,0 +1,243 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 contacts">
+        <!-- Top bar section -->
+        <div id="managerX_project-manager-checklist_top-bar_section" class="top_bar_section">
+            <!-- Title section -->
+            <div id="managerX_project-manager-checklist_page_title" class="page_title">Tasks assigned</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_project-manager-checklist_search-icon_field" class="custom-icon-field">
+                <div id="managerX_project-manager-checklist_search-input_container" class="input-container">
+                    <p-inputIcon id="managerX_project-manager-checklist_search_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_project-manager-checklist_search_input" type="text" pInputText
+                        placeholder="Search" class="custom-search-box" [(ngModel)]="currentFilter.SearchQuery"
+                        (input)="currentFilter.CurrentPage=1;GetAllAssignedTasksDetails();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Contacts table section -->
+        <div id="managerX_project-manager-checklist_contacts-table_section" class="col-12">
+            <!-- Current prime ng table section -->
+            <p-table id="managerX_project-manager-checklist_current_table" [value]="assignedTasksList">
+                <!-- Headers section -->
+                <ng-template pTemplate="header">
+                    <tr id="managerX_project-manager-checklist_table-header_section" class="table_header_section">
+                        <th id="managerX_project-manager-checklist_table_header" class="header_label_span person_col">
+                            <span>Task Name</span>
+                        </th>
+                        <th id="managerX_project-manager-checklist_table_header2"
+                            class="header_label_span role_name_col">
+                            State</th>
+                        <th id="managerX_project-manager-checklist_table_header3"
+                            class="header_label_span contact_number_col">{{'CL' | appUpdateUserType}} Name</th>
+                        <th id="managerX_project-manager-checklist_table_header4"
+                            class="header_label_span contact_address_col">Address</th>
+                        <th id="managerX_project-manager-checklist_table_header5"
+                            class="header_label_span contact_address_col">Person</th>
+                        <th id="managerX_project-manager-checklist_table_header6"
+                            class="header_label_span contact_email_col">Due Date</th>
+                    </tr>
+                </ng-template>
+                <!-- End of Headers section -->
+
+                <!-- Table body content section -->
+                <ng-template pTemplate="body" let-task>
+                    <tr id="managerX_project-manager-checklist_task_row" class="current-tr"
+                        (click)="editTaskOnCLick(task.Id, task.CreatorId)">
+                        <td id="managerX_project-manager-checklist_table_cell" class="person_col" pTooltip="Edit Task"
+                            tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Display the task name section -->
+                            <div id="managerX_project-manager-checklist_task-name_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <input id="managerX_project-manager-checklist_task-status_checkbox" type="checkbox"
+                                    class="custom-cursor"
+                                    [disabled]="task.CreatorId != overallCookieInterface.GetUserId() && overallCookieInterface.GetUserId() > 0"
+                                    [(ngModel)]="getStatusCodeValue(task.StatusCode).value"
+                                    (change)="taskStatusCompleteOnChange($event, task.Id)"
+                                    (click)="$event.stopPropagation();">
+
+                                <!-- info icon -->
+                                <i id="managerX_project-manager-checklist_info_icon" class="fa fa-info-circle info_icon"
+                                    aria-hidden="true" (click)="$event.stopPropagation();opInfo.toggle($event)"></i>
+                                <!-- End of info icon -->
+                                <span id="managerX_project-manager-checklist_task-name_label"
+                                    class="content_lbl task_name_lbl">{{task.Name}}</span>
+                                <!-- Edit icon -->
+                                <!-- <i *ngIf="task.CreatorId == overallCookieInterface.GetUserId()"
+                                id="managerX_project-manager_checklist-edit_icon" class="fa fa-pencil edit_icon"
+                                aria-hidden="true"></i> -->
+                                <i *ngIf="task.CreatorId == overallCookieInterface.GetUserId()  ||  overallCookieInterface.GetUserId() < 0"
+                                    id="managerX_project-manager_checklist-edit_icon" class="fa fa-pencil edit_icon"
+                                    aria-hidden="true"></i>
+                                <!-- End of Edit icon -->
+                                <!-- View icon -->
+                                <i id="managerX_admin-tasks_task-edit_icon" class="fa fa-eye edit_icon"
+                                    aria-hidden="true"
+                                    (click)="$event.stopPropagation();setViewType('VIEW',task.Id, task.CreatorId);"></i>
+                                <!-- End of View icon -->
+                            </div>
+                            <!-- End of Display the task name section -->
+                        </td>
+
+                        <td id="managerX_project-manager-checklist_cell2" class="role_name_col" pTooltip="Edit Task"
+                            tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_project-manager_checklist-status_section"
+                                class="display_flex_center value_content_lbl_table padding_left_5">
+                                <!-- Status dropdown -->
+                                <div id="managerX_project-manager_checklist-status-display_dropdownbackground"
+                                    class="status_display" [ngClass]="task.StatusCode">
+                                    <span
+                                        id="managerX_project-manager_checklist-status_label">{{task.StatusName}}</span>
+                                </div>
+                                <!-- End of Status dropdown -->
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_project-manager-checklist_table_cell3" class="contact_number_col"
+                            pTooltip="Edit Task" tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_project-manager-checklist_client-name-section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_project-manager-checklist_client-name_label" class="content_lbl">{{
+                                    task.ConstructionCompany}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_project-manager-checklist_table_cell4" class="contact_address_col"
+                            pTooltip="Edit Task" tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_project-manager-checklist_address_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span id="managerX_project-manager-checklist_address_label" class="content_lbl">{{
+                                    task.FullAddress}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+
+                        <td id="managerX_project-manager-checklist_table_cell5" class="contact_address_col"
+                            pTooltip="Edit Task" tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Display the user section -->
+                            <div id="managerX_project-manager-checklist_user_section"
+                                class="display_flex_center display_user_section">
+                                <!-- Avatar section -->
+                                <div id="managerX_project-manager-checklist_avatar_section" class="avatar_section">
+                                    <img id="managerX_project-manager-checklist_default_avatar"
+                                        src="../../../../assets/Images/default_avatar.png">
+                                    <img id="managerX_project-manager-checklist_avatar_avatar"
+                                        *ngIf="task.PersonList[0].Avatar" [src]="task.PersonList[0].Avatar">
+                                </div>
+                                <!-- End of Avatar section -->
+                                <!-- Name and role section -->
+                                <div id="managerX_project-manager-checklist_name-role_section"
+                                    class="name_role_section">
+                                    <!-- Name section -->
+                                    <div class="content_div">
+                                        <span id="managerX_project-manager-checklist_name_label"
+                                            class="content_val name_section"
+                                            *ngIf="task.PersonList.length > 0 && task.PersonList[0].FirstName && task.PersonList[0].FirstName != ''">{{task.PersonList[0].FirstName}}
+                                            {{task.PersonList[0].LastName}}</span>
+                                        <span id="managerX_project-manager-checklist_no-name_label"
+                                            class="content_val name_section"
+                                            *ngIf="!(task.PersonList.length > 0 && task.PersonList[0].FirstName && task.PersonList[0].FirstName != '')">-</span>
+                                    </div>
+                                    <!-- End of Name section -->
+
+                                    <!-- Role name section -->
+                                    <div class="content_div">
+                                        <span id="managerX_project-manager-checklist_role-name_label"
+                                            class="content_val role_name"
+                                            *ngIf="task.PersonList.length > 0 && task.PersonList[0].RoleName && task.PersonList[0].RoleName != ''">{{task.PersonList[0].RoleName}}</span>
+                                        <span id="managerX_project-manager-checklist_no-role-name_label"
+                                            class="content_val role_name"
+                                            *ngIf="!(task.PersonList.length > 0 && task.PersonList[0].RoleName && task.PersonList[0].RoleName != '')">-</span>
+                                    </div>
+                                    <!-- End of Role name section -->
+                                </div>
+                                <!-- End of Name and role section -->
+                            </div>
+                            <!-- End of Display the user section -->
+                        </td>
+
+                        <td id="managerX_project-manager-checklist_table_cell6" class="contact_email_col"
+                            pTooltip="Edit Task" tooltipPosition="top"
+                            [tooltipStyleClass]="(task.CreatorId == overallCookieInterface.GetUserId())?'small-tooltip':'hide_tooltip'">
+                            <!-- Due date section -->
+                            <div id="managerX_project-manager-checklist_due-date_section"
+                                class="display_flex_center value_content_lbl_table">
+                                <span class="content_lbl">{{ task.DueDate | date: 'dd MMM yyyy '}}</span>
+                            </div>
+                            <!-- End of Due date section -->
+                        </td>
+                    </tr>
+                </ng-template>
+                <!-- Table body content section -->
+            </p-table>
+            <!-- End of Current prime ng table section -->
+
+            <!--End of Client list table-->
+            <div *ngIf="assignedTasksList.length == 0">
+                <div id="managerX_project-manager-checklist_empty-content_section" colspan="9" class="empty_content">
+                    There are no records to display
+                </div>
+                <div colspan="9" class="empty_content" *ngIf="SelectedClientId == 0">
+                    You haven't been assigned a client yet. Please contact the admin to have a client assigned to you.
+                </div>
+            </div>
+            <!-- Pagination section -->
+            <p-paginator id="managerX_project-manager-checklist_pagination_section" class="paginator_sec"
+                #modulePaginator
+                *ngIf="assignedTasksList && assignedTasksList.length > 0 && assignedTasksList[0].TotalRecords > currentFilter.RecordsPerPage"
+                [ngClass]="(assignedTasksList && assignedTasksList.length > 0 && assignedTasksList[0].TotalRecords > currentFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="currentFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                [totalRecords]="(assignedTasksList.length>0)? assignedTasksList[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+
+            <!-- Add new task button -->
+            <div class="col-12" *ngIf="SelectedClientId">
+                <button id="managerX_project-manager-checklist_add-task_button" class="add_note_btn"
+                    (click)="addNewTaskOnClick()">
+                    <span id="managerX_project-manager-checklist_add-task_icon_label" class="icon_lbl">
+                        <i id="managerX_project-manager-checklist_add-task_icon" class="fa fa-plus"
+                            aria-hidden="true"></i>
+                    </span>
+                    <span id="managerX_project-manager-checklist_add-task_button_label">Add a new task</span>
+                </button>
+            </div>
+            <!-- End of Add new task button -->
+        </div>
+        <!-- End of Contacts table section -->
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Display side panel -->
+    <p-sidebar id="managerX_project-manager-checklist_add-task_sidebar" *ngIf="isAddNewTaskDetailsVisible"
+        class="projects_slide" [(visible)]="isAddNewTaskDetailsVisible" [position]="'right'" [modal]="true"
+        (onHide)="GetAllAssignedTasksDetails()">
+        <app-new-task (closeSlideInPopup)="closeSlideInPopup($event)" [SelectedClientId]="SelectedClientId"
+            [TaskId]="currentTask" (refreshList)="refreshList($event)" [viewTaskState]="viewTaskState"></app-new-task>
+    </p-sidebar>
+    <!-- End of Display side panel -->
+
+    <!-- Overlay panel -->
+    <p-overlayPanel id="managerX_project-manager-checklist_edit-warning_overlay" #opInfo>
+        <div id="managerX_project-manager-checklist_edit-warning_message" class="col-12 info_section">
+            <span id="managerX_project-manager-checklist_edit-warning_text">Only the creator can edit this
+                contact.</span>
+        </div>
+    </p-overlayPanel>
+    <!-- End of Overlay panel -->
+</ion-content>

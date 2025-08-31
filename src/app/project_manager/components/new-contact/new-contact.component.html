@@ -1,0 +1,656 @@
+<ion-content [fullscreen]="true">
+    <!-- Add or import contact section -->
+    <div id="managerX_new-contact_import-contact_section"
+        class="row col-12 import_contact_section new_client_details_section" *ngIf="overallDisplayState == 'SELECTION'">
+        <!-- Top row section -->
+        <div id="managerX_new-contact_header_row" class="d-flex align-items-center header_row">
+            <div id="managerX_new-contact_back_button">
+                <i class="fa fa-chevron-left" style="cursor: pointer;" aria-hidden="true"
+                    (click)="closeOnClickFunction()"></i>
+            </div>
+            <div id="managerX_new-contact_header_title" class="header_title">
+                <span class="my-0">Manage Contacts</span>
+            </div>
+        </div>
+        <!-- End of Top row section -->
+
+        <!-- First button -->
+        <div id="managerX_new-contact_first_button" class="row col-12 each_button">
+            <div id="managerX_new-contact_first_button-image_section" class="col-6 image_section">
+                <img src="../../../../assets/Images/new_client.jpg">
+            </div>
+            <!-- {{('CL' | appUpdateUserType).toLowerCase()}} -->
+            <div id="managerX_new-contact_first_button-add_contact" class="col-6">
+                <button id="managerX_new-contact-add_contact_button" class="pushable" [disabled]="IsShowPurchaseButton"
+                    (click)="addNewTypeSelection('ADD_NEW')">
+                    <span class="front">
+                        Add new contact
+                    </span>
+                </button>
+            </div>
+        </div>
+        <!-- End of First button -->
+
+        <!-- Second button -->
+        <div id="managerX_new-contact_second_button" class="row col-12 each_button">
+            <div id="managerX_new-contact-second_button-import_contact" class="col-6">
+                <button id="managerX_new-contact_import-contact_button" class="pushable"
+                    (click)="addNewTypeSelection('IMPORT_NEW')">
+                    <span class="front">
+                        Import contact
+                    </span>
+                </button>
+            </div>
+            <div id="managerX_new-contact_second-button-image_section" class="col-6 image_section">
+                <img src="../../../../assets/Images/service.png">
+            </div>
+        </div>
+        <!-- End of Second button -->
+    </div>
+    <!-- End of Add or import contact section -->
+
+    <!-- Main content section -->
+    <div id="managerX_new-contact_main_content" class="row col-12 new_client_details_section"
+        *ngIf="overallDisplayState == 'ADD_NEW'">
+        <!-- Top row section -->
+        <div id="managerX_new-contact_main_content-header-row" class="d-flex align-items-center header_row">
+            <div id="managerX_new-contact_main-content-back_button">
+                <i class="fa fa-chevron-left" style="cursor: pointer;" aria-hidden="true"
+                    (click)="cancelOnClickFunction()"></i>
+            </div>
+            <div id="managerX_new-contact_main-content-header_title" class="header_title">
+                <span class="my-0" *ngIf="SelectedPersonContactId == 0">Add New Contact</span>
+                <span class="my-0" *ngIf="SelectedPersonContactId !== 0">Update Contact</span>
+            </div>
+        </div>
+        <!-- End of Top row section -->
+
+        <!-- Sub heading section -->
+        <div id="managerX_new-contact_basic_details" class="row col-12 sub_title">
+            <!-- Title section -->
+            <div id="managerX_new-contact_basic-details-title" class="sub_page_title">Basic Contact Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Select the user type -->
+        <!-- <div id="managerX_new-contact_user_type" class="col-12"
+        *ngIf="displayUserTypes && displayUserTypes.length > 0 && userDetails"> -->
+        <!-- Each row section -->
+        <!-- <div id="managerX_new-contact_user-type_selection" class="col-12 each_row_section"> -->
+        <!-- Label section -->
+        <!--  <div id="managerX_new-contact_user-type_label" class="content_lbl">
+                <span>Select user type</span>
+            </div> -->
+        <!-- End of Label section -->
+
+        <!-- Content section -->
+        <!-- <div id="managerX_new-contact_user-type_value" class="content_value_lbl">
+                <div class="col-12">
+                    <span>
+                        <p-selectButton id="managerX_new-contact_user-type_dropdown"
+                            [disabled]="SelectedPersonContactId !== 0" [options]="displayUserTypes"
+                            [(ngModel)]="userDetails.UserType" (onChange)="userTypeOnChange()" />
+                    </span>
+                </div>
+            </div> -->
+        <!-- End of Content section -->
+        <!--  </div> -->
+        <!-- End of Each row section -->
+        <!--    </div> -->
+        <!-- End of Select the user type -->
+
+        <!-- Content section -->
+        <div id="managerX_new-contact_content_section" class="col-12">
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_first_name" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_first-name_label" class="content_lbl">
+                    <span>First Name</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_first-name_value" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-contact_first-ame_input" type="text"
+                                [(ngModel)]="userDetails.FirstName">
+                        </span>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error1" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$FIRST_NAME')">
+                        <span>{{CheckErrorCode('EMPTY$FIRST_NAME')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_last-name" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_last_name_label" class="content_lbl">
+                    <span>Last Name</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_last_name_value" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-contact_last-name_input" type="text"
+                                [(ngModel)]="userDetails.LastName">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error2" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$LAST_NAME')">
+                        <span>{{CheckErrorCode('EMPTY$LAST_NAME')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_email" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_email_label" class="content_lbl">
+                    <span>Email</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_email_value" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX-new-contact-email-input" type="text"
+                                [disabled]="SelectedPersonContactId !== 0" [(ngModel)]="userDetails.Email">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error3" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$EMAIL')">
+                        <span>{{CheckErrorCode('EMPTY$EMAIL')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error4" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMAIL$FORMAT')">
+                        <span>{{CheckErrorCode('EMAIL$FORMAT')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error5" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EXISTS$EMAIL')">
+                        <span>{{CheckErrorCode('EXISTS$EMAIL')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_password-Section_password" class="col-12 each_row_section"
+                *ngIf="userDetails.UserType == 'AD' || userDetails.UserType == 'PM' || userDetails.UserType == 'SP'">
+                <!-- Label section -->
+                <div id="managerX_new-contact_password_label" class="content_lbl">
+                    <span>Password</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_password_value" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-contact_password_input" type="password"
+                                [disabled]="SelectedPersonContactId !== 0" [(ngModel)]="userDetails.Password">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error6" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$PASSWORD')">
+                        <span>{{CheckErrorCode('EMPTY$PASSWORD')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_contact-number_section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_contact-number_label" class="content_lbl">
+                    <span>Contact No</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_contact-number_value" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-contact_contact-number_input" type="text"
+                                [(ngModel)]="userDetails.ContactNumber">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error7" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$CONTACT_NUMBER')">
+                        <span>{{CheckErrorCode('EMPTY$CONTACT_NUMBER')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+
+
+            <!-- Select the user type -->
+            <div id="managerX_new-contact_user_type" class="col-12"
+                *ngIf="displayUserTypes && displayUserTypes.length > 0 && userDetails">
+                <!-- Each row section -->
+                <div id="managerX_new-contact_user-type_selection" class="col-12 each_row_section">
+                    <!-- Label section -->
+                    <div id="managerX_new-contact_user-type_label" class="content_lbl">
+                        <span>User type</span>
+                    </div>
+                    <!-- End of Label section -->
+
+                    <!-- Content section -->
+                    <div id="managerX_new-contact_user-type_value" class="content_value_lbl">
+                        <div class="col-12">
+                            <span>
+                                <p-dropdown id="managerX_new-contact_user-type_dropdown" class="custom-dropdown-prime"
+                                    [disabled]="SelectedPersonContactId !== 0" [options]="displayUserTypes"
+                                    [(ngModel)]="userDetails.UserType" optionLabel="label" optionValue="value"
+                                    (onChange)="userTypeOnChange()">
+                                </p-dropdown>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- End of Content section -->
+                </div>
+                <!-- End of Each row section -->
+            </div>
+            <!-- End of Select the user type -->
+        </div>
+        <!-- End of Content section -->
+
+        <!-- Sub heading section -->
+        <div id="managerX_new-contact_role-detail_title" class="row col-12 sub_title">
+            <!-- Title section -->
+            <div id="managerX_new-contact_role-detail_sub-title" class="sub_page_title">Role Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div class="col-12">
+            <!-- Each row section -->
+            <div id="managerX_new-contact_role-detail_section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_role-detail_label" class="content_lbl">
+                    <span>Role</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div class="content_value_lbl" *ngIf="displayRoleList.length > 0">
+                    <!-- Country list section -->
+                    <div class="form-group form-floating">
+                        <span class="p-float-label">
+                            <p-dropdown id="managerX_new-contact_role-detail_dropdown"
+                                class="full_width_dropdown custom-dropdown-prime" [options]="displayRoleList"
+                                [(ngModel)]="userDetails.RoleId" />
+                        </span>
+                    </div>
+                    <!-- End of Country list section -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+        </div>
+        <!-- Content section -->
+
+        <!-- Sub heading section -->
+        <div id="managerX_new-contact_project-company-details_title" class="row col-12 sub_title"
+            *ngIf="userDetails.UserType == 'PM'">
+            <!-- Title section -->
+            <div id="managerX_new-contact_project-company-details_subtitle" class="sub_page_title">Project Company
+                Details
+            </div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div id="managerX_new-contact_company-name_section" class="col-12" *ngIf="userDetails.UserType == 'PM'">
+            <!-- Each row section -->
+            <div class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_company-name_label" class="content_lbl">
+                    <span>Company Name</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_company-name_value-label" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input [(ngModel)]="userDetails.BuilderCompanyName" />
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error8" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$BUILDER_COMPANY')">
+                        <span>{{CheckErrorCode('EMPTY$BUILDER_COMPANY')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+        </div>
+        <!-- End of Content section -->
+
+        <!-- Sub heading section -->
+        <div class="row col-12 sub_title" *ngIf="userDetails.UserType == 'AD'">
+            <!-- Title section -->
+            <div id="managerX_new-contact_Address-details_title" class="sub_page_title">Address Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div class="col-12" *ngIf="userDetails.UserType == 'AD'">
+            <!-- Each row section -->
+            <div id="managerX_new-contact_street-Address_section" class="col-12 each_row_section display_flex_baseline">
+                <!-- Label section -->
+                <div id="managerX_new-contact_street-Address_label" class="content_lbl">
+                    <span>Street Address</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_street-Address_value-label" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <textarea id="managerX_new-contact_street-Address_textarea"
+                                [(ngModel)]="userDetails.AddressDetails.StreetAddress"></textarea>
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error9" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$STREET_ADDRESS')">
+                        <span>{{CheckErrorCode('EMPTY$STREET_ADDRESS')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_city_section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_city_label" class="content_lbl">
+                    <span>City</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_city_value" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-contact_city_input" type="text"
+                                [(ngModel)]="userDetails.AddressDetails.City">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error10" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$CITY')">
+                        <span>{{CheckErrorCode('EMPTY$CITY')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_state_section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_state_label" class="content_lbl">
+                    <span>State</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_state-Address-details_section" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-contact_state-Address-details_input" type="text"
+                                [(ngModel)]="userDetails.AddressDetails.State">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error11" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$STATE')">
+                        <span>{{CheckErrorCode('EMPTY$STATE')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_postcode_section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_postcode_label" class="content_lbl">
+                    <span>Postcode</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_postcode_value" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-contact_postcode_input" type="text"
+                                [(ngModel)]="userDetails.AddressDetails.PostCode">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-contact_error12" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$POSTCODE')">
+                        <span>{{CheckErrorCode('EMPTY$POSTCODE')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-contact_country_section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-contact_country_label" class="content_lbl">
+                    <span>Country</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-contact_country_value" class="content_value_lbl">
+                    <!-- Country list section -->
+                    <div class="form-group form-floating">
+                        <span class="p-float-label">
+                            <p-dropdown id="managerX_new-contact_country_dropdown" class="full_width_dropdown"
+                                [options]="displayCountryList" [(ngModel)]="userDetails.AddressDetails.CountryId" />
+                        </span>
+                    </div>
+                    <!-- End of Country list section -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+        </div>
+        <!-- Content section -->
+
+        <!-- Buttons section -->
+        <div class="col-12">
+            <button id="managerX_new-contact_create_button" class="create_btn" (click)="onClickSubmit()">Submit</button>
+            <button id="managerX_new-contact_cancel_button" class="cancel_btn margin_right_10"
+                (click)="cancelOnClickFunction()">Cancel</button>
+            <button id="managerX_new-contact_remove_button" *ngIf="SelectedPersonContactId != 0" class="cancel_btn"
+                (click)="removeOnClickFunction()">Remove</button>
+            <button id="managerX_new-contact_remove_button" *ngIf="addedByState=='ADC' && SelectedPersonContactId != 0"
+                class="cancel_btn margin_left_10" (click)="tempDisableOnClickFunction()"
+                [ngClass]="(userDetails.TempDisabled)?'color_green':'color_red'">
+                <span class="color_green" *ngIf="userDetails.TempDisabled">Enable</span>
+                <span class="color_red" *ngIf="!userDetails.TempDisabled">Temporarily Disable</span>
+            </button>
+        </div>
+        <!-- End of Buttons section -->
+
+    </div>
+    <!-- End of Main content section -->
+
+    <!-- Main content section for import -->
+    <div id="managerX_new-contact_import-contact-details_setion" class="row col-12 new_client_details_section"
+        *ngIf="overallDisplayState == 'IMPORT_NEW'">
+        <!-- Top row section -->
+        <div class="d-flex align-items-center header_row">
+            <div>
+                <i id="managerX_new-contact_import-contact-details-cancel_button" class="fa fa-chevron-left"
+                    style="cursor: pointer;" aria-hidden="true" (click)="cancelOnClickFunction()"></i>
+            </div>
+            <div class="header_title">
+                <span class="my-0"> Import Contact Details</span>
+            </div>
+        </div>
+        <!-- End of Top row section -->
+
+        <!-- Select the user type -->
+        <div id="managerX_new-contact_usertype_select-section" class="col-12"
+            *ngIf="displayUserTypes && displayUserTypes.length > 0 && userDetails">
+            <!-- Each row section -->
+            <div class="col-12 each_row_section">
+                <!-- Label section -->
+                <div class="content_lbl">
+                    <span id="managerX_new-contact_usertype_title">Select user type</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <p-selectButton id="managerX_new-contact_usertype_button" class="full-width-select-button"
+                                [options]="displayUserTypes" [(ngModel)]="selectedUserTypeFilter"
+                                (onChange)="userImportTypeOnChange()">
+                            </p-selectButton>
+
+                        </span>
+                    </div>
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+        </div>
+        <!-- End of Select the user type -->
+
+
+        <!-- Loop through the contact list -->
+        <div id="managerX_import-contact_contact_list" class="row col-12 sub_title select_person_list">
+            <!-- Display the user section -->
+            <div id="managerX_import-contact_contact_person" class="display_flex_center display_user_section"
+                *ngFor="let personObject of allContactsForImport"
+                [ngClass]="(personObject.ManageNotificationViaEmail)?'disabled_box':''">
+                <!-- Avatar section -->
+                <div id="managerX_import-contact_avatar_section" class="avatar_section">
+                    <img *ngIf="!personObject.Avatar" src="../../../../assets/Images/default_avatar.png">
+                    <img *ngIf="personObject.Avatar" [src]="personObject.Avatar">
+                </div>
+                <!-- End of Avatar section -->
+                <!-- Name and role section -->
+                <div id="managerX_import-contact_role_section" class="name_role_section">
+                    <!-- Name section -->
+                    <div class="content_div">
+                        <span id="managerX_import-contact_name-value_title" class="content_val name_section"
+                            *ngIf="personObject.FirstName && personObject.FirstName != ''">{{personObject.FirstName}}
+                            {{personObject.LastName}}</span>
+                        <span id="managerX_import-contact_name-empty_title" class="content_val name_section"
+                            *ngIf="!(personObject.FirstName && personObject.FirstName != '')">-</span>
+                    </div>
+                    <!-- End of Name section -->
+
+                    <!-- Role section -->
+                    <div id="managerX_import-contact_role_section" class="content_div">
+                        <span id="managerX_import-contact_role-value_title" class="content_val name_section role_name"
+                            *ngIf="personObject.RoleName && personObject.RoleName != ''">{{personObject.RoleName}}</span>
+                        <span id="managerX_import-contact_role-empty_title" class="content_val name_section role_name"
+                            *ngIf="!(personObject.RoleName && personObject.RoleName != '')">-</span>
+                    </div>
+                    <!-- End of Role section -->
+
+                    <!-- Already added section -->
+                    <div id="managerX_import-contact_already-added_section" class="content_div"
+                        *ngIf="personObject.ManageNotificationViaEmail">
+                        <span id="managerX_import-contact_already-added_label"
+                            class="content_val name_section role_name">(Already added to the project)</span>
+                    </div>
+                    <!-- End of Already added section-->
+                </div>
+                <!-- End of Name and role section -->
+
+                <!-- Remove icon -->
+                <div id="managerX_import-contact_remove_section" class="remove_person_icon"
+                    *ngIf="personObject.ManageNotificationViaEmail"
+                    (click)="removeContactToProject(personObject.UserId)">
+                    <i id="managerX_import-contact_remove_icon" class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <!-- End of Remove icon -->
+
+                <!-- Add icon -->
+                <div id="managerX_import-contact_add_section" class="add_person_icon"
+                    *ngIf="!personObject.ManageNotificationViaEmail && !IsShowPurchaseButton"
+                    (click)="addContactToProject(personObject.UserId)">
+                    <i id="managerX_import-contact_add_icon" class="fa fa-plus" aria-hidden="true"></i>
+                </div>
+                <!-- End of Add icon -->
+            </div>
+            <!-- End of Display the user section -->
+
+            <!-- When empty -->
+            <div id="managerX_project-manager-contacts_no-records_display" *ngIf="allContactsForImport.length == 0">
+                <div id="managerX_project-manager-contacts_no-records_message" class="empty_content">
+                    There are no records to display
+                </div>
+            </div>
+            <!-- End of When empty -->
+
+            <!-- Pagination section -->
+            <p-paginator id="managerX_import-contact_pagination_section" class="paginator_sec" #modulePaginator
+                *ngIf="allContactsForImport && allContactsForImport.length > 0 && allContactsForImport[0].TotalRecords > contactsForImportFilter.RecordsPerPage"
+                [ngClass]="(allContactsForImport && allContactsForImport.length > 0 && allContactsForImport[0].TotalRecords > contactsForImportFilter.RecordsPerPage)?'':'display_hide'"
+                [rows]="contactsForImportFilter.RecordsPerPage" (onPageChange)="onPageChange($event)"
+                [totalRecords]="(allContactsForImport.length>0)? allContactsForImport[0].TotalRecords:0"></p-paginator>
+            <!-- End of Pagination section -->
+        </div>
+        <!-- End of Loop through the contact list -->
+    </div>
+    <!-- End of Main content section for import -->
+</ion-content>

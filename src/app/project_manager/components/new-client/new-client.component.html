@@ -1,0 +1,368 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div id="managerX_new-client_mainContent_section" class="row col-12 new_client_details_section">
+        <!-- Top row section -->
+        <div id="managerX_new-client_topRow_Section" class="d-flex align-items-center header_row">
+            <div>
+                <i id="managerX_new-client_back_Button" class="fa fa-chevron-left" style="cursor: pointer;"
+                    aria-hidden="true" (click)="cancelOnClickFunction()"></i>
+            </div>
+            <div id="managerX_new-client_header_Title" class="header_title">
+                <span class="my-0" *ngIf="SelectedPersonClientId == 0">Add New {{'CL' | appUpdateUserType}}</span>
+                <span class="my-0" *ngIf="SelectedPersonClientId !== 0">Update {{'CL' | appUpdateUserType}}</span>
+            </div>
+        </div>
+        <!-- End of Top row section -->
+
+        <!-- Sub heading section -->
+        <div class="row col-12 sub_title">
+            <!-- Title section -->
+            <div id="managerX_new-client_basic-Details_Title" class="sub_page_title">Basic {{'CL' | appUpdateUserType}}
+                Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div id="managerX_new-client_content_Section" class="col-12">
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_first-Name_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_first-Name_Label" class="content_lbl">
+                    <span>First Name</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_first-Name_Content" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-client_first-Name_Input" type="text"
+                                [(ngModel)]="userDetails.FirstName">
+                        </span>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message1" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$FIRST_NAME')">
+                        <span>{{CheckErrorCode('EMPTY$FIRST_NAME')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_last-Name_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_last-Name_Label" class="content_lbl">
+                    <span>Last Name</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_lastNameContent" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-client_lastNameInput" type="text"
+                                [(ngModel)]="userDetails.LastName">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message2" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$LAST_NAME')">
+                        <span>{{CheckErrorCode('EMPTY$LAST_NAME')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_email_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_email_Label" class="content_lbl">
+                    <span>Email</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_email_Content" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-client_email_Input" type="text" [(ngModel)]="userDetails.Email"
+                                [disabled]="SelectedPersonClientId !== 0">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message3" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$EMAIL')">
+                        <span>{{CheckErrorCode('EMPTY$EMAIL')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message4" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMAIL$FORMAT')">
+                        <span>{{CheckErrorCode('EMAIL$FORMAT')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message5" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EXISTS$EMAIL')">
+                        <span>{{CheckErrorCode('EXISTS$EMAIL')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_contact-Number_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_contact-Number_Label" class="content_lbl">
+                    <span>Contact No</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_contact-Number_Content" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-client_contact-Number_Input" type="text"
+                                [(ngModel)]="userDetails.ContactNumber">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message6" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$CONTACT_NUMBER')">
+                        <span>{{CheckErrorCode('EMPTY$CONTACT_NUMBER')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+        </div>
+        <!-- End of Content section -->
+
+        <!-- Sub heading section -->
+        <div id="managerX_new-client_address-SubHeading_Section" class="row col-12 sub_title">
+            <!-- Title section -->
+            <div id="managerX_new-client_address-Details_Title" class="sub_page_title">Address Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div id="managerX_new-client_address-Content_Section" class="col-12">
+            <!-- Each row section -->
+            <div id="managerX_new-client_street-Address_Section" class="col-12 each_row_section display_flex_baseline">
+                <!-- Label section -->
+                <div id="managerX_new-client_street-Address_Label" class="content_lbl">
+                    <span>Street Address</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_street-Address_Content" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <textarea id="managerX_new-client_street-Address_Input"
+                                [(ngModel)]="userDetails.AddressDetails.StreetAddress"></textarea>
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message7" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$STREET_ADDRESS')">
+                        <span>{{CheckErrorCode('EMPTY$STREET_ADDRESS')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_city_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_city_Label" class="content_lbl">
+                    <span>City</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_city_Content" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-client_city_Input" type="text"
+                                [(ngModel)]="userDetails.AddressDetails.City">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message8" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$CITY')">
+                        <span>{{CheckErrorCode('EMPTY$CITY')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_state_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_state_Label" class="content_lbl">
+                    <span>State</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_state_Content" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input id="managerX_new-client_state_Input" type="text"
+                                [(ngModel)]="userDetails.AddressDetails.State">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message9" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$STATE')">
+                        <span>{{CheckErrorCode('EMPTY$STATE')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_postal-Code_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_postal-Code_Label" class="content_lbl">
+                    <span>Postcode</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_postal-Code_Content" class="content_value_lbl">
+                    <div class="col-12">
+                        <span>
+                            <input type="text" [(ngModel)]="userDetails.AddressDetails.PostCode">
+                        </span>
+                    </div>
+                    <!-- Error Message -->
+                    <div id="managerX_new-client_Error_Message10" class="col-12 no-side-padding error_message"
+                        *ngIf="CheckErrorCode('EMPTY$POSTCODE')">
+                        <span>{{CheckErrorCode('EMPTY$POSTCODE')!.ErrorMessage}}</span>
+                    </div>
+                    <!-- End of Error Message -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_Country_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_country_Label" class="content_lbl">
+                    <span>Country</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div class="content_value_lbl">
+                    <!-- Country list section -->
+                    <div class="form-group form-floating">
+                        <span class="p-float-label">
+                            <p-dropdown id="managerX_new-client_address-Drop_Down"
+                                class="full_width_dropdown custom-dropdown-prime" [options]="displayCountryList"
+                                [(ngModel)]="userDetails.AddressDetails.CountryId" />
+                        </span>
+                    </div>
+                    <!-- End of Country list section -->
+                </div>
+                <!-- End of Content section -->
+            </div>
+            <!-- End of Each row section -->
+        </div>
+        <!-- Content section -->
+
+        <!-- Sub heading section -->
+        <div id="managerX_new-client_Project_Section" class="row col-12 sub_title">
+            <!-- Title section -->
+            <div id="managerX_new-client_subTitle" class="sub_page_title">Project Details</div>
+            <!-- End of Title section -->
+        </div>
+        <!-- End of Sub heading section -->
+
+        <!-- Content section -->
+        <div id="managerX_new-client_Start-Date_Section" class="col-12">
+            <!-- Each row section -->
+            <div class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_Start-Date_label" class="content_lbl">
+                    <span>Start Date</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_Start-Date_toggle" class="content_value_lbl" (click)="opSD.toggle($event)">
+                    <span>{{userDetails.ProjectStartDate| date: 'dd MMM yyyy'}}</span>
+                </div>
+                <!-- End of Content section -->
+
+                <p-overlayPanel #opSD>
+                    <p-calendar id="managerX_new-client_start-Date_calender" class="max-w-full" [(ngModel)]="startDate"
+                        [inline]="true" (onSelect)="onSelectDate('S');opSD.hide();" />
+                </p-overlayPanel>
+            </div>
+            <!-- End of Each row section -->
+
+            <!-- Each row section -->
+            <div id="managerX_new-client_End-Date_Section" class="col-12 each_row_section">
+                <!-- Label section -->
+                <div id="managerX_new-client_End-Date_Label" class="content_lbl">
+                    <span>End Date</span>
+                </div>
+                <!-- End of Label section -->
+
+                <!-- Content section -->
+                <div id="managerX_new-client_end-Date_toggle" class="content_value_lbl" (click)="opED.toggle($event)">
+                    <span>{{userDetails.ProjectEndDate| date: 'dd MMM yyyy'}}</span>
+                </div>
+                <!-- End of Content section -->
+
+                <p-overlayPanel #opED>
+                    <p-calendar id="managerX_new-client_end-Date_calender" class="max-w-full" [(ngModel)]="endDate"
+                        [inline]="true" (onSelect)="onSelectDate('E');opED.hide();" />
+                </p-overlayPanel>
+            </div>
+            <!-- End of Each row section -->
+        </div>
+        <!-- End of Content section -->
+
+
+
+
+        <!-- Buttons section -->
+        <div class="col-12">
+            <button id="managerX_new-client_create_button" class="create_btn" (click)="onClickSubmit()">Submit</button>
+            <button id="managerX_new-client_cancel_button" class="cancel_btn margin_right_10"
+                (click)="cancelOnClickFunction()">Cancel</button>
+            <button *ngIf="addedByState != 'ADC' && SelectedPersonClientId != 0" class="cancel_btn"
+                (click)="removeOnClickFunction()">Remove</button>
+        </div>
+        <!-- End of Buttons section -->
+
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

@@ -1,0 +1,143 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="container-lg-12 md-12 project_contract" [ngClass]="(!DisplayTopBar)?'no_gap':''">
+        <!-- Top bar section -->
+        <div id="managerX_admin-project-contract_top_bar" class="top_bar_section" *ngIf="DisplayTopBar">
+            <!-- Title section -->
+            <div id="managerX_admin-project-contract_page_title" class="page_title">Project Contract</div>
+            <!-- End of Title section -->
+
+            <!-- Search icon box -->
+            <p-iconField id="managerX_admin-project-contract_search_box" class="custom-icon-field">
+                <div class="input-container">
+                    <p-inputIcon id="managerX_admin-project-contract_search_icon"
+                        class="pi pi-search search-icon"></p-inputIcon>
+                    <input id="managerX_admin-project-contract_search_input" type="text" pInputText placeholder="Search"
+                        class="custom-search-box" [(ngModel)]="searchQuery" (input)="GetAllContractStages();" />
+                </div>
+            </p-iconField>
+            <!-- End of Search icon box -->
+        </div>
+        <!-- End of Top bar section -->
+
+        <!-- Contract stages section -->
+        <div id="managerX_admin-project-contract_stages_section" class="col-12 custom-padding-5px bg-content"
+            style="background-color:#F2F2F2!important">
+
+            <div colspan="9" class="empty_content" *ngIf="SelectedClientId == 0">
+                You haven't created any clients yet. Go to the Client Menu to add a new
+                client and start managing your options.
+            </div>
+
+            <!-- Loop through the contract stages -->
+            <div id="managerX_admin-project-contract_stage" class="col-12 each_file_upload_stage"
+                style="background-color:rgb(255, 255, 255)!important"
+                *ngFor="let contractStage of contractStages; let stageIndex = index">
+                <!-- First row section -->
+                <div id="managerX_admin-project-contract_stage-top_row"
+                    class="col-12 display_flex_center attachment_top_row">
+                    <!-- Name section -->
+                    <div class="display_flex_center full_width">
+                        <!-- Green tick icon -->
+                        <i id="managerX_admin-project-contract_stage-tick_icon" class="fa" [ngClass]="{'fa-check-circle': contractStage.AttachmentList.length > 1,
+                     'fa-check-circle-o ': contractStage.AttachmentList.length == 1  }"
+                            [ngStyle]="{'color': contractStage.AttachmentList.length > 1 ? '#44AA00' : '#a3a3a3' }"></i>
+                        <!-- End of Green tick icon -->
+
+                        <!-- Label section -->
+                        <div id="managerX_admin-project-contract_stage_section"
+                            class="value_content_lbl_table full_width">
+                            <span id="managerX_admin-project-contract_stage_label"
+                                class="stage_name_lbl">{{contractStage.Name}}</span>
+                            <span id="managerX_admin-project-contract_stage-date_text" class="date_lbl"
+                                *ngIf="contractStage.AttachmentList.length > 1">
+                                {{contractStage.LastUpdatedDate | date: 'dd MMM, yyyy'}}
+                            </span>
+                        </div>
+                        <!-- End of Label section -->
+                    </div>
+                    <!-- End of Name section -->
+                </div>
+                <!-- End of First row section -->
+
+                <!-- Files content section -->
+                <div id="managerX_admin-project-contract_file_section" class="col-12 display_flex_center flex_wrap">
+                    <!-- Loop through the files list -->
+                    <div id="managerX_admin-project-contract_file_list" class="each_attachment"
+                        *ngFor="let file of contractStage.AttachmentList">
+                        <!-- Check if the Id is not -1 -->
+                        <div id="managerX_admin-project-contract_uploaded_file " *ngIf="file.Id !== -1"
+                            class="uploaded_file">
+                            <span class="content_label">
+                                <!-- Attachment icon -->
+                                <span class="file_icon">
+                                    <i id="managerX_admin-project-contract_file_icon" class="fa fa-paperclip"
+                                        aria-hidden="true"></i>
+                                </span>
+                                <!-- End of Attachment icon -->
+
+                                <!-- File name -->
+                                <span id="managerX_admin-project-contract_filename_text"
+                                    class="file_title">{{file.FileName}}</span>
+                                <!-- End of File name -->
+
+                                <!-- options icons -->
+                                <div class="display_flex_center">
+                                    <!-- Download icon -->
+                                    <span id="managerX_admin-project-contract_downloadicon_section"
+                                        class="file_icon custom-cursor "
+                                        (click)="downloadAttachment(file.LocalPath,file.FileName)">
+                                        <i id="managerX_admin-project-contract_download_icon" class="fa fa-download"
+                                            aria-hidden="true"></i>
+                                    </span>
+                                    <!-- End of Download icon -->
+
+                                    <!-- Delete icon -->
+                                    <span id="managerX_admin-project-contract_deleteicon_section"
+                                        class="file_icon margin_right_0 custom-cursor "
+                                        (click)="deleteAttachmentOnClick(file.Id)">
+                                        <i id="managerX_admin-project-contract_delete_icon" class="fa fa-trash-o"
+                                            aria-hidden="true"></i>
+                                    </span>
+                                    <!-- End of Delete icon -->
+                                </div>
+                                <!-- End of options icons -->
+                            </span>
+                        </div>
+                        <!-- End of Check if the Id is not -1 -->
+
+                        <!-- Check if the Id is -1 -->
+                        <div id="managerX_admin-project-contract_upload_file2" *ngIf="SelectedClientId && file.Id == -1"
+                            class="upload_file" (click)="uploadFilesOnClick(contractStage.Id)">
+                            <span class="content_label">
+                                <span class="file_icon">
+                                    <i id="managerX_admin-project-contract_add_icon" class="fa fa-plus"
+                                        aria-hidden="true"></i>
+                                </span>
+                                <span id="managerX_admin-project-contract_addicon_text" class="file_title">Upload
+                                    File</span>
+                            </span>
+                        </div>
+                        <!-- End of Check if the Id is -1 -->
+                    </div>
+                    <!-- End of Loop through the files list -->
+
+                    <!-- Pagination section -->
+                    <p-paginator id="managerX_admin-project-contract_paginator_section" class="paginator_sec"
+                        #modulePaginator
+                        *ngIf="contractStage.AttachmentList && contractStage.AttachmentList.length > 0 && contractStage.AttachmentList[0].TotalRecords > currentAttachmentFilterList[stageIndex].RecordsPerPage"
+                        [ngClass]="(contractStage.AttachmentList && contractStage.AttachmentList.length > 0 && contractStage.AttachmentList[0].TotalRecords > currentAttachmentFilterList[stageIndex].RecordsPerPage)?'':'display_hide'"
+                        [rows]="currentAttachmentFilterList[stageIndex].RecordsPerPage"
+                        (onPageChange)="stageFilterOnPageChange($event,stageIndex)"
+                        [totalRecords]="(contractStage.AttachmentList.length>0)? contractStage.AttachmentList[0].TotalRecords:0"></p-paginator>
+                    <!-- End of Pagination section -->
+                </div>
+                <!-- End of Files content section -->
+            </div>
+            <!-- End of Loop through the contract stages -->
+        </div>
+        <!-- End of Contract stages section -->
+
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

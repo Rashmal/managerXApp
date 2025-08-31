@@ -1,0 +1,64 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="col-12 error_message">
+        <!-- Image section -->
+        <div class="col-12 image_section">
+            <img id="managerX-error_message-image" src="../../../../assets/Images/sad_face.png">
+        </div>
+        <!-- End of Image section -->
+
+        <!-- Title section -->
+        <div class="title_section">
+            <h1 id="managerX-error_message-title">You have encountered an Error in the ManagerX</h1>
+            <h5 id="managerX-error_message-subtitle">Please contact the Admin with a screenshot of the error message
+            </h5>
+        </div>
+        <!-- End of Title section -->
+
+        <!-- Navigate to the login page -->
+        <div class="col-12 login_button_section">
+            <button id="managerX-error_message-login_button" (click)="loginClick()">Click here to Login</button>
+        </div>
+        <!-- End of Navigate to the login page -->
+
+        <!-- Error message details -->
+        <div class="error_message_box">
+            <!-- Row label -->
+            <div id="managerX-error_message-name_label" class="bold_text">Name:</div>
+            <div id="managerX-error_message-name">{{errorMessage.Name}}</div>
+            <!-- End of Row label -->
+
+            <!-- Row label -->
+            <div id="managerX-error_message-status_text_label" class="bold_text">StatusText:</div>
+            <div id="managerX-error_message-status_text">{{errorMessage.StatusText}}</div>
+            <!-- End of Row label -->
+
+            <!-- Row label -->
+            <div id="managerX-error_message-url_label" class="bold_text">Url:</div>
+            <div id="managerX-error_message-url">{{errorMessage.Url}}</div>
+            <!-- End of Row label -->
+
+            <!-- Row label -->
+            <div id="managerX-error_message-message_label" class="bold_text">Message:</div>
+            <div id="managerX-error_message-message">{{errorMessage.Message}}</div>
+            <!-- End of Row label -->
+        </div>
+
+        <!-- Below image section -->
+        <div class="user_image">
+            <img id="managerX-error_message-user_image" src="../../../../assets/Images/user.png">
+        </div>
+        <!-- End of Below image section -->
+    </div>
+    <!-- End of Main content section -->
+
+
+    <!-- Snapzing section -->
+    <div id="managerX-snapzing_section" class="divLoadingWrapper" *ngIf="showLoading">
+        <div class="divLoadingBg"></div>
+        <div class="divLoadingContent">
+            <img id="managerX-snapzing_section-loading_image" src="../../../../assets/Images/aws_loading.gif">
+        </div>
+    </div>
+    <!-- End of the Snapzing section -->
+</ion-content>

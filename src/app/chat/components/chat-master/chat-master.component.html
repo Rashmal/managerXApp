@@ -1,0 +1,255 @@
+<ion-content [fullscreen]="true">
+    <!-- Main content section -->
+    <div class="row col-12 chat_master" [ngClass]="(chatFullScreen)?'chat_full_master':''">
+        <!-- Content section -->
+        <div class="col-12 main_content">
+            <ion-menu side="start" menuId="main-menu-chat" contentId="main-content-chat">
+                <ion-content>
+                    <!-- Left section -->
+                    <div class="" style="padding: 10px;"
+                        [ngClass]="[(isFullScreen)?'left_section_full':'', (viewAllArchiveList)?'archive_bg':'']">
+                        <!-- Top bar -->
+                        <div class="col-12 left_top_bar">
+                            <!-- Title  -->
+                            <div class="margin_left_flex sub_title">
+                                <span>Chat</span>
+                            </div>
+                            <!-- End of Title  -->
+
+                            <!-- Create chat -->
+                            <div class="margin_right_flex">
+                                <i class="fa fa-pencil-square-o cursor_pointer" aria-hidden="true"
+                                    (click)="createNewChatRoom()" title="Create chat room"></i>
+                            </div>
+                            <!-- End of Create chat -->
+                        </div>
+                        <!-- End of Top bar -->
+
+                        <!-- Search bar section -->
+                        <div class="col-12 search_bar" *ngIf="!isFullScreen">
+                            <!-- Search -->
+                            <div class="icon" (click)="onChangePaginator({page:0},currentSelectedChatTab)"
+                                style="padding-right: 10px;">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </div>
+                            <!-- End of Search -->
+
+                            <!-- Input box -->
+                            <div class="user_prompt">
+                                <input type="search" placeholder="Search chat" [(ngModel)]="chatRoomFilter"
+                                    (input)="onChangePaginator({page:0},currentSelectedChatTab)">
+                            </div>
+                            <!-- End of Input box -->
+                        </div>
+                        <!-- End of Search bar section -->
+
+                        <!-- Tabs section -->
+                        <div class="row col-12 tabs_section" *ngIf="!isFullScreen">
+                            <div class="col-4 cursor_pointer" (click)="onClickChatTab('ALL')"
+                                [ngClass]="(currentSelectedChatTab == 'ALL')?'tabs_section_active':''">
+                                <span>All</span>
+                            </div>
+                            <div class="col-4 cursor_pointer" (click)="onClickChatTab('IND')"
+                                [ngClass]="(currentSelectedChatTab == 'IND')?'tabs_section_active':''">
+                                <span>My</span>
+                            </div>
+                            <div class="col-4 cursor_pointer" (click)="onClickChatTab('GRP')"
+                                [ngClass]="(currentSelectedChatTab == 'GRP')?'tabs_section_active':''">
+                                <span>Groups</span>
+                            </div>
+                        </div>
+                        <!-- End of Tabs section -->
+
+                        <!-- Archived list header -->
+                        <div class="archived_header" (click)="toggleArchive()">
+                            <i class="fa fa-archive" aria-hidden="true" *ngIf="!viewAllArchiveList"></i>
+                            <span *ngIf="!viewAllArchiveList && !isFullScreen">Archived</span>
+
+                            <i class="fa fa-arrow-circle-o-left" aria-hidden="true" *ngIf="viewAllArchiveList"></i>
+                            <span *ngIf="viewAllArchiveList && !isFullScreen">View archived</span>
+                        </div>
+                        <!-- End of Archived list header -->
+
+                        <!-- My list -->
+                        <div class="each_chat_title"
+                            *ngIf="currentSelectedChatTab == 'ALL' || currentSelectedChatTab == 'IND'">
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            <span *ngIf="!isFullScreen">My List</span>
+                            <span *ngIf="isFullScreen">ML</span>
+                        </div>
+                        <!-- End of My list -->
+
+                        <!-- Loop through the chat room list -->
+                        <div *ngIf="currentSelectedChatTab == 'ALL' || currentSelectedChatTab == 'IND'">
+                            <div *ngFor="let chatRoom of myChatRoomList" class="chat_room_display"
+                                (click)="selectChatRoomOnClick(chatRoom)"
+                                [ngClass]="(selectedRoomId == chatRoom.Id)?'selected_chat_room':''">
+                                <!-- Logo -->
+                                <div class="room_logo">
+                                    <span>{{GetChatRoomLogoLetters(chatRoom.RoomName)}}</span>
+                                </div>
+                                <!-- End of Logo -->
+
+                                <!-- Name -->
+                                <div class="display-flex-center full_width" *ngIf="!isFullScreen">
+                                    <div class="flex_align_left">
+                                        <div class="name_lbl">
+                                            <span>{{chatRoom.RoomName}}</span>
+                                        </div>
+                                        <div class="description_lbl">
+                                            <span>{{chatRoom.RoomDescription}}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex_align_right" *ngIf="chatRoom.UnreadCount != 0">
+                                        <div class="unread_count">
+                                            <span *ngIf="chatRoom.UnreadCount >= 10">9+</span>
+                                            <span *ngIf="chatRoom.UnreadCount < 10">{{chatRoom.UnreadCount}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End of Name -->
+                            </div>
+                        </div>
+                        <!-- End of Loop through the chat room list -->
+
+                        <!-- Empty message -->
+                        <div class="each_chat_title_lbl"
+                            *ngIf="myChatRoomList.length == 0 &&!isFullScreen && (currentSelectedChatTab == 'ALL' || currentSelectedChatTab == 'IND')">
+                            <span>There are no chats</span>
+                        </div>
+                        <!-- End of Empty message -->
+
+                        <!-- Pagination section -->
+                        <p-paginator class="paginator_sec" #modulePaginator
+                            id="managerX_project-manager-notifications_pagination_section"
+                            *ngIf="myChatRoomList && myChatRoomList.length > 0 && myChatRoomList[0].TotalRecords > myChatRoomFilter.RecordsPerPage"
+                            [ngClass]="(myChatRoomList && myChatRoomList.length > 0 && myChatRoomList[0].TotalRecords > myChatRoomFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="myChatRoomFilter.RecordsPerPage" (onPageChange)="onChangePaginator($event, 'IND')"
+                            [totalRecords]="(myChatRoomList.length>0)? myChatRoomList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+
+                        <!-- Group list -->
+                        <div class="each_chat_title"
+                            *ngIf="currentSelectedChatTab == 'ALL' || currentSelectedChatTab == 'GRP'">
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            <span *ngIf="!isFullScreen">Group List</span>
+                            <span *ngIf="isFullScreen">GL</span>
+                        </div>
+                        <!-- End of Group list -->
+
+                        <!-- Loop through the chat room list -->
+                        <div *ngIf="currentSelectedChatTab == 'ALL' || currentSelectedChatTab == 'GRP'">
+                            <div *ngFor="let chatRoom of groupChatRoomList" class="chat_room_display"
+                                (click)="selectChatRoomOnClick(chatRoom)"
+                                [ngClass]="(selectedRoomId == chatRoom.Id)?'selected_chat_room':''">
+                                <!-- Logo -->
+                                <div class="room_logo">
+                                    <span>{{GetChatRoomLogoLetters(chatRoom.RoomName)}}</span>
+                                </div>
+                                <!-- End of Logo -->
+
+                                <!-- Name -->
+                                <div class="display-flex-center full_width" *ngIf="!isFullScreen">
+                                    <div class="flex_align_left">
+                                        <div class="name_lbl">
+                                            <span>{{chatRoom.RoomName}}</span>
+                                        </div>
+                                        <div class="description_lbl">
+                                            <span>{{chatRoom.RoomDescription}}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex_align_right" *ngIf="chatRoom.UnreadCount != 0">
+                                        <div class="unread_count">
+                                            <span *ngIf="chatRoom.UnreadCount >= 10">9+</span>
+                                            <span *ngIf="chatRoom.UnreadCount < 10">{{chatRoom.UnreadCount}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End of Name -->
+                            </div>
+                        </div>
+                        <!-- End of Loop through the chat room list -->
+
+                        <!-- Empty message -->
+                        <div class="each_chat_title_lbl"
+                            *ngIf="groupChatRoomList.length == 0 && !isFullScreen && (currentSelectedChatTab == 'ALL' || currentSelectedChatTab == 'GRP')">
+                            <span>There are no group chats</span>
+                        </div>
+                        <!-- End of Empty message -->
+
+                        <!-- Pagination section -->
+                        <p-paginator class="paginator_sec" #modulePaginator
+                            id="managerX_project-manager-notifications_pagination_section"
+                            *ngIf="groupChatRoomList && groupChatRoomList.length > 0 && groupChatRoomList[0].TotalRecords > allChatRoomFilter.RecordsPerPage"
+                            [ngClass]="(groupChatRoomList && groupChatRoomList.length > 0 && groupChatRoomList[0].TotalRecords > allChatRoomFilter.RecordsPerPage)?'':'display_hide'"
+                            [rows]="allChatRoomFilter.RecordsPerPage" (onPageChange)="onChangePaginator($event, 'IND')"
+                            [totalRecords]="(groupChatRoomList.length>0)? groupChatRoomList[0].TotalRecords:0"></p-paginator>
+                        <!-- End of Pagination section -->
+                    </div>
+                    <!-- End of Left section -->
+                </ion-content>
+            </ion-menu>
+
+            <div class="ion-page" id="main-content-chat">
+                <ion-header>
+                    <ion-toolbar>
+                        <ion-buttons slot="start" style="width: 100%;">
+                            <ion-menu-button menu="main-menu-chat"></ion-menu-button>
+                            <!-- Header section -->
+                            <div class="col-12 no_side_padding top_bar_section">
+                                <span class="page_title">ManagerX Chat Room Page</span>
+                                <i class="fa fa-arrows-alt pointer" aria-hidden="true" (click)="toggleFullScreen()"
+                                    *ngIf="chatFullScreen"></i>
+                                <i class="fa fa-arrows pointer" aria-hidden="true" (click)="toggleFullScreen()"
+                                    *ngIf="!chatFullScreen"></i>
+                            </div>
+                            <!-- End of Header section -->
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                    <!-- Right section -->
+                    <div class="right_section" [ngClass]="(isFullScreen)?'right_section_full':''">
+                        <!-- Overall chat -->
+                        <div class="overall_chat" *ngIf="currentChatState=='OVERALL' && selectedRoomId == 0">
+                            <!-- Default message -->
+                            <div class="default_message">
+                                <div class="icon_default">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                </div>
+                                <div class="title_default">
+                                    <span>Select a Chat Room</span>
+                                </div>
+                                <div class="sub_title_default">
+                                    <span>Connect, Chat, Create: Choose Your Space</span>
+                                </div>
+                            </div>
+                            <!-- End of Default message -->
+                        </div>
+                        <!-- End of Overall chat -->
+
+                        <!-- Display message list -->
+                        <app-message-list *ngIf="currentChatState=='OVERALL' && selectedRoomId !== 0"
+                            [CurrentRoomId]="selectedRoomId" [selectedRoom]="selectedRoom"
+                            (editChatRoom)="editChatRoom($event)"
+                            [viewAllArchiveList]="viewAllArchiveList"></app-message-list>
+                        <!-- End of Display message list -->
+
+                        <!-- Create new chat room -->
+                        <app-create-chat-room *ngIf="currentChatState=='CREATE$ROOM'"
+                            [selectedRoom]="deep(selectedRoom!)" [selectedType]="selectedType"
+                            [selectedClientId]="selectedClientId"
+                            (CloseComponent)="CloseComponent($event)"></app-create-chat-room>
+                        <!-- End of Create new chat room -->
+                    </div>
+                    <!-- End of Right section -->
+                </ion-content>
+            </div>
+        </div>
+        <!-- End of Content section -->
+
+    </div>
+    <!-- End of Main content section -->
+</ion-content>

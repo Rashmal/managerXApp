@@ -1,0 +1,103 @@
+<ion-content [fullscreen]="true">
+    <ion-menu side="start" menuId="main-menu1" contentId="main-content1">
+        <ion-content>
+            <div class="wrapper">
+                <!-- Aside menu section -->
+                <aside id="sidebarSuper" [style]="sidebarClasses" class="burgerMenu">
+                    <!-- content for sidebarSuper -->
+                    <div class="h-100 w-100">
+                        <!-- Side bar UL nav section -->
+                        <ul class="sidebarSuper-nav">
+                            <br>
+                            <!-- Help and Support menu item -->
+                            <li id="managerX_master-page_help-Support-Menu_Item"
+                                class="sidebarSuper-item custom-sidebarSuper-item">
+                                <!-- A tag section -->
+                                <a id="managerX_master-page_help-Support_Link" (click)="navFunction('subList')"
+                                    [ngClass]="(activatedComp=='subList')?'active-custom':''"
+                                    class="sidebarSuper-link link-underline link-underline-opacity-0">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    <span>Subscription List</span>
+                                </a>
+                                <!-- End of A tag section -->
+                            </li>
+
+                            <li id="managerX_master-page_help-Support-Menu_Item"
+                                class="sidebarSuper-item custom-sidebarSuper-item">
+                                <!-- A tag section -->
+                                <a id="managerX_master-page_help-Support_Link" (click)="navFunction('LoginLog')"
+                                    [ngClass]="(activatedComp=='LoginLog')?'active-custom':''"
+                                    class="sidebarSuper-link link-underline link-underline-opacity-0">
+                                    <i class="fa fa-list" aria-hidden="true"></i>
+                                    <span>Activity Log</span>
+                                </a>
+                                <!-- End of A tag section -->
+                            </li>
+                            <li id="managerX_master-page_help-Support-Menu_Item"
+                                class="sidebarSuper-item custom-sidebarSuper-item">
+                                <!-- A tag section -->
+                                <a id="managerX_master-page_help-Support_Link" (click)="navFunction('GoogleAnalytics')"
+                                    [ngClass]="(activatedComp=='GoogleAnalytics')?'active-custom':''"
+                                    class="sidebarSuper-link link-underline link-underline-opacity-0">
+                                    <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                                    <span>Google Analytics</span>
+                                </a>
+                                <!-- End of A tag section -->
+                            </li>
+                            <!-- Help and Support menu item -->
+                            <li id="managerX_master-page_help-Support-Menu_Item"
+                                class="sidebarSuper-item custom-sidebarSuper-item" (click)="logout()">
+                                <!-- A tag section -->
+                                <a id="managerX_master-page_help-Support_Link"
+                                    class="sidebarSuper-link link-underline link-underline-opacity-0">
+                                    <i class="fa fa-power-off" aria-hidden="true"></i>
+                                    <span>Logout</span>
+                                </a>
+                                <!-- End of A tag section -->
+                            </li>
+                            <!-- End of Help and Support menu item -->
+
+                        </ul>
+                        <!-- End of Side bar UL nav section -->
+                    </div>
+                    <!-- End of content for sidebarSuper -->
+                </aside>
+                <!-- End of Aside menu section -->
+            </div>
+        </ion-content>
+    </ion-menu>
+
+    <div class="ion-page" id="main-content1">
+        <ion-header>
+            <ion-toolbar>
+                <ion-buttons slot="start">
+                   <ion-menu-button menu="main-menu1"></ion-menu-button>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-header>
+        <ion-content>
+            <div class="wrapper">
+                <!-- Display the content section -->
+                <div id="managerX_master-page_main_Content" class="col-12" class="main">
+                    <!-- Main section -->
+                    <main id="managerX_master-page_content_section">
+                        <!-- subscription-log component -->
+                        <app-stripe-subscription-log *ngIf="activatedComp =='subList'"></app-stripe-subscription-log>
+                        <!-- End of subscription-log component -->
+
+                        <!--  -activity-log component -->
+                        <app-activity-log *ngIf="activatedComp =='LoginLog'"></app-activity-log>
+                        <!-- End of  -activity-log component -->
+
+                        <!-- GoogleAnalyticscomponent -->
+                        <app-google-analytics *ngIf="activatedComp =='GoogleAnalytics'"></app-google-analytics>
+                        <!-- End of  GoogleAnalytics -->
+                    </main>
+                    <!-- End of Main section -->
+                </div>
+                <!-- End of Display the content section -->
+            </div>
+        </ion-content>
+    </div>
+
+</ion-content>
