@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG (if using Angular 20)
+      # 4. Patch PrimeNG for Angular 20 (if needed)
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
@@ -36,27 +36,18 @@ jobs:
 
       # 6. Decode and install .p12 certificate
       - name: Decode and import .p12 certificate
+        env:
+          KEYCHAIN_PASSWORD: TempPass123!
         run: |
-          # Set a password for the keychain
-          KEYCHAIN_PASSWORD="TempPass123!"
-
-          # Decode the .p12 file
           echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
-
-          # Create keychain
+          # Create a temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-
-          # Import certificate
+          # Import the certificate
           security import ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.IOS_P12_PASSWORD }}" -T /usr/bin/codesign
-
-          # Set keychain as default
+          # Set keychain as default and unlock it
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
-
-          # Unlock keychain
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" ~/Library/Keychains/build.keychain
-
-          # Allow codesign access
           security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" ~/Library/Keychains/build.keychain
 
       # 7. Install provisioning profile
@@ -76,7 +67,7 @@ jobs:
         run: |
           xcodebuild -exportArchive -archivePath ios/App/build/App.xcarchive -exportOptionsPlist ios/App/exportOptions.plist -exportPath output
 
-      # 10. Upload artifact (IPA file)
+      # 10. Upload IPA as artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
