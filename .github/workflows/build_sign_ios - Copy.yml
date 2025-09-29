@@ -8,58 +8,54 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # 1️⃣ Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4️⃣ Patch PrimeNG if needed
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5️⃣ Add Provisioning Profile
       - name: Add Provisioning Profile
         run: |
-          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > ManagerXApp.mobileprovision
+          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp ManagerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      # 6️⃣ Save Signing Key (.p12)
-      - name: Save Signing Key
-        run: echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.p12
+      # Save the P12 certificate directly (no CER -> PEM -> P12)
+      - name: Save Apple P12 Certificate
+        run: |
+          echo "${{ secrets.APPLE_P12_BASE64 }}" | base64 -d > ios_cert.p12
 
-      # 7️⃣ Install Certificate in Keychain
-      - name: Install Certificate
+      - name: Install Certificate in Keychain
         run: |
           security create-keychain -p "" build.keychain
-          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.APPLE_CERT_PASSWORD }}" -T /usr/bin/codesign
+          security import ios_cert.p12 \
+            -k ~/Library/Keychains/build.keychain \
+            -P "${{ secrets.APPLE_CERT_PASSWORD }}" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/security
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      # 8️⃣ Install Fastlane
       - name: Install Fastlane
         run: sudo gem install fastlane -v 2.228.0
 
-      # 9️⃣ Build Ionic app and sync Capacitor
-      - name: Build Ionic App
+      - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 🔟 Archive iOS App (manual signing only for App target)
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -68,11 +64,10 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
-            CODE_SIGN_STYLE=Manual \
             PROVISIONING_PROFILE_SPECIFIER="ManagerXApp" \
+            CODE_SIGN_STYLE=Manual \
             clean archive
 
-      # 1️⃣1️⃣ Export signed IPA
       - name: Export IPA
         run: |
           cd ios/App
@@ -81,7 +76,6 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -exportPath output
 
-      # 1️⃣2️⃣ Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
