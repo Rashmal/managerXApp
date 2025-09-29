@@ -1,4 +1,4 @@
-name: Build & Sign iOS App 2
+name: Build & Sign iOS App 11
 
 on:
   workflow_dispatch:
@@ -32,7 +32,10 @@ jobs:
         run: |
           echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          # Extract UUID from profile
+          UUID=$(security cms -D -i managerXApp.mobileprovision | plutil -extract UUID xml1 -o - - | grep -o '<string>.*</string>' | sed -e 's/<string>//' -e 's/<\/string>//')
+          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
+          echo "Provisioning profile UUID: $UUID"
 
       # 6. Save Signing Key
       - name: Save Signing Key
@@ -71,7 +74,7 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 12. Archive with Xcode (manual signing, hardcoded Team ID)
+      # 12. Archive iOS App with manual signing
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -80,18 +83,17 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
-            PROVISIONING_PROFILE_SPECIFIER="managerXApp" \
+            PROVISIONING_PROFILE_SPECIFIER="$UUID" \
             CODE_SIGN_STYLE=Manual \
             clean archive
 
       # 13. Export signed IPA
       - name: Export IPA
         run: |
-          cd ios/App
           xcodebuild -exportArchive \
-            -archivePath build/App.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath output
+            -archivePath ios/App/build/App.xcarchive \
+            -exportOptionsPlist ios/App/exportOptions.plist \
+            -exportPath ios/App/output
 
       # 14. Upload IPA artifact
       - name: Upload IPA
