@@ -11,19 +11,41 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Save Signing Key
+      # 2. Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Install npm dependencies
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      # 4. Patch PrimeNG dynamicdialog-injector for Angular 20
+      - name: Patch PrimeNG
+        run: |
+          sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
+
+      # 5. Add Provisioning Profile
+      - name: Add Provisioning Profile
+        run: |
+          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      # 6. Save Signing Key
       - name: Save Signing Key
         run: echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
 
-      # 3. Save Apple Certificate
+      # 7. Save Apple Certificate
       - name: Save Apple Certificate
         run: echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
 
-      # 4. Convert CER to PEM
+      # 8. Convert CER to PEM
       - name: Convert CER to PEM
         run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
 
-      # 5. Export .p12 on macOS
+      # 9. Export .p12 (hardcoded password)
       - name: Export P12
         run: |
           openssl pkcs12 -export \
@@ -32,7 +54,7 @@ jobs:
             -out ios_cert.p12 \
             -password pass:Infy17cre@t
 
-      # 6. Install Certificate in Keychain
+      # 10. Install Certificate in Keychain
       - name: Install Certificate
         run: |
           security create-keychain -p "" build.keychain
@@ -42,30 +64,8 @@ jobs:
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      # 7. Add Provisioning Profile
-      - name: Add Provisioning Profile
-        run: |
-          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-
-      # 8. Setup Node.js
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      # 9. Install dependencies
-      - name: Install npm dependencies
-        run: npm install --legacy-peer-deps
-
-      # 10. Patch PrimeNG dynamicdialog for Angular 20
-      - name: Patch PrimeNG dynamicdialog-injector
-        run: |
-          sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
-
       # 11. Build Ionic Capacitor iOS
-      - name: Build Ionic Capacitor iOS
+      - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
