@@ -85,13 +85,14 @@ jobs:
       - name: Archive iOS App
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace \
-            -scheme App \   # 👈 replace with actual scheme after checking above step
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
             -configuration Release \
-            -archivePath $PWD/build/ManagerXApp.xcarchive \
+            -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE="$PROFILE_UUID" \
+            PROVISIONING_PROFILE=4164b093-e94c-44b1-aa54-bba641b892d7 \
             clean archive
 
       # 14. Export IPA
