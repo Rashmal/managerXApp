@@ -1,4 +1,4 @@
-name: Build & Sign iOS App l1
+name: Build & Sign iOS App fastlane
 
 on:
   workflow_dispatch:
@@ -6,10 +6,6 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
-    env:
-      TEAM_ID: NPXC63W394
-      PROVISIONING_PROFILE_NAME: managerXApp
-      P12_PASSWORD: Infy17cre@t
 
     steps:
       # 1. Checkout repo
@@ -24,7 +20,7 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       # 4. Patch PrimeNG dynamicdialog-injector for Angular 20
       - name: Patch PrimeNG
@@ -32,42 +28,26 @@ jobs:
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Add Provisioning Profile
-      - name: Add Provisioning Profile
-        run: |
-          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+      # 5. Setup Fastlane
+      - name: Install Fastlane
+        run: gem install fastlane
 
-      # 6. Save Signing Key & Certificate
-      - name: Setup Signing Credentials
+      # 6. Match (fetch certificates & profiles)
+      - name: Fastlane Match (App Store)
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          FASTLANE_USER: ${{ secrets.APPLE_ID }}
+          FASTLANE_TEAM_ID: NPXC63W394
         run: |
-          echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
-          echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
-          openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
-          openssl pkcs12 -export \
-            -inkey ios_signing.key \
-            -in ios_cert.pem \
-            -out ios_cert.p12 \
-            -password pass:$P12_PASSWORD
+          fastlane match appstore --readonly --git_url https://github.com/Rashmal/managerXApp.git
 
-      # 7. Install Certificate in Keychain
-      - name: Install Certificate
-        run: |
-          security create-keychain -p "" build.keychain
-          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
-
-      # 8. Build Ionic Capacitor iOS
-      - name: Build Ionic App
+      # 7. Build Ionic Capacitor iOS
+      - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 9. Archive with Xcode (manual signing)
+      # 8. Archive with Xcode using automatic signing from Match
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -75,21 +55,20 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
-            DEVELOPMENT_TEAM=$TEAM_ID \
-            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME" \
-            CODE_SIGN_STYLE=Manual \
-            clean archive
+            clean archive \
+            -allowProvisioningUpdates
 
-      # 10. Export signed IPA
+      # 9. Export signed IPA
       - name: Export IPA
         run: |
           cd ios/App
           xcodebuild -exportArchive \
             -archivePath build/App.xcarchive \
             -exportOptionsPlist exportOptions.plist \
-            -exportPath output
+            -exportPath output \
+            -allowProvisioningUpdates
 
-      # 11. Upload IPA artifact
+      # 10. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
