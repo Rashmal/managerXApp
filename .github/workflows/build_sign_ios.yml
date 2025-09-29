@@ -4,27 +4,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  # -------------------------------
-  # Job 1: Generate .p12 on Ubuntu
-  # -------------------------------
-  generate-p12:
-    runs-on: ubuntu-latest
+  build-ios:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
-      # 1. Save private key from secret
+      # 1. Save private key
       - name: Save Signing Key
         run: echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
 
-      # 2. Save Apple certificate from secret
+      # 2. Save Apple Certificate
       - name: Save Apple Certificate
         run: echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
 
-      # 3. Convert .cer to .pem
+      # 3. Convert .cer to .pem (optional)
       - name: Convert CER to PEM
         run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
 
-      # 4. Export .p12 with hardcoded password
+      # 4. Export .p12 **on macOS**
       - name: Export P12
         run: |
           openssl pkcs12 -export \
@@ -33,75 +30,45 @@ jobs:
             -out ios_cert.p12 \
             -password pass:Infy17cre@t
 
-      # 5. Upload .p12 as artifact
-      - name: Upload P12 artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-p12
-          path: ios_cert.p12
+      # 5. Install certificate
+      - name: Install Certificate
+        run: |
+          security create-keychain -p "" build.keychain
+          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@t" -T /usr/bin/codesign
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security default-keychain -s ~/Library/Keychains/build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-  # -------------------------------
-  # Job 2: Build & Sign on macOS
-  # -------------------------------
-  build-ios:
-    runs-on: macos-latest
-    needs: generate-p12
-    steps:
-      - uses: actions/checkout@v4
-
-      # 1. Download the .p12 artifact
-      - name: Download P12 artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ios-p12
-          path: ios-p12
-
-      # 2. Save Provisioning Profile
+      # 6. Save Provisioning Profile
       - name: Add Provisioning Profile
         run: |
           echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      # 3. Install certificate in keychain
-      - name: Install Certificate
-        run: |
-          security create-keychain -p "" build.keychain
-          security import ios-p12/ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@t" -T /usr/bin/codesign
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
-
-      # 4. Setup Node.js
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      # 7. Setup Node and dependencies
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: npm install --legacy-peer-deps
 
-      # 5. Install npm dependencies
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      # 6. Build Ionic Capacitor iOS app
-      - name: Build Ionic Capacitor iOS
-        run: |
+      # 8. Build Ionic Capacitor iOS app
+      - run: |
           npm run build
           npx cap sync ios
           cd ios/App
           xcodebuild -workspace App.xcworkspace -scheme App -configuration Release archive -archivePath $PWD/build/App.xcarchive
 
-      # 7. Export signed IPA
-      - name: Export IPA
-        run: |
+      # 9. Export IPA
+      - run: |
           xcodebuild -exportArchive \
             -archivePath ios/App/build/App.xcarchive \
             -exportOptionsPlist ios/App/exportOptions.plist \
             -exportPath ios/App/output
 
-      # 8. Upload IPA artifact
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
+      # 10. Upload IPA
+      - uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
           path: ios/App/output/*.ipa
