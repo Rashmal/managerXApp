@@ -78,9 +78,9 @@ jobs:
       # 12. Archive iOS App (manual signing)
       - name: Archive iOS App
         run: |
-          cd ios/App   # <- folder path stays as 'App'
-          xcodebuild -workspace ManagerXApp.xcworkspace \
-            -scheme ManagerXApp \
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace \   # <- FIXED
+            -scheme ManagerXApp \                   # <- keep scheme as ManagerXApp
             -configuration Release \
             -archivePath $PWD/build/ManagerXApp.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
@@ -91,7 +91,7 @@ jobs:
       # 13. Export IPA
       - name: Export IPA
         run: |
-          cd ios/App   # <- folder path stays as 'App'
+          cd ios/App
           xcodebuild -exportArchive \
             -archivePath build/ManagerXApp.xcarchive \
             -exportOptionsPlist exportOptions.plist \
