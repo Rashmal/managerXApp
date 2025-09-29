@@ -54,7 +54,7 @@ jobs:
       - name: Build & Sign iOS with API key
         run: |
           fastlane run build_ios_app \
-            project: "ios/App/App.xcodeproj" \
+            workspace: "ios/App/App.xcworkspace" \
             scheme: "${{ secrets.APP_SCHEME }}" \
             export_method: "app-store" \
             api_key_path: "AuthKey.p8"
