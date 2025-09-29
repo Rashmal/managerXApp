@@ -1,4 +1,4 @@
-name: Build & Sign iOS App fastlane
+name: Build & Sign iOS App fg
 
 on:
   workflow_dispatch:
@@ -6,7 +6,6 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
-
     steps:
       # 1. Checkout repo
       - name: Checkout repo
@@ -28,9 +27,9 @@ jobs:
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Setup Fastlane
+      # 5. Install Fastlane
       - name: Install Fastlane
-        run: gem install fastlane
+        run: sudo gem install fastlane -NV
 
       # 6. Match (fetch certificates & profiles)
       - name: Fastlane Match (App Store)
@@ -39,7 +38,9 @@ jobs:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
           FASTLANE_TEAM_ID: NPXC63W394
         run: |
-          fastlane match appstore --readonly --git_url https://github.com/Rashmal/managerXApp.git
+          fastlane match appstore --readonly \
+            --git_url https://github.com/Rashmal/managerXApp.git \
+            --app_identifier com.yourcompany.managerXApp
 
       # 7. Build Ionic Capacitor iOS
       - name: Build Ionic iOS App
@@ -47,7 +48,7 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 8. Archive with Xcode using automatic signing from Match
+      # 8. Archive with Xcode (automatic signing via Match)
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -55,8 +56,9 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
-            clean archive \
-            -allowProvisioningUpdates
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=NPXC63W394 \
+            clean archive
 
       # 9. Export signed IPA
       - name: Export IPA
@@ -65,8 +67,7 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath build/App.xcarchive \
             -exportOptionsPlist exportOptions.plist \
-            -exportPath output \
-            -allowProvisioningUpdates
+            -exportPath output
 
       # 10. Upload IPA artifact
       - name: Upload IPA
