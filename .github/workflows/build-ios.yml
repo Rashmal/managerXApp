@@ -22,11 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG (Angular fix)
+      # 4. Patch PrimeNG (if needed)
       - name: Patch PrimeNG
         run: |
-          sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
-          sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
+          sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
+          sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
 
       # 5. Build Ionic and sync iOS
       - name: Build Ionic iOS
@@ -34,14 +34,21 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 6. Install CocoaPods & generate workspace
+      # 6. Install CocoaPods
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
           cd ios/App
           pod install
 
-      # 7. Setup Ruby & Fastlane
+      # 7. Verify workspace
+      - name: Detect workspace
+        run: |
+          WORKSPACE=$(ls ios/App/*.xcworkspace | head -n 1)
+          echo "Workspace detected: $WORKSPACE"
+          echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
+
+      # 8. Setup Ruby & Fastlane
       - name: Setup Ruby & Fastlane
         uses: ruby/setup-ruby@v1
         with:
@@ -51,22 +58,22 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane -v 2.228.0
 
-      # 8. Setup App Store Connect API key
+      # 9. Setup App Store Connect API key
       - name: Setup API Key
         run: echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > AuthKey.p8
         env:
           APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
 
-      # 9. Build & sign iOS with workspace
+      # 10. Build & sign iOS
       - name: Build & Sign iOS
         run: |
           fastlane run build_ios_app \
-            workspace: "ios/App/App.xcworkspace" \
+            workspace: "$WORKSPACE" \
             scheme: "${{ secrets.APP_SCHEME }}" \
             export_method: "app-store" \
             api_key_path: "AuthKey.p8"
 
-      # 10. Upload IPA artifact
+      # 11. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
