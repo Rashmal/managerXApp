@@ -1,0 +1,68 @@
+name: Build iOS App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      # 1. Checkout your repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2. Setup Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Install npm dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Add Provisioning Profile
+      - name: Add Provisioning Profile
+        run: |
+          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      # 5. Decode .p12 certificate
+      - name: Decode .p12 certificate
+        run: |
+          echo "${{ secrets.APPLE_CERT_P12 }}" | base64 -d > ios_cert.p12
+
+      # 6. Install certificate in keychain
+      - name: Install Certificate
+        run: |
+          security create-keychain -p "" build.keychain
+          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.P12_PASSWORD }}" -T /usr/bin/codesign
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security default-keychain -s ~/Library/Keychains/build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+
+      # 7. Build Ionic Capacitor iOS app
+      - name: Build Ionic Capacitor iOS
+        run: |
+          npm run build
+          npx cap sync ios
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release archive -archivePath $PWD/build/App.xcarchive
+
+      # 8. Export signed IPA
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath ios/App/build/App.xcarchive \
+            -exportOptionsPlist ios/App/exportOptions.plist \
+            -exportPath output
+
+      # 9. Upload IPA artifact
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: ios/App/output/*.ipa
