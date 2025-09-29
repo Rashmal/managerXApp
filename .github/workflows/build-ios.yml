@@ -18,11 +18,11 @@ jobs:
         with:
           node-version: 20
 
-      # 3. Install dependencies
-      - name: Install npm dependencies
+      # 3. Install npm dependencies
+      - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20 (if needed)
+      # 4. Patch PrimeNG (if using Angular 20)
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
@@ -34,43 +34,41 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 6. Install Ruby & Fastlane
+      # 6. Setup Ruby & Fastlane
       - name: Setup Ruby & Fastlane
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2
           bundler-cache: true
 
-      # 7. Save App Store Connect API key from secret
-      - name: Save App Store Connect Key
-        run: |
-          echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > AuthKey.json
+      - name: Install Fastlane
+        run: gem install fastlane -v 2.227.0
 
-      # 8. Use Fastlane match to fetch certificates & profiles
+      # 7. Setup App Store Connect API key
+      - name: Setup API Key
+        run: |
+          echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > AuthKey.p8
+        env:
+          APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
+
+      # 8. Fetch certificates & provisioning profiles with match
       - name: Fetch certificates & provisioning profiles
         run: |
           fastlane match appstore \
             --readonly true \
             --app_identifier "${{ secrets.APP_IDENTIFIER }}" \
-            --api_key AuthKey.json
-
-      # 9. Build & archive with Xcode
+            --api_key_path AuthKey.p8
+          
+      # 9. Build and archive with Xcode
       - name: Build with Xcode
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace \
-                     -scheme "${{ secrets.APP_SCHEME }}" \
-                     -sdk iphoneos \
-                     -configuration Release \
-                     archive -archivePath $PWD/build/App.xcarchive
+          xcodebuild -workspace App.xcworkspace -scheme "${{ secrets.APP_SCHEME }}" -sdk iphoneos -configuration Release archive -archivePath $PWD/build/App.xcarchive
 
       # 10. Export IPA
       - name: Export IPA
         run: |
-          xcodebuild -exportArchive \
-                     -archivePath ios/App/build/App.xcarchive \
-                     -exportOptionsPlist ios/App/exportOptions.plist \
-                     -exportPath output
+          xcodebuild -exportArchive -archivePath ios/App/build/App.xcarchive -exportOptionsPlist ios/App/exportOptions.plist -exportPath output
 
       # 11. Upload artifact (IPA file)
       - name: Upload IPA
