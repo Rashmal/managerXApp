@@ -34,54 +34,33 @@ jobs:
           echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > ManagerXApp.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp ManagerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-          # Extract UUID for CI
           PROFILE_UUID=$(security cms -D -i ManagerXApp.mobileprovision | plutil -extract UUID xml1 -o - - | xmllint --xpath 'string(//string)' -)
           echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
 
-      # 6. Save Signing Key
-      - name: Save Signing Key
-        run: echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
-
-      # 7. Save Apple Certificate
-      - name: Save Apple Certificate
-        run: echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
-
-      # 8. Convert CER to PEM
-      - name: Convert CER to PEM
-        run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
-
-      # 9. Export P12
-      - name: Export P12
+      # 6. Import Certificate (.p12 with private key)
+      - name: Import Certificate
         run: |
-          openssl pkcs12 -export \
-            -inkey ios_signing.key \
-            -in ios_cert.pem \
-            -out ios_cert.p12 \
-            -password pass:Infy17cre@
-
-      # 10. Install Certificate in Keychain
-      - name: Install Certificate
-        run: |
+          echo "${{ secrets.APPLE_P12 }}" | base64 -d > cert.p12
           security create-keychain -p "" build.keychain
-          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@" -T /usr/bin/codesign
+          security import cert.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.APPLE_P12_PASSWORD }}" -T /usr/bin/codesign
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      # 11. Build Ionic App
+      # 7. Build Ionic App
       - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 🔍 12. List available Xcode schemes (to confirm real scheme name)
+      # 8. List available Xcode schemes
       - name: List Xcode Schemes
         run: |
           cd ios/App
           xcodebuild -list -workspace App.xcworkspace
 
-      # 13. Archive iOS App (manual signing)
+      # 9. Archive iOS App
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -89,13 +68,13 @@ jobs:
             -workspace App.xcworkspace \
             -scheme App \
             -configuration Release \
-            -archivePath $PWD/build/App.xcarchive \
+            -archivePath $PWD/build/ManagerXApp.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE=4164b093-e94c-44b1-aa54-bba641b892d7 \
+            PROVISIONING_PROFILE_SPECIFIER=${{ env.PROFILE_UUID }} \
             clean archive
 
-      # 14. Export IPA
+      # 10. Export IPA
       - name: Export IPA
         run: |
           cd ios/App
@@ -104,7 +83,7 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -exportPath output
 
-      # 15. Upload IPA
+      # 11. Upload IPA
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
