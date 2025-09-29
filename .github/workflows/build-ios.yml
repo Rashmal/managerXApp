@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20 (if needed)
+      # 4. Patch PrimeNG (if using Angular 20)
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
@@ -35,18 +35,29 @@ jobs:
           npx cap sync ios
 
       # 6. Decode and install .p12 certificate
-      - name: Decode .p12 certificate
+      - name: Decode and import .p12 certificate
         run: |
-            echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
-            security create-keychain -p "" build.keychain
-            security import ios_distribution.p12 \
-              -k ~/Library/Keychains/build.keychain \
-              -P "Rashmal@1993" \
-              -T /usr/bin/codesign
-            security list-keychains -s ~/Library/Keychains/build.keychain
-            security default-keychain -s ~/Library/Keychains/build.keychain
-            security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-            security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+          # Set a password for the keychain
+          KEYCHAIN_PASSWORD="TempPass123!"
+
+          # Decode the .p12 file
+          echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
+
+          # Create keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+
+          # Import certificate
+          security import ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.IOS_P12_PASSWORD }}" -T /usr/bin/codesign
+
+          # Set keychain as default
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security default-keychain -s ~/Library/Keychains/build.keychain
+
+          # Unlock keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" ~/Library/Keychains/build.keychain
+
+          # Allow codesign access
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" ~/Library/Keychains/build.keychain
 
       # 7. Install provisioning profile
       - name: Install provisioning profile
