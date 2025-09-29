@@ -8,11 +8,11 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # 1. Checkout your repo
+      # 1. Checkout the repository
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Setup Node
+      # 2. Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -32,7 +32,7 @@ jobs:
       # 5. Decode .p12 certificate
       - name: Decode .p12 certificate
         run: |
-          echo "${{ secrets.APPLE_CERT_P12 }}" | base64 -d > ios_cert.p12
+          echo "${{ secrets.APPLE_CERT_P12 }}" | tr -d '\n' | base64 -d > ios_cert.p12
 
       # 6. Install certificate in keychain
       - name: Install Certificate
@@ -58,7 +58,7 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath ios/App/build/App.xcarchive \
             -exportOptionsPlist ios/App/exportOptions.plist \
-            -exportPath output
+            -exportPath ios/App/output
 
       # 9. Upload IPA artifact
       - name: Upload IPA
