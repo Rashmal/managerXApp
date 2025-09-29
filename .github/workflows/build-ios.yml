@@ -37,13 +37,16 @@ jobs:
       # 6. Decode and install .p12 certificate
       - name: Decode .p12 certificate
         run: |
-          echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
-          security create-keychain -p "" build.keychain
-          security import ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.IOS_P12_PASSWORD }}" -T /usr/bin/codesign
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+            echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
+            security create-keychain -p "" build.keychain
+            security import ios_distribution.p12 \
+              -k ~/Library/Keychains/build.keychain \
+              -P "Rashmal@1993" \
+              -T /usr/bin/codesign
+            security list-keychains -s ~/Library/Keychains/build.keychain
+            security default-keychain -s ~/Library/Keychains/build.keychain
+            security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+            security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
       # 7. Install provisioning profile
       - name: Install provisioning profile
