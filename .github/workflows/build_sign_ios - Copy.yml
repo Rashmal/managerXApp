@@ -1,4 +1,4 @@
-name: Build & Sign iOS App 1
+name: Build & Sign iOS App
 
 on:
   workflow_dispatch:
@@ -24,9 +24,7 @@ jobs:
       # 4. Patch PrimeNG dynamicdialog-injector for Angular 20
       - name: Patch PrimeNG
         run: |
-          # Remove InjectFlags import
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
-          # Remove InjectFlags usage in method signatures
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
       # 5. Add Provisioning Profile
@@ -72,24 +70,30 @@ jobs:
         run: |
           npm run build
           npx cap sync ios
+
+      # 12. Archive with Xcode (manual signing, hardcoded Team ID)
+      - name: Archive iOS App
+        run: |
           cd ios/App
           xcodebuild -workspace App.xcworkspace \
             -scheme App \
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
+            PROVISIONING_PROFILE_SPECIFIER="managerXApp" \
             CODE_SIGN_STYLE=Manual \
             clean archive
 
-      # 12. Export signed IPA
+      # 13. Export signed IPA
       - name: Export IPA
         run: |
+          cd ios/App
           xcodebuild -exportArchive \
-            -archivePath ios/App/build/App.xcarchive \
-            -exportOptionsPlist ios/App/exportOptions.plist \
-            -exportPath ios/App/output
+            -archivePath build/App.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath output
 
-      # 13. Upload IPA artifact
+      # 14. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
