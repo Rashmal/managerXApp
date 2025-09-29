@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20
+      # 4. Patch PrimeNG for Angular 20 (if needed)
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
@@ -31,16 +31,9 @@ jobs:
       # 5. Add Provisioning Profile
       - name: Add Provisioning Profile
         run: |
-          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
+          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > ManagerXApp.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-
-      # 5a. Extract Profile Name
-      - name: Extract Provisioning Profile Name
-        id: extract_profile
-        run: |
-          PROFILE_NAME=$(security cms -D -i managerXApp.mobileprovision | plutil -extract AppIDName xml1 -o - - | xmllint --xpath 'string(//string)' -)
-          echo "profile_name=$PROFILE_NAME" >> $GITHUB_OUTPUT
+          cp ManagerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
       # 6. Save Signing Key
       - name: Save Signing Key
@@ -54,7 +47,7 @@ jobs:
       - name: Convert CER to PEM
         run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
 
-      # 9. Export .p12
+      # 9. Export .p12 (self-contained)
       - name: Export P12
         run: |
           openssl pkcs12 -export \
@@ -77,25 +70,13 @@ jobs:
       - name: Install Fastlane
         run: sudo gem install fastlane -v 2.228.0
 
-      # 12. (Optional) Match App Store Certificates
-      - name: Match App Store Certificates
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-        run: |
-          fastlane match appstore \
-            --git_url https://github.com/Rashmal/managerXApp.git \
-            --app_identifier com.yourcompany.managerXApp \
-            --team_id NPXC63W394 \
-            --readonly \
-            --verbose
-
-      # 13. Build Ionic iOS App
+      # 12. Build Ionic iOS App
       - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 14. Archive with Xcode (manual signing)
+      # 13. Archive iOS App (manual signing)
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -104,11 +85,11 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
-            PROVISIONING_PROFILE_SPECIFIER="${{ steps.extract_profile.outputs.profile_name }}" \
+            PROVISIONING_PROFILE_SPECIFIER="ManagerXApp" \
             CODE_SIGN_STYLE=Manual \
             clean archive
 
-      # 15. Export signed IPA
+      # 14. Export signed IPA
       - name: Export IPA
         run: |
           cd ios/App
@@ -117,7 +98,7 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -exportPath output
 
-      # 16. Upload IPA artifact
+      # 15. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
