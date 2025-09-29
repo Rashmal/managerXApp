@@ -6,7 +6,8 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
-
+    env:
+      CERT_PASSWORD: "Rashmal@1993"  # hardcoded for workflow, can use secret
     steps:
       # 1. Checkout repo
       - name: Checkout repo
@@ -18,7 +19,7 @@ jobs:
         with:
           node-version: 20
 
-      # 3. Install npm dependencies
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
@@ -34,40 +35,58 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 6. Decode and install .p12 certificate
-      - name: Decode and import .p12 certificate
-        env:
-          KEYCHAIN_PASSWORD: TempPass123!
+      # 6. Generate private key and CSR
+      - name: Generate Key & CSR
         run: |
-          echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
-          # Create a temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          # Import the certificate
-          security import ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.IOS_P12_PASSWORD }}" -T /usr/bin/codesign
-          # Set keychain as default and unlock it
+          mkdir -p ios/certs
+          openssl genrsa -out ios/certs/ios.key 2048
+          openssl req -new -key ios/certs/ios.key -out ios/certs/ios.csr -subj "/CN=Your Name/C=US"
+
+      # 7. Download certificate from Apple via API
+      - name: Download iOS Distribution Certificate
+        run: |
+          # Requires fastlane + App Store Connect API key stored as secrets
+          gem install fastlane
+          fastlane spaceauth -u ${{ secrets.APPLE_ID }} # first-time auth
+          fastlane cert:create \
+            --csr_path ios/certs/ios.csr \
+            --output_path ios/certs/ios_distribution.cer \
+            --type ios_distribution \
+            --api_key_path ./AuthKey_ABC123XYZ.json  # your App Store Connect API Key
+
+      # 8. Create .p12 from .cer + key
+      - name: Create .p12
+        run: |
+          openssl pkcs12 -export -out ios/certs/ios_distribution.p12 -inkey ios/certs/ios.key -in ios/certs/ios_distribution.cer -password pass:$CERT_PASSWORD
+
+      # 9. Setup temporary keychain and import .p12
+      - name: Import .p12 into Keychain
+        run: |
+          security create-keychain -p "" build.keychain
+          security import ios/certs/ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" ~/Library/Keychains/build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      # 7. Install provisioning profile
+      # 10. Install provisioning profile
       - name: Install provisioning profile
         run: |
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.IOS_MOBILEPROVISION_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
 
-      # 8. Build and archive with Xcode
+      # 11. Build and archive with Xcode
       - name: Build with Xcode
         run: |
           cd ios/App
           xcodebuild -workspace App.xcworkspace -scheme "${{ secrets.APP_SCHEME }}" -sdk iphoneos -configuration Release archive -archivePath $PWD/build/App.xcarchive
 
-      # 9. Export IPA
+      # 12. Export IPA
       - name: Export IPA
         run: |
           xcodebuild -exportArchive -archivePath ios/App/build/App.xcarchive -exportOptionsPlist ios/App/exportOptions.plist -exportPath output
 
-      # 10. Upload IPA as artifact
+      # 13. Upload IPA
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
