@@ -41,10 +41,15 @@ jobs:
           cd ios/App
           pod install
 
-      # 7. Verify workspace
+      # 7. Detect workspace correctly
       - name: Detect workspace
         run: |
-          WORKSPACE=$(ls ios/App/*.xcworkspace | head -n 1)
+          # Find the actual .xcworkspace directory (not internal files)
+          WORKSPACE=$(find ios/App -name "*.xcworkspace" -type d | head -n 1)
+          if [ -z "$WORKSPACE" ]; then
+            echo "Error: .xcworkspace not found"
+            exit 1
+          fi
           echo "Workspace detected: $WORKSPACE"
           echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
 
