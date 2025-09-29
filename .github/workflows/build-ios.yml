@@ -53,11 +53,11 @@ jobs:
           echo "Workspace detected: $WORKSPACE"
           echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
 
-      # 8. Verify workspace has the correct scheme
+      # 8. Verify workspace has the App scheme
       - name: Verify workspace scheme
         run: |
           cd ios/App
-          SCHEME="${{ secrets.APP_SCHEME }}"
+          SCHEME="App"  # Hardcoded scheme
           if ! xcodebuild -list -workspace "$(basename $WORKSPACE)" | grep -q "$SCHEME"; then
             echo "Error: Scheme '$SCHEME' not found in workspace"
             exit 1
@@ -85,7 +85,7 @@ jobs:
         run: |
           fastlane run build_ios_app \
             workspace: "$WORKSPACE" \
-            scheme: "${{ secrets.APP_SCHEME }}" \
+            scheme: "App" \
             export_method: "app-store" \
             api_key_path: "AuthKey.p8"
 
