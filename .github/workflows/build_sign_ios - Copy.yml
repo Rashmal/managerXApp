@@ -8,51 +8,55 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # 1. Checkout repo
+      # 1️⃣ Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
+      # 2️⃣ Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3. Install npm dependencies
+      # 3️⃣ Install npm dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20
+      # 4️⃣ Patch PrimeNG for Angular 20
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Setup Ruby & Fastlane
-      - name: Setup Ruby & Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.3
-          bundler-cache: true
-
-      # 6. Decrypt certificates using Match
-      - name: Match App Store Certificates
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      # 5️⃣ Decode & install certificates & provisioning profile
+      - name: Install Certificates & Provisioning Profile
         run: |
-          bundle exec fastlane match appstore \
-            --git_url https://github.com/Rashmal/managerXApp.git \
-            --app_identifier com.yourcompany.managerXApp \
-            --team_id NPXC63W394 \
-            --verbose
+          # Decode .p12 certificate
+          echo "$IOS_CERT_BASE64" | base64 --decode > ios-cert.p12
 
-      # 7. Build Ionic Capacitor iOS
+          # Decode provisioning profile
+          echo "$IOS_PROV_PROFILE_BASE64" | base64 --decode > ios-profile.mobileprovision
+
+          # Create a keychain for signing
+          security create-keychain -p "" build.keychain
+          security import ios-cert.p12 -k ~/Library/Keychains/build.keychain -P "" -T /usr/bin/codesign
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+
+          # Install provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp ios-profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+        env:
+          IOS_CERT_BASE64: ${{ secrets.IOS_CERT_BASE64 }}
+          IOS_PROV_PROFILE_BASE64: ${{ secrets.IOS_PROV_PROFILE_BASE64 }}
+
+      # 6️⃣ Build Ionic iOS App
       - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 8. Archive with Xcode (manual signing, team ID hardcoded)
+      # 7️⃣ Archive iOS App
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -65,7 +69,7 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             clean archive
 
-      # 9. Export signed IPA
+      # 8️⃣ Export signed IPA
       - name: Export IPA
         run: |
           cd ios/App
@@ -74,7 +78,7 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -exportPath output
 
-      # 10. Upload IPA artifact
+      # 9️⃣ Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
