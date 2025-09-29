@@ -1,4 +1,4 @@
-name: Build & Sign iOS App fg
+name: Build & Sign iOS App New
 
 on:
   workflow_dispatch:
@@ -6,6 +6,7 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
+
     steps:
       # 1. Checkout repo
       - name: Checkout repo
@@ -21,26 +22,29 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG dynamicdialog-injector for Angular 20
+      # 4. Patch PrimeNG for Angular 20
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Install Fastlane
-      - name: Install Fastlane
-        run: sudo gem install fastlane -NV
+      # 5. Setup Ruby & Fastlane
+      - name: Setup Ruby & Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
 
-      # 6. Match (fetch certificates & profiles)
-      - name: Fastlane Match (App Store)
+      # 6. Decrypt certificates using Match
+      - name: Match App Store Certificates
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          FASTLANE_TEAM_ID: NPXC63W394
         run: |
-          fastlane match appstore --readonly \
+          bundle exec fastlane match appstore \
             --git_url https://github.com/Rashmal/managerXApp.git \
-            --app_identifier com.yourcompany.managerXApp
+            --app_identifier com.yourcompany.managerXApp \
+            --team_id NPXC63W394 \
+            --verbose
 
       # 7. Build Ionic Capacitor iOS
       - name: Build Ionic iOS App
@@ -48,7 +52,7 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 8. Archive with Xcode (automatic signing via Match)
+      # 8. Archive with Xcode (manual signing, team ID hardcoded)
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -56,8 +60,9 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
-            CODE_SIGN_STYLE=Automatic \
             DEVELOPMENT_TEAM=NPXC63W394 \
+            PROVISIONING_PROFILE_SPECIFIER="managerXApp" \
+            CODE_SIGN_STYLE=Manual \
             clean archive
 
       # 9. Export signed IPA
