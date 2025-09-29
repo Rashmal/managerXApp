@@ -1,4 +1,4 @@
-name: Build & Sign iOS App 11
+name: Build & Sign iOS App 22
 
 on:
   workflow_dispatch:
@@ -21,60 +21,34 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG dynamicdialog-injector for Angular 20
+      # 4. Patch PrimeNG for Angular 20
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Add Provisioning Profile
-      - name: Add Provisioning Profile
+      # 5. Install Ruby and Fastlane
+      - name: Install Fastlane
         run: |
-          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          # Extract UUID from profile
-          UUID=$(security cms -D -i managerXApp.mobileprovision | plutil -extract UUID xml1 -o - - | grep -o '<string>.*</string>' | sed -e 's/<string>//' -e 's/<\/string>//')
-          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
-          echo "Provisioning profile UUID: $UUID"
+          brew install ruby
+          gem install fastlane -NV
 
-      # 6. Save Signing Key
-      - name: Save Signing Key
-        run: echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
-
-      # 7. Save Apple Certificate
-      - name: Save Apple Certificate
-        run: echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
-
-      # 8. Convert CER to PEM
-      - name: Convert CER to PEM
-        run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
-
-      # 9. Export .p12 (hardcoded password)
-      - name: Export P12
+      # 6. Setup Fastlane Match (fetch provisioning profile + certificate)
+      - name: Setup Signing (Fastlane Match)
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # password used to encrypt your certificates in the repo
         run: |
-          openssl pkcs12 -export \
-            -inkey ios_signing.key \
-            -in ios_cert.pem \
-            -out ios_cert.p12 \
-            -password pass:Infy17cre@t
+          fastlane match appstore --team_id NPXC63W394 --readonly
 
-      # 10. Install Certificate in Keychain
-      - name: Install Certificate
-        run: |
-          security create-keychain -p "" build.keychain
-          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@t" -T /usr/bin/codesign
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+      # 7. Build Ionic App
+      - name: Build Angular/Ionic
+        run: npm run build
 
-      # 11. Build Ionic Capacitor iOS
-      - name: Build Ionic iOS App
-        run: |
-          npm run build
-          npx cap sync ios
+      # 8. Sync Capacitor
+      - name: Capacitor Sync iOS
+        run: npx cap sync ios
 
-      # 12. Archive iOS App with manual signing
+      # 9. Build & Archive iOS App
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -83,11 +57,9 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
-            PROVISIONING_PROFILE_SPECIFIER="$UUID" \
-            CODE_SIGN_STYLE=Manual \
-            clean archive
+            CODE_SIGN_STYLE=Manual clean archive
 
-      # 13. Export signed IPA
+      # 10. Export signed IPA
       - name: Export IPA
         run: |
           xcodebuild -exportArchive \
@@ -95,7 +67,7 @@ jobs:
             -exportOptionsPlist ios/App/exportOptions.plist \
             -exportPath ios/App/output
 
-      # 14. Upload IPA artifact
+      # 11. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
