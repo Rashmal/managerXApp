@@ -1,4 +1,4 @@
-name: Convert Apple Cert to P12
+name: Convert Apple Cert to P12g
 
 on:
   workflow_dispatch:
