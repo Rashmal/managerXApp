@@ -76,30 +76,30 @@ jobs:
           npx cap sync ios
 
       # 12. Archive iOS App (manual signing)
-      - name: Archive iOS App
-        run: |
-          cd ios/ManagerXApp
-          xcodebuild -workspace ManagerXApp.xcworkspace \
-            -scheme ManagerXApp \
-            -configuration Release \
-            -archivePath $PWD/build/ManagerXApp.xcarchive \
-            DEVELOPMENT_TEAM=NPXC63W394 \
-            CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE="$PROFILE_UUID" \
-            clean archive
+    - name: Archive iOS App
+      run: |
+        cd ios/App  # <- keep the actual folder path
+        xcodebuild -workspace ManagerXApp.xcworkspace \
+          -scheme ManagerXApp \
+          -configuration Release \
+          -archivePath $PWD/build/ManagerXApp.xcarchive \
+          DEVELOPMENT_TEAM=NPXC63W394 \
+          CODE_SIGN_STYLE=Manual \
+          PROVISIONING_PROFILE="$PROFILE_UUID" \
+          clean archive
 
-      # 13. Export IPA
-      - name: Export IPA
-        run: |
-          cd ios/ManagerXApp
-          xcodebuild -exportArchive \
-            -archivePath build/ManagerXApp.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath output
+    # 13. Export IPA
+    - name: Export IPA
+      run: |
+        cd ios/App  # <- keep the actual folder path
+        xcodebuild -exportArchive \
+          -archivePath build/ManagerXApp.xcarchive \
+          -exportOptionsPlist exportOptions.plist \
+          -exportPath output
 
-      # 14. Upload IPA
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-ipa
-          path: ios/ManagerXApp/output/*.ipa
+    # 14. Upload IPA
+    - name: Upload IPA
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-ipa
+        path: ios/App/output/*.ipa
