@@ -1,0 +1,17 @@
+name: Upload iOS Signing Key
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-key:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Upload iOS Signing Key
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-csr
+          path: ios_signing.key
