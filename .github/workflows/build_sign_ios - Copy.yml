@@ -31,9 +31,9 @@ jobs:
       # 5. Add Provisioning Profile
       - name: Add Provisioning Profile
         run: |
-          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > ManagerXApp.mobileprovision
+          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp ManagerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
       # 6. Save Signing Key
       - name: Save Signing Key
@@ -47,7 +47,7 @@ jobs:
       - name: Convert CER to PEM
         run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
 
-      # 9. Export .p12 (Distribution)
+      # 9. Export P12
       - name: Export P12
         run: |
           openssl pkcs12 -export \
@@ -60,22 +60,23 @@ jobs:
       - name: Install Certificate
         run: |
           security create-keychain -p "" build.keychain
-          security import ios_cert.p12 \
-            -k ~/Library/Keychains/build.keychain \
-            -P "Infy17cre@t" \
-            -T /usr/bin/codesign
+          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@t" -T /usr/bin/codesign
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      # 11. Build Ionic iOS App
+      # 11. Install Fastlane
+      - name: Install Fastlane
+        run: sudo gem install fastlane -v 2.228.0
+
+      # 12. Build Ionic iOS App
       - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 12. Archive iOS App (Distribution)
+      # 13. Archive iOS App (manual signing for App target only)
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -84,12 +85,10 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
-            PROVISIONING_PROFILE_SPECIFIER="ManagerXApp" \
             CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution: Your Name (NPXC63W394)" \
             clean archive
 
-      # 13. Export signed IPA
+      # 14. Export signed IPA
       - name: Export IPA
         run: |
           cd ios/App
@@ -98,7 +97,7 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -exportPath output
 
-      # 14. Upload IPA artifact
+      # 15. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
