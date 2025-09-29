@@ -6,8 +6,14 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
+
     env:
-      CERT_PASSWORD: "Rashmal@1993"  # hardcoded for workflow, can use secret
+      APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+      APP_SCHEME: ${{ secrets.APP_SCHEME }}
+      APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
+
     steps:
       # 1. Checkout repo
       - name: Checkout repo
@@ -19,11 +25,11 @@ jobs:
         with:
           node-version: 20
 
-      # 3. Install dependencies
+      # 3. Install npm dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20 (if needed)
+      # 4. Patch PrimeNG if Angular 20 (optional)
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
@@ -35,58 +41,50 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 6. Generate private key and CSR
-      - name: Generate Key & CSR
-        run: |
-          mkdir -p ios/certs
-          openssl genrsa -out ios/certs/ios.key 2048
-          openssl req -new -key ios/certs/ios.key -out ios/certs/ios.csr -subj "/CN=Your Name/C=US"
+      # 6. Install fastlane
+      - name: Install Fastlane
+        run: sudo gem install fastlane
 
-      # 7. Download certificate from Apple via API
-      - name: Download iOS Distribution Certificate
+      # 7. Match / Generate certificates & provisioning profiles via App Store Connect API
+      - name: Generate signing credentials
         run: |
-          # Requires fastlane + App Store Connect API key stored as secrets
-          gem install fastlane
-          fastlane spaceauth -u ${{ secrets.APPLE_ID }} # first-time auth
-          fastlane cert:create \
-            --csr_path ios/certs/ios.csr \
-            --output_path ios/certs/ios_distribution.cer \
-            --type ios_distribution \
-            --api_key_path ./AuthKey_ABC123XYZ.json  # your App Store Connect API Key
+          echo "$APP_STORE_CONNECT_KEY" > AuthKey.p8
+          fastlane match development \
+            --type ios \
+            --readonly false \
+            --app_identifier $APP_IDENTIFIER \
+            --username YOUR_APPLE_ID_EMAIL \
+            --api_key_path AuthKey.p8 \
+            --api_key_id $APP_STORE_CONNECT_KEY_ID \
+            --api_issuer_id $APP_STORE_CONNECT_ISSUER_ID
+          fastlane match appstore \
+            --type ios \
+            --readonly false \
+            --app_identifier $APP_IDENTIFIER \
+            --username YOUR_APPLE_ID_EMAIL \
+            --api_key_path AuthKey.p8 \
+            --api_key_id $APP_STORE_CONNECT_KEY_ID \
+            --api_issuer_id $APP_STORE_CONNECT_ISSUER_ID
 
-      # 8. Create .p12 from .cer + key
-      - name: Create .p12
-        run: |
-          openssl pkcs12 -export -out ios/certs/ios_distribution.p12 -inkey ios/certs/ios.key -in ios/certs/ios_distribution.cer -password pass:$CERT_PASSWORD
-
-      # 9. Setup temporary keychain and import .p12
-      - name: Import .p12 into Keychain
-        run: |
-          security create-keychain -p "" build.keychain
-          security import ios/certs/ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
-
-      # 10. Install provisioning profile
-      - name: Install provisioning profile
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.IOS_MOBILEPROVISION_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
-
-      # 11. Build and archive with Xcode
+      # 8. Build and archive with Xcode
       - name: Build with Xcode
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme "${{ secrets.APP_SCHEME }}" -sdk iphoneos -configuration Release archive -archivePath $PWD/build/App.xcarchive
+          xcodebuild -workspace App.xcworkspace \
+                     -scheme $APP_SCHEME \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     archive -archivePath $PWD/build/App.xcarchive
 
-      # 12. Export IPA
+      # 9. Export IPA
       - name: Export IPA
         run: |
-          xcodebuild -exportArchive -archivePath ios/App/build/App.xcarchive -exportOptionsPlist ios/App/exportOptions.plist -exportPath output
+          xcodebuild -exportArchive \
+                     -archivePath ios/App/build/App.xcarchive \
+                     -exportOptionsPlist ios/App/exportOptions.plist \
+                     -exportPath output
 
-      # 13. Upload IPA
+      # 10. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
