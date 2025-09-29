@@ -8,27 +8,33 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      # 1. Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # 2. Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3. Install npm dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
+      # 4. Patch PrimeNG for Angular 20 (if needed)
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
+      # 5. Build Ionic project for iOS
       - name: Build Ionic iOS
         run: |
           npm run build
           npx cap sync ios
 
+      # 6. Setup Ruby & Fastlane
       - name: Setup Ruby & Fastlane
         uses: ruby/setup-ruby@v1
         with:
@@ -38,11 +44,13 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane -v 2.228.0
 
+      # 7. Setup App Store Connect API key
       - name: Setup API Key
         run: echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > AuthKey.p8
         env:
           APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
 
+      # 8. Build & Sign iOS using Fastlane
       - name: Build & Sign iOS with API key
         run: |
           fastlane run build_ios_app \
@@ -51,6 +59,7 @@ jobs:
             export_method: "app-store" \
             api_key_path: "AuthKey.p8"
 
+      # 9. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
