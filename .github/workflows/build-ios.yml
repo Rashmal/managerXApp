@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       # 2. Setup Node.js
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -37,9 +37,9 @@ jobs:
       # 6. Decode and install .p12 certificate
       - name: Decode .p12 certificate
         run: |
-          echo "${{ secrets.APPLE_CERTIFICATE_P12 }}" | base64 --decode > ios_distribution.p12
+          echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
           security create-keychain -p "" build.keychain
-          security import ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
+          security import ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.IOS_P12_PASSWORD }}" -T /usr/bin/codesign
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
@@ -49,7 +49,7 @@ jobs:
       - name: Install provisioning profile
         run: |
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+          echo "${{ secrets.IOS_MOBILEPROVISION_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
 
       # 8. Build and archive with Xcode
       - name: Build with Xcode
