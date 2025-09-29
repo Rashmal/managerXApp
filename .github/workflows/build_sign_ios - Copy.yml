@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20
+      # 4. Patch PrimeNG for Angular 20 (if needed)
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
@@ -54,7 +54,7 @@ jobs:
       - name: Convert CER to PEM
         run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
 
-      # 9. Export .p12
+      # 9. Export .p12 (self-contained, no match needed)
       - name: Export P12
         run: |
           openssl pkcs12 -export \
@@ -77,6 +77,7 @@ jobs:
       - name: Install Fastlane
         run: sudo gem install fastlane -v 2.228.0
 
+<<<<<<< HEAD
       # 12. (Optional) Match App Store Certificates
       - name: Match App Store Certificates
         env:
@@ -90,12 +91,15 @@ jobs:
             --verbose
 
       # 13. Build Ionic iOS App
+=======
+      # 12. Build Ionic iOS App
+>>>>>>> 2b0a056d52b239440fa2fc84c6647d6c21f01261
       - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 14. Archive with Xcode (manual signing)
+      # 13. Archive iOS App (manual signing)
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -108,7 +112,7 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             clean archive
 
-      # 15. Export signed IPA
+      # 14. Export signed IPA
       - name: Export IPA
         run: |
           cd ios/App
@@ -117,7 +121,7 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -exportPath output
 
-      # 16. Upload IPA artifact
+      # 15. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
