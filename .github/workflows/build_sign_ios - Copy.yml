@@ -29,40 +29,77 @@ jobs:
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
       # 5. Add Provisioning Profile
-- name: Add Provisioning Profile
-  run: |
-    echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > ManagerXApp.mobileprovision
-    mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-    cp ManagerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-    # Extract UUID
-    PROFILE_UUID=$(security cms -D -i ManagerXApp.mobileprovision | plutil -extract UUID xml1 -o - - | xmllint --xpath 'string(//string)' -)
-    echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
+      - name: Add Provisioning Profile
+        run: |
+          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > ManagerXApp.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp ManagerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          # Extract UUID for CI
+          PROFILE_UUID=$(security cms -D -i ManagerXApp.mobileprovision | plutil -extract UUID xml1 -o - - | xmllint --xpath 'string(//string)' -)
+          echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
 
-# 12. Archive iOS App
-- name: Archive iOS App
-  run: |
-    cd ios/ManagerXApp
-    xcodebuild -workspace ManagerXApp.xcworkspace \
-      -scheme ManagerXApp \
-      -configuration Release \
-      -archivePath $PWD/build/ManagerXApp.xcarchive \
-      DEVELOPMENT_TEAM=NPXC63W394 \
-      CODE_SIGN_STYLE=Manual \
-      PROVISIONING_PROFILE="$PROFILE_UUID" \
-      clean archive
+      # 6. Save Signing Key
+      - name: Save Signing Key
+        run: echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
 
-# 13. Export IPA
-- name: Export IPA
-  run: |
-    cd ios/ManagerXApp
-    xcodebuild -exportArchive \
-      -archivePath build/ManagerXApp.xcarchive \
-      -exportOptionsPlist exportOptions.plist \
-      -exportPath output
+      # 7. Save Apple Certificate
+      - name: Save Apple Certificate
+        run: echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
 
-# 14. Upload IPA
-- name: Upload IPA
-  uses: actions/upload-artifact@v4
-  with:
-    name: ios-ipa
-    path: ios/ManagerXApp/output/*.ipa
+      # 8. Convert CER to PEM
+      - name: Convert CER to PEM
+        run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
+
+      # 9. Export P12
+      - name: Export P12
+        run: |
+          openssl pkcs12 -export \
+            -inkey ios_signing.key \
+            -in ios_cert.pem \
+            -out ios_cert.p12 \
+            -password pass:Infy17cre@
+
+      # 10. Install Certificate in Keychain
+      - name: Install Certificate
+        run: |
+          security create-keychain -p "" build.keychain
+          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@" -T /usr/bin/codesign
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security default-keychain -s ~/Library/Keychains/build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+
+      # 11. Build Ionic App
+      - name: Build Ionic iOS App
+        run: |
+          npm run build
+          npx cap sync ios
+
+      # 12. Archive iOS App (manual signing)
+      - name: Archive iOS App
+        run: |
+          cd ios/ManagerXApp
+          xcodebuild -workspace ManagerXApp.xcworkspace \
+            -scheme ManagerXApp \
+            -configuration Release \
+            -archivePath $PWD/build/ManagerXApp.xcarchive \
+            DEVELOPMENT_TEAM=NPXC63W394 \
+            CODE_SIGN_STYLE=Manual \
+            PROVISIONING_PROFILE="$PROFILE_UUID" \
+            clean archive
+
+      # 13. Export IPA
+      - name: Export IPA
+        run: |
+          cd ios/ManagerXApp
+          xcodebuild -exportArchive \
+            -archivePath build/ManagerXApp.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath output
+
+      # 14. Upload IPA
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: ios/ManagerXApp/output/*.ipa
