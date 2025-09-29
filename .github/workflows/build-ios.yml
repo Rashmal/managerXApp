@@ -41,11 +41,11 @@ jobs:
           cd ios/App
           pod install
 
-      # 7. Detect workspace correctly
+      # 7. Detect actual .xcworkspace
       - name: Detect workspace
         run: |
-          # Find the actual .xcworkspace directory (not internal files)
-          WORKSPACE=$(find ios/App -name "*.xcworkspace" -type d | head -n 1)
+          # Look only at top-level directories under ios/App
+          WORKSPACE=$(find ios/App -maxdepth 1 -name "*.xcworkspace" -type d | head -n 1)
           if [ -z "$WORKSPACE" ]; then
             echo "Error: .xcworkspace not found"
             exit 1
