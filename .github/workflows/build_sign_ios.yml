@@ -9,8 +9,6 @@ jobs:
   # -------------------------------
   generate-p12:
     runs-on: ubuntu-latest
-    outputs:
-      p12-path: ios_cert.p12
     steps:
       - uses: actions/checkout@v4
 
@@ -26,14 +24,14 @@ jobs:
       - name: Convert CER to PEM
         run: openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
 
-      # 4. Export .p12 with password from secret
+      # 4. Export .p12 with hardcoded password
       - name: Export P12
         run: |
           openssl pkcs12 -export \
             -inkey ios_signing.key \
             -in ios_cert.pem \
             -out ios_cert.p12 \
-            -password pass:${{ secrets.P12_PASSWORD }}
+            -password pass:Infy17cre@t
 
       # 5. Upload .p12 as artifact
       - name: Upload P12 artifact
@@ -69,7 +67,7 @@ jobs:
       - name: Install Certificate
         run: |
           security create-keychain -p "" build.keychain
-          security import ios-p12/ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.P12_PASSWORD }}" -T /usr/bin/codesign
+          security import ios-p12/ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@t" -T /usr/bin/codesign
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
