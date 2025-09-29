@@ -1,0 +1,25 @@
+name: Generate iOS CSR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-csr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate private key
+        run: |
+          openssl genrsa -out ios_signing.key 2048
+
+      - name: Generate CSR
+        run: |
+          openssl req -new -key ios_signing.key -out ios_signing.csr -subj "/CN=Rashmal iOS App/O=YourCompany/C=US"
+
+      - name: Upload CSR & Key
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-csr
+          path: |
+            ios_signing.csr
+            ios_signing.key
