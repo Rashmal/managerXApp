@@ -1,0 +1,20 @@
+- name: Convert Apple Cert to P12
+  run: |
+    # Save private key
+    echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
+    
+    # Decode Apple certificate
+    echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
+    
+    # Convert to PEM
+    openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
+    
+    # Export to P12
+    openssl pkcs12 -export \
+      -inkey ios_signing.key \
+      -in ios_cert.pem \
+      -out ios_cert.p12 \
+      -password pass:${{ secrets.P12_PASSWORD }}
+    
+    # Encode .p12 to Base64 and optionally create a secret
+    base64 ios_cert.p12 > ios_cert.p12.b64
