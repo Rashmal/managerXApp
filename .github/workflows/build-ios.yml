@@ -22,15 +22,21 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Build Ionic project
+      # 4. Patch PrimeNG for Angular 20
+      - name: Patch PrimeNG
+        run: |
+          sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
+          sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
+
+      # 5. Build Ionic project
       - name: Build Ionic project
         run: npm run build
 
-      # 5. Sync Capacitor iOS project
+      # 6. Sync Capacitor iOS project
       - name: Sync Capacitor iOS
         run: npx cap sync ios
 
-      # 6. Decode and install .p12 certificate
+      # 7. Decode and install .p12 certificate
       - name: Install .p12 certificate
         run: |
           echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
@@ -41,17 +47,17 @@ jobs:
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      # 7. Install provisioning profile
+      # 8. Install provisioning profile
       - name: Install provisioning profile
         run: |
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.IOS_MOBILEPROVISION_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
 
-      # 8. Decode App Store Connect API key
+      # 9. Decode App Store Connect API key
       - name: Setup App Store Connect API key
         run: echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > AuthKey.p8
 
-      # 9. Build iOS with Fastlane
+      # 10. Build iOS with Fastlane
       - name: Build iOS with Fastlane
         run: |
           fastlane run build_ios_app \
@@ -60,7 +66,7 @@ jobs:
             export_method:"app-store" \
             api_key_path:"AuthKey.p8"
 
-      # 10. Upload IPA artifact
+      # 11. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
