@@ -73,7 +73,13 @@ jobs:
           npm run build
           npx cap sync ios
           cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release archive -archivePath $PWD/build/App.xcarchive
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -archivePath $PWD/build/App.xcarchive \
+            DEVELOPMENT_TEAM=NPXC63W394 \
+            CODE_SIGN_STYLE=Manual \
+            clean archive
 
       # 12. Export signed IPA
       - name: Export IPA
