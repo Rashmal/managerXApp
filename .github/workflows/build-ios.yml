@@ -8,65 +8,49 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # 1. Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3. Install npm dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Build Ionic project
-      - name: Build Ionic project
-        run: npm run build
-
-      # 6. Sync Capacitor iOS project
-      - name: Sync Capacitor iOS
-        run: npx cap sync ios
-
-      # 7. Decode and install .p12 certificate
-      - name: Install .p12 certificate
+      - name: Build Ionic iOS
         run: |
-          echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ios_distribution.p12
-          security create-keychain -p "" build.keychain
-          security import ios_distribution.p12 -k ~/Library/Keychains/build.keychain -P "${{ secrets.IOS_P12_PASSWORD }}" -T /usr/bin/codesign
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+          npm run build
+          npx cap sync ios
 
-      # 8. Install provisioning profile
-      - name: Install provisioning profile
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.IOS_MOBILEPROVISION_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+      - name: Setup Ruby & Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
 
-      # 9. Decode App Store Connect API key
-      - name: Setup App Store Connect API key
+      - name: Install Fastlane
+        run: gem install fastlane -v 2.228.0
+
+      - name: Setup API Key
         run: echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > AuthKey.p8
+        env:
+          APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
 
-      # 10. Build iOS with Fastlane
-      - name: Build iOS with Fastlane
+      - name: Build & Sign iOS with API key
         run: |
           fastlane run build_ios_app \
-            workspace:"ios/App/App.xcworkspace" \
-            scheme:"${{ secrets.APP_SCHEME }}" \
-            export_method:"app-store" \
-            api_key_path:"AuthKey.p8"
+            workspace: "ios/App/App.xcworkspace" \
+            scheme: "${{ secrets.APP_SCHEME }}" \
+            export_method: "app-store" \
+            api_key_path: "AuthKey.p8"
 
-      # 11. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
