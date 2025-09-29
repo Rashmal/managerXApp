@@ -75,12 +75,18 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 12. Archive iOS App (manual signing)
+      # 🔍 12. List available Xcode schemes (to confirm real scheme name)
+      - name: List Xcode Schemes
+        run: |
+          cd ios/App
+          xcodebuild -list -workspace App.xcworkspace
+
+      # 13. Archive iOS App (manual signing)
       - name: Archive iOS App
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace \   # <- FIXED
-            -scheme ManagerXApp \                   # <- keep scheme as ManagerXApp
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \   # 👈 replace with actual scheme after checking above step
             -configuration Release \
             -archivePath $PWD/build/ManagerXApp.xcarchive \
             DEVELOPMENT_TEAM=NPXC63W394 \
@@ -88,7 +94,7 @@ jobs:
             PROVISIONING_PROFILE="$PROFILE_UUID" \
             clean archive
 
-      # 13. Export IPA
+      # 14. Export IPA
       - name: Export IPA
         run: |
           cd ios/App
@@ -97,7 +103,7 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -exportPath output
 
-      # 14. Upload IPA
+      # 15. Upload IPA
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
