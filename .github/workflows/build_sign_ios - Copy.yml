@@ -1,4 +1,4 @@
-name: Build & Sign iOS App 22
+name: Build & Sign iOS App l1
 
 on:
   workflow_dispatch:
@@ -6,6 +6,11 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
+    env:
+      TEAM_ID: NPXC63W394
+      PROVISIONING_PROFILE_NAME: managerXApp
+      P12_PASSWORD: Infy17cre@t
+
     steps:
       # 1. Checkout repo
       - name: Checkout repo
@@ -19,36 +24,50 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
-      # 4. Patch PrimeNG for Angular 20
+      # 4. Patch PrimeNG dynamicdialog-injector for Angular 20
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Install Ruby and Fastlane
-      - name: Install Fastlane
+      # 5. Add Provisioning Profile
+      - name: Add Provisioning Profile
         run: |
-          brew install ruby
-          gem install fastlane -NV
+          echo "${{ secrets.APPLE_PROVISION_PROFILE }}" | base64 -d > managerXApp.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      # 6. Setup Fastlane Match (fetch provisioning profile + certificate)
-      - name: Setup Signing (Fastlane Match)
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # password used to encrypt your certificates in the repo
+      # 6. Save Signing Key & Certificate
+      - name: Setup Signing Credentials
         run: |
-          fastlane match appstore --team_id NPXC63W394 --readonly
+          echo "${{ secrets.APPLE_SIGNING_KEY }}" > ios_signing.key
+          echo "${{ secrets.APPLE_CERT_BASE64 }}" | base64 -d > ios_cert.cer
+          openssl x509 -in ios_cert.cer -inform DER -out ios_cert.pem -outform PEM
+          openssl pkcs12 -export \
+            -inkey ios_signing.key \
+            -in ios_cert.pem \
+            -out ios_cert.p12 \
+            -password pass:$P12_PASSWORD
 
-      # 7. Build Ionic App
-      - name: Build Angular/Ionic
-        run: npm run build
+      # 7. Install Certificate in Keychain
+      - name: Install Certificate
+        run: |
+          security create-keychain -p "" build.keychain
+          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security default-keychain -s ~/Library/Keychains/build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      # 8. Sync Capacitor
-      - name: Capacitor Sync iOS
-        run: npx cap sync ios
+      # 8. Build Ionic Capacitor iOS
+      - name: Build Ionic App
+        run: |
+          npm run build
+          npx cap sync ios
 
-      # 9. Build & Archive iOS App
+      # 9. Archive with Xcode (manual signing)
       - name: Archive iOS App
         run: |
           cd ios/App
@@ -56,16 +75,19 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
-            DEVELOPMENT_TEAM=NPXC63W394 \
-            CODE_SIGN_STYLE=Manual clean archive
+            DEVELOPMENT_TEAM=$TEAM_ID \
+            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME" \
+            CODE_SIGN_STYLE=Manual \
+            clean archive
 
       # 10. Export signed IPA
       - name: Export IPA
         run: |
+          cd ios/App
           xcodebuild -exportArchive \
-            -archivePath ios/App/build/App.xcarchive \
-            -exportOptionsPlist ios/App/exportOptions.plist \
-            -exportPath ios/App/output
+            -archivePath build/App.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath output
 
       # 11. Upload IPA artifact
       - name: Upload IPA
