@@ -1,4 +1,4 @@
-name: Build & Sign iOS App Final
+name: Build & Sign iOS App New
 
 on:
   workflow_dispatch:
@@ -6,6 +6,7 @@ on:
 jobs:
   build-ios:
     runs-on: macos-latest
+
     steps:
       # 1. Checkout repo
       - name: Checkout repo
@@ -27,29 +28,31 @@ jobs:
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts
 
-      # 5. Copy Provisioning Profile from repo
-      - name: Add Provisioning Profile
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp ios/certs/managerXApp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+      # 5. Setup Ruby & Fastlane
+      - name: Setup Ruby & Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
 
-      # 6. Install Certificate in Keychain
-      - name: Install Certificate
+      # 6. Decrypt certificates using Match
+      - name: Match App Store Certificates
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: |
-          security create-keychain -p "" build.keychain
-          security import ios/certs/ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Infy17cre@t" -T /usr/bin/codesign
-          security list-keychains -s ~/Library/Keychains/build.keychain
-          security default-keychain -s ~/Library/Keychains/build.keychain
-          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+          bundle exec fastlane match appstore \
+            --git_url https://github.com/Rashmal/managerXApp.git \
+            --app_identifier com.yourcompany.managerXApp \
+            --team_id NPXC63W394 \
+            --verbose
 
-      # 7. Build Ionic iOS App
+      # 7. Build Ionic Capacitor iOS
       - name: Build Ionic iOS App
         run: |
           npm run build
           npx cap sync ios
 
-      # 8. Archive with Xcode (manual signing)
+      # 8. Archive with Xcode (manual signing, team ID hardcoded)
       - name: Archive iOS App
         run: |
           cd ios/App
