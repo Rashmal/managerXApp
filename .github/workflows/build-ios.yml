@@ -84,7 +84,7 @@ jobs:
       - name: Build & Sign iOS
         run: |
           fastlane run build_ios_app \
-            workspace: "$WORKSPACE" \
+            workspace: "ios/App/App.xcworkspace" \
             scheme: "App" \
             export_method: "app-store" \
             api_key_path: "AuthKey.p8"
