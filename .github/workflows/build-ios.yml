@@ -8,33 +8,27 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # 1. Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG if needed
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
 
-      # 5. Build Ionic and sync iOS
-      - name: Build Ionic iOS
+      - name: Build Ionic & sync iOS
         run: |
           npm run build
           npx cap sync ios
 
-      # 6. Install CocoaPods
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
@@ -42,7 +36,6 @@ jobs:
           pod repo update
           pod install --verbose
 
-      # 7. Detect workspace
       - name: Detect workspace
         run: |
           WORKSPACE=$(find ios/App -maxdepth 1 -name "*.xcworkspace" -type d | head -n 1)
@@ -53,7 +46,6 @@ jobs:
           echo "Workspace detected: $WORKSPACE"
           echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
 
-      # 8. Setup Ruby & Fastlane
       - name: Setup Ruby & Fastlane
         uses: ruby/setup-ruby@v1
         with:
@@ -63,39 +55,50 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane -v 2.228.0
 
-      # 9. Decode iOS signing files
-      - name: Decode iOS Certificates
+      - name: Setup iOS Signing
         run: |
+          # Import .p12 certificate
           echo "${IOS_P12_BASE64}" | base64 --decode > ios_cert.p12
+          security create-keychain -p "" build.keychain
+          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "${IOS_P12_PASSWORD}" -T /usr/bin/codesign
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security default-keychain -s ~/Library/Keychains/build.keychain
+          security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+
+          # Install provisioning profile
           echo "${IOS_MOBILEPROVISION_BASE64}" | base64 --decode > ios_profile.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp ios_profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
         env:
+          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
           IOS_P12_BASE64: ${{ secrets.IOS_P12_BASE64 }}
           IOS_MOBILEPROVISION_BASE64: ${{ secrets.IOS_MOBILEPROVISION_BASE64 }}
 
-      # 10. Decode App Store Connect API key
-      - name: Setup API Key
+      - name: Setup App Store Connect API Key
         run: |
           echo "${APP_STORE_CONNECT_API_KEY_BASE64}" | base64 --decode > AuthKey.p8
         env:
           APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
 
-      # 11. Build & sign iOS with Fastlane
-      - name: Build & Sign iOS
+      - name: Build & Sign iOS App
         run: |
           mkdir -p build/ios
           fastlane run build_ios_app \
             workspace:"ios/App/App.xcworkspace" \
-            scheme:"${{ secrets.APP_SCHEME }}" \
+            scheme:"App" \
             export_method:"app-store" \
             output_directory:"build/ios" \
-            api_key_path:"AuthKey.p8" \
             xcargs:"DEVELOPMENT_TEAM=NPXC63W394" \
-            export_options:"provisioningProfiles={\"${{ secrets.APP_IDENTIFIER }}\":\"ios_profile.mobileprovision\"}"
-        env:
-          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
+            export_options:"provisioningProfiles={\"com.managerxpro\":\"ios_profile.mobileprovision\"}"
 
-      # 12. Upload IPA artifact
-      - name: Upload IPA
+      - name: Upload IPA to App Store Connect
+        run: |
+          fastlane pilot upload \
+            ipa:"build/ios/App.ipa" \
+            skip_submission:true \
+            api_key_path:"AuthKey.p8"
+
+      - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
           name: iOS-IPA
