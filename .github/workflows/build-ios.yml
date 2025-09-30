@@ -21,7 +21,7 @@ jobs:
       # 3. Install npm dependencies
       - name: Install dependencies
         # Use a safe install command
-        run: npm ci
+        run: npm ci --legacy-peer-deps 
 
       # 4. Patch PrimeNG (if needed)
       # Note: This is a direct port of your original 'sed' command for macOS runners.
