@@ -82,12 +82,7 @@ jobs:
 
       # 11. Build & sign iOS
       - name: Build & Sign iOS
-        run: |
-          fastlane run build_ios_app \
-            workspace: "ios/App/App.xcworkspace" \
-            scheme: "App" \
-            export_method: "app-store" \
-            api_key_path: "AuthKey.p8"
+        run: fastlane run build_ios_app workspace:"ios/App/App.xcworkspace" scheme:"App" export_method:"app-store" api_key_path:"AuthKey.p8"
 
       # 12. Upload IPA artifact
       - name: Upload IPA
