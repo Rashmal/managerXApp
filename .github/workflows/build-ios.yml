@@ -106,11 +106,11 @@ jobs:
       - name: Set Development Team ID
         run: fastlane run update_project_team path:"ios/App/App.xcodeproj" targets:App teamid:"NPXC63W394"
 
-      # 14. Set Manual Code Signing Settings <--- FINAL FIX FOR SIGNING STYLE
+      # 14. Set Manual Code Signing Settings 
       - name: Set Manual Code Signing
         run: fastlane run update_code_signing_settings targets:App path:"ios/App/App.xcodeproj" code_sign_identity:Apple Distribution use_automatic_signing:false team_id:NPXC63W394 profile_name:"match AppStore com.managerxpro"
 
-      # 15. Build & sign iOS IPA
+      # 15. Build & sign iOS IPA <--- FIX: Added suppress_xcode_output and clean
       - name: Build & Sign iOS
         run: |
           mkdir -p build/ios
@@ -118,7 +118,9 @@ jobs:
             workspace:"${{ env.WORKSPACE_PATH }}" \
             scheme:"App" \
             export_method:"app-store" \
-            output_directory:"build/ios"
+            output_directory:"build/ios" \
+            suppress_xcode_output:true \
+            clean:true
 
       # 16. Upload IPA artifact
       - name: Upload IPA
