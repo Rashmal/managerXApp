@@ -90,7 +90,7 @@ jobs:
             scheme:"App" \
             export_method:"app-store" \
             output_directory:"build/ios" \
-            export_team_id:"NPXC63W394"
+            xcargs:"DEVELOPMENT_TEAM=NPXC63W394"
 
       # 12. Upload IPA artifact
       - name: Upload IPA
