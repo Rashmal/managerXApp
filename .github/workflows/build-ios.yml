@@ -1,4 +1,4 @@
-name: Build & Sign iOS App
+name: Build & Deploy iOS App
 
 on:
   workflow_dispatch:
@@ -12,37 +12,25 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
+      # 2. Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3. Install npm dependencies
+      # 3. Install dependencies
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install
 
-      # 4. Patch PrimeNG (if needed)
-      - name: Patch PrimeNG
-        run: |
-          sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
-          sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
-
-      # 5. Build Ionic and sync iOS
+      # 4. Build Ionic iOS
       - name: Build Ionic iOS
-        run: |
-          npm run build
-          npx cap sync ios
+        run: npx ionic build --prod
 
-      # 6. Install CocoaPods and generate valid workspace
-      - name: Install CocoaPods
-        run: |
-          sudo gem install cocoapods
-          cd ios/App
-          pod repo update
-          pod install --verbose
+      # 5. Capacitor copy iOS
+      - name: Sync Capacitor iOS
+        run: npx cap sync ios
 
-      # 7. Detect actual .xcworkspace
+      # 6. Detect .xcworkspace
       - name: Detect workspace
         run: |
           WORKSPACE=$(find ios/App -maxdepth 1 -name "*.xcworkspace" -type d | head -n 1)
@@ -53,40 +41,29 @@ jobs:
           echo "Workspace detected: $WORKSPACE"
           echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
 
-      # 8. Verify workspace has the App scheme
-      - name: Verify workspace scheme
+      # 7. Install fastlane
+      - name: Install fastlane
+        run: gem install fastlane --no-document
+
+      # 8. Decode AuthKey.p8 from GitHub Secret
+      - name: Decode AuthKey.p8
         run: |
-          cd ios/App
-          SCHEME="App"  # Hardcoded scheme
-          if ! xcodebuild -list -workspace "$(basename $WORKSPACE)" | grep -q "$SCHEME"; then
-            echo "Error: Scheme '$SCHEME' not found in workspace"
-            exit 1
-          fi
-          echo "Scheme '$SCHEME' verified"
-
-      # 9. Setup Ruby & Fastlane
-      - name: Setup Ruby & Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2
-          bundler-cache: true
-
-      - name: Install Fastlane
-        run: gem install fastlane -v 2.228.0
-
-      # 10. Setup App Store Connect API key
-      - name: Setup API Key
-        run: echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > AuthKey.p8
+          echo "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 --decode > AuthKey.p8
+        shell: bash
         env:
-          APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
+          APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
 
-      # 11. Build & sign iOS
+      # 9. Build & Sign iOS
       - name: Build & Sign iOS
-        run: fastlane run build_ios_app workspace:"ios/App/App.xcworkspace" scheme:"App" export_method:"app-store" api_key_path:"AuthKey.p8"
+        run: |
+          fastlane run build_ios_app \
+            workspace:"$WORKSPACE" \
+            scheme:"App" \
+            export_method:"app-store" \
+            api_key_path:"AuthKey.p8"
 
-      # 12. Upload IPA artifact
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: iOS-IPA
-          path: ios/App/output/*.ipa
+      # 10. Upload to TestFlight
+      - name: Upload to TestFlight
+        run: |
+          fastlane run upload_to_testflight \
+            api_key_path:"AuthKey.p8"
