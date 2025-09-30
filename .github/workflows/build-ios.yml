@@ -120,7 +120,8 @@ jobs:
             export_method:"app-store" \
             output_directory:"build/ios" \
             suppress_xcode_output:true \
-            clean:true
+            clean:true \
+            skip_package_dependencies_resolution:true # <-- ADD THIS LINE
 
       # 16. Upload IPA artifact
       - name: Upload IPA
