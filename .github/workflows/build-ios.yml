@@ -104,7 +104,7 @@ jobs:
           # Hardcoded Match Password
           MATCH_PASSWORD: Rashmal@1993 
           
-      # 13. Update Xcode Project Team ID (Hardcoded)
+      # 13. Update Xcode Project Team ID <--- CORRECTED: Single run command
       - name: Set Development Team ID
         run: |
           fastlane run update_project_team \
