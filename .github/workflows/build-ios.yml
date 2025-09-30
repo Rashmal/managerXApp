@@ -66,21 +66,20 @@ jobs:
       # 9. Decode iOS signing files
       - name: Decode iOS Certificates
         run: |
-          echo "${IOS_P12_BASE64}" | base64 --decode > ios_cert.p12
+          echo "${IOS_P12_BASE64}" | tr -d '\r' | base64 --decode > ios_cert.p12
           echo "${IOS_MOBILEPROVISION_BASE64}" | base64 --decode > ios_profile.mobileprovision
         env:
           IOS_P12_BASE64: ${{ secrets.IOS_P12_BASE64 }}
           IOS_MOBILEPROVISION_BASE64: ${{ secrets.IOS_MOBILEPROVISION_BASE64 }}
 
-      # 10. Import .p12 into keychain
+      # 10. Import .p12 into keychain (password hardcoded)
       - name: Import iOS Certificate
         run: |
           security create-keychain -p "" build.keychain
-          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "$IOS_P12_PASSWORD" -T /usr/bin/codesign
+          security import ios_cert.p12 -k ~/Library/Keychains/build.keychain -P "Rashmal@1993" -T /usr/bin/codesign -A
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
-        env:
-          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
+          security set-keychain-settings -t 3600 -l ~/Library/Keychains/build.keychain
 
       # 11. Decode App Store Connect API key
       - name: Setup API Key
@@ -93,20 +92,20 @@ jobs:
       - name: Create export options plist
         run: |
           cat > export_options.plist <<EOL
-            <?xml version="1.0" encoding="UTF-8"?>
-            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-            <plist version="1.0">
-            <dict>
-                <key>method</key>
-                <string>app-store</string>
-                <key>provisioningProfiles</key>
-                <dict>
-                    <key>com.managerxpro</key>
-                    <string>ios_profile.mobileprovision</string>
-                </dict>
-            </dict>
-            </plist>
-            EOL
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.managerxpro</key>
+        <string>ios_profile.mobileprovision</string>
+    </dict>
+</dict>
+</plist>
+EOL
 
       # 13. Build & sign iOS with Fastlane
       - name: Build & Sign iOS
@@ -120,8 +119,6 @@ jobs:
             xcargs:"DEVELOPMENT_TEAM=NPXC63W394" \
             export_options:"export_options.plist" \
             app_store_connect_api_key_path:"AuthKey.p8"
-        env:
-          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
 
       # 14. Upload IPA artifact
       - name: Upload IPA
