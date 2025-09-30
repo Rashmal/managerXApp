@@ -18,11 +18,11 @@ jobs:
         with:
           node-version: 20
 
-      # 3. Install npm dependencies
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Patch PrimeNG (if needed)
+      # 4. Patch PrimeNG if needed
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
@@ -34,7 +34,7 @@ jobs:
           npm run build
           npx cap sync ios
 
-      # 6. Install CocoaPods and generate valid workspace
+      # 6. Install CocoaPods
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
@@ -42,7 +42,7 @@ jobs:
           pod repo update
           pod install --verbose
 
-      # 7. Detect actual .xcworkspace
+      # 7. Detect workspace
       - name: Detect workspace
         run: |
           WORKSPACE=$(find ios/App -maxdepth 1 -name "*.xcworkspace" -type d | head -n 1)
@@ -53,18 +53,7 @@ jobs:
           echo "Workspace detected: $WORKSPACE"
           echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
 
-      # 8. Verify workspace has the App scheme
-      - name: Verify workspace scheme
-        run: |
-          cd ios/App
-          SCHEME="App"  # Hardcoded scheme
-          if ! xcodebuild -list -workspace "$(basename $WORKSPACE)" | grep -q "$SCHEME"; then
-            echo "Error: Scheme '$SCHEME' not found in workspace"
-            exit 1
-          fi
-          echo "Scheme '$SCHEME' verified"
-
-      # 9. Setup Ruby & Fastlane
+      # 8. Setup Ruby & Fastlane
       - name: Setup Ruby & Fastlane
         uses: ruby/setup-ruby@v1
         with:
@@ -74,23 +63,36 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane -v 2.228.0
 
-      # 10. Setup App Store Connect API key (decoded from base64)
+      # 9. Decode iOS signing files
+      - name: Decode iOS Certificates
+        run: |
+          echo "${IOS_P12_BASE64}" | base64 --decode > ios_cert.p12
+          echo "${IOS_MOBILEPROVISION_BASE64}" | base64 --decode > ios_profile.mobileprovision
+        env:
+          IOS_P12_BASE64: ${{ secrets.IOS_P12_BASE64 }}
+          IOS_MOBILEPROVISION_BASE64: ${{ secrets.IOS_MOBILEPROVISION_BASE64 }}
+
+      # 10. Decode App Store Connect API key
       - name: Setup API Key
         run: |
           echo "${APP_STORE_CONNECT_API_KEY_BASE64}" | base64 --decode > AuthKey.p8
         env:
           APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
 
-      # 11. Build & sign iOS
+      # 11. Build & sign iOS with Fastlane
       - name: Build & Sign iOS
         run: |
           mkdir -p build/ios
           fastlane run build_ios_app \
             workspace:"ios/App/App.xcworkspace" \
-            scheme:"App" \
+            scheme:"${{ secrets.APP_SCHEME }}" \
             export_method:"app-store" \
             output_directory:"build/ios" \
-            xcargs:"DEVELOPMENT_TEAM=NPXC63W394 -allowProvisioningUpdates"
+            api_key_path:"AuthKey.p8" \
+            xcargs:"DEVELOPMENT_TEAM=NPXC63W394" \
+            export_options:"provisioningProfiles={\"${{ secrets.APP_IDENTIFIER }}\":\"ios_profile.mobileprovision\"}"
+        env:
+          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
 
       # 12. Upload IPA artifact
       - name: Upload IPA
