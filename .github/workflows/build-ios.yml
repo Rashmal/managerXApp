@@ -22,7 +22,6 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
-        # FIX: Added --legacy-peer-deps to bypass Angular/FullCalendar conflict
         run: npm ci --legacy-peer-deps 
 
       # 4. Patch PrimeNG (if needed)
@@ -91,7 +90,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_REPO_SSH_PRIVATE_KEY }}
 
-      # 12. Fetch signing credentials (Run without --readonly for first time setup)
+      # 12. Fetch signing credentials (Temporary: no --readonly)
       - name: Fetch signing credentials
         run: |
           fastlane match appstore \
@@ -101,14 +100,13 @@ jobs:
             --git_url ${{ secrets.FASTLANE_MATCH_GIT_URL }}
         env:
           FASTLANE_MATCH_GIT_URL: ${{ secrets.FASTLANE_MATCH_GIT_URL }}
-          # Hardcoded Match Password
           MATCH_PASSWORD: Rashmal@1993 
           
-      # 13. Update Xcode Project Team ID <--- TEAM ID HARDCODED HERE
+      # 13. Update Xcode Project Team ID <--- CORRECTED PARAMETER
       - name: Set Development Team ID
         run: |
           fastlane run update_project_team \
-            xcodeproj:"ios/App/App.xcodeproj" \
+            path:"ios/App/App.xcodeproj" \
             teamid:"NPXC63W394"
         
       # 14. Build & sign iOS IPA
