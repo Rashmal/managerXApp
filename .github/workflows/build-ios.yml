@@ -106,9 +106,9 @@ jobs:
       - name: Set Development Team ID
         run: fastlane run update_project_team path:"ios/App/App.xcodeproj" targets:App teamid:"NPXC63W394"
 
-      # 14. Set Manual Code Signing Settings <--- FINAL CORRECTION: Renamed parameter
+      # 14. Set Manual Code Signing Settings <--- FINAL FIX FOR SIGNING STYLE
       - name: Set Manual Code Signing
-        run: fastlane run update_code_signing_settings targets:App path:"ios/App/App.xcodeproj" code_sign_identity:Apple Distribution code_signing_style:Manual team_id:NPXC63W394 profile_name:"match AppStore com.managerxpro"
+        run: fastlane run update_code_signing_settings targets:App path:"ios/App/App.xcodeproj" code_sign_identity:Apple Distribution use_automatic_signing:false team_id:NPXC63W394 profile_name:"match AppStore com.managerxpro"
 
       # 15. Build & sign iOS IPA
       - name: Build & Sign iOS
