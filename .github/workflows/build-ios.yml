@@ -22,6 +22,7 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
+        # FIX: Added --legacy-peer-deps to bypass Angular/FullCalendar conflict
         run: npm ci --legacy-peer-deps 
 
       # 4. Patch PrimeNG (if needed)
@@ -100,16 +101,29 @@ jobs:
             --git_url ${{ secrets.FASTLANE_MATCH_GIT_URL }}
         env:
           FASTLANE_MATCH_GIT_URL: ${{ secrets.FASTLANE_MATCH_GIT_URL }}
+          # Hardcoded Match Password
           MATCH_PASSWORD: Rashmal@1993 
           
-      # 13. Update Xcode Project Team ID <--- CORRECTED PARAMETER
+      # 13. Update Xcode Project Team ID (Hardcoded)
       - name: Set Development Team ID
         run: |
           fastlane run update_project_team \
             path:"ios/App/App.xcodeproj" \
+            targets:App \ 
             teamid:"NPXC63W394"
-        
-      # 14. Build & sign iOS IPA
+
+      # 14. Set Manual Code Signing Settings <--- FIXES "No profiles for 'com.managerxpro' were found"
+      - name: Set Manual Code Signing
+        run: |
+          fastlane run update_code_signing_settings \
+            targets:App \
+            path:"ios/App/App.xcodeproj" \
+            code_signing_identity:Apple Distribution \
+            code_signing_style:Manual \
+            team_id:NPXC63W394 \
+            profile_name:"match AppStore com.managerxpro"
+
+      # 15. Build & sign iOS IPA
       - name: Build & Sign iOS
         run: |
           mkdir -p build/ios
@@ -119,7 +133,7 @@ jobs:
             export_method:"app-store" \
             output_directory:"build/ios"
 
-      # 15. Upload IPA artifact
+      # 16. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
