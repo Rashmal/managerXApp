@@ -109,6 +109,8 @@ jobs:
             --git_url ${{ secrets.FASTLANE_MATCH_GIT_URL }}
         env:
           FASTLANE_MATCH_GIT_URL: ${{ secrets.FASTLANE_MATCH_GIT_URL }}
+          # HARDCODED PASSWORD: This will pass the password directly to fastlane
+          MATCH_PASSWORD: Rashmal@1993
 
       # 13. Build & sign iOS IPA
       - name: Build & Sign iOS
