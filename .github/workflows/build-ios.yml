@@ -22,7 +22,6 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
-        # FIX: Added --legacy-peer-deps to bypass Angular/FullCalendar conflict
         run: npm ci --legacy-peer-deps 
 
       # 4. Patch PrimeNG (if needed)
@@ -53,7 +52,6 @@ jobs:
             echo "Error: .xcworkspace not found"
             exit 1
           fi
-          echo "Workspace detected: $WORKSPACE_PATH"
           echo "WORKSPACE_PATH=$WORKSPACE_PATH" >> $GITHUB_ENV
           echo "WORKSPACE_NAME=$(basename $WORKSPACE_PATH)" >> $GITHUB_ENV
 
@@ -91,7 +89,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_REPO_SSH_PRIVATE_KEY }}
 
-      # 12. Fetch signing credentials (Temporary: no --readonly)
+      # 12. Fetch signing credentials
       - name: Fetch signing credentials
         run: |
           fastlane match appstore \
@@ -104,24 +102,13 @@ jobs:
           # Hardcoded Match Password
           MATCH_PASSWORD: Rashmal@1993 
           
-      # 13. Update Xcode Project Team ID <--- CORRECTED: Single run command
+      # 13. Update Xcode Project Team ID <--- FIX: COMMAND IS NOW ON ONE LINE
       - name: Set Development Team ID
-        run: |
-          fastlane run update_project_team \
-            path:"ios/App/App.xcodeproj" \
-            targets:App \ 
-            teamid:"NPXC63W394"
+        run: fastlane run update_project_team path:"ios/App/App.xcodeproj" targets:App teamid:"NPXC63W394"
 
-      # 14. Set Manual Code Signing Settings <--- FIXES "No profiles for 'com.managerxpro' were found"
+      # 14. Set Manual Code Signing Settings <--- FIX: COMMAND IS NOW ON ONE LINE
       - name: Set Manual Code Signing
-        run: |
-          fastlane run update_code_signing_settings \
-            targets:App \
-            path:"ios/App/App.xcodeproj" \
-            code_signing_identity:Apple Distribution \
-            code_signing_style:Manual \
-            team_id:NPXC63W394 \
-            profile_name:"match AppStore com.managerxpro"
+        run: fastlane run update_code_signing_settings targets:App path:"ios/App/App.xcodeproj" code_signing_identity:Apple Distribution code_signing_style:Manual team_id:NPXC63W394 profile_name:"match AppStore com.managerxpro"
 
       # 15. Build & sign iOS IPA
       - name: Build & Sign iOS
