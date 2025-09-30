@@ -22,7 +22,7 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
-        # Added --legacy-peer-deps to bypass Angular/FullCalendar conflict
+        # FIX: Added --legacy-peer-deps to bypass Angular/FullCalendar conflict
         run: npm ci --legacy-peer-deps 
 
       # 4. Patch PrimeNG (if needed)
@@ -91,19 +91,27 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_REPO_SSH_PRIVATE_KEY }}
 
-      # 12. Fetch signing credentials
+      # 12. Fetch signing credentials (Run without --readonly for first time setup)
       - name: Fetch signing credentials
         run: |
           fastlane match appstore \
             --type appstore \
             --app_identifier com.managerxpro \
             --api_key_path AuthKey.p8 \
-            --git_url ${{ secrets.FASTLANE_MATCH_GIT_URL }} # <-- REMOVED --readonly
+            --git_url ${{ secrets.FASTLANE_MATCH_GIT_URL }}
         env:
           FASTLANE_MATCH_GIT_URL: ${{ secrets.FASTLANE_MATCH_GIT_URL }}
+          # Hardcoded Match Password
           MATCH_PASSWORD: Rashmal@1993 
           
-      # 13. Build & sign iOS IPA
+      # 13. Update Xcode Project Team ID <--- TEAM ID HARDCODED HERE
+      - name: Set Development Team ID
+        run: |
+          fastlane run update_project_team \
+            xcodeproj:"ios/App/App.xcodeproj" \
+            teamid:"NPXC63W394"
+        
+      # 14. Build & sign iOS IPA
       - name: Build & Sign iOS
         run: |
           mkdir -p build/ios
@@ -113,7 +121,7 @@ jobs:
             export_method:"app-store" \
             output_directory:"build/ios"
 
-      # 14. Upload IPA artifact
+      # 15. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
