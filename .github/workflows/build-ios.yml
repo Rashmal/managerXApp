@@ -8,9 +8,11 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # 1. Checkout repo
+      # 1. Checkout repo (Shallow clone for speed)
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       # 2. Setup Node.js
       - name: Setup Node
@@ -20,11 +22,10 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
-        # Use a safe install command
+        # Added --legacy-peer-deps to bypass Angular/FullCalendar conflict
         run: npm ci --legacy-peer-deps 
 
       # 4. Patch PrimeNG (if needed)
-      # Note: This is a direct port of your original 'sed' command for macOS runners.
       - name: Patch PrimeNG
         run: |
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
@@ -39,17 +40,12 @@ jobs:
       # 6. Install CocoaPods
       - name: Install CocoaPods
         run: |
-          # Install CocoaPods globally on the runner
           sudo gem install cocoapods
-          # Change directory to the iOS project folder
           cd ios/App
-          # Update the pod repository list
           pod repo update
-          # Install the necessary dependencies (Capacitor plugins, etc.)
           pod install --verbose
 
       # 7. Detect workspace
-      # We combine detection and setting the environment variable
       - name: Detect workspace
         run: |
           WORKSPACE_PATH=$(find ios/App -maxdepth 1 -name "*.xcworkspace" -type d | head -n 1)
@@ -59,15 +55,13 @@ jobs:
           fi
           echo "Workspace detected: $WORKSPACE_PATH"
           echo "WORKSPACE_PATH=$WORKSPACE_PATH" >> $GITHUB_ENV
-          # Extract the base name (e.g., App.xcworkspace)
           echo "WORKSPACE_NAME=$(basename $WORKSPACE_PATH)" >> $GITHUB_ENV
 
-      # 8. Verify scheme (optional but good practice)
+      # 8. Verify scheme
       - name: Verify workspace scheme
         run: |
           cd ios/App
           SCHEME="App"
-          # Check if the scheme exists in the workspace
           if ! xcodebuild -list -workspace "${{ env.WORKSPACE_NAME }}" | grep -q "$SCHEME"; then
             echo "Error: Scheme '$SCHEME' not found"
             exit 1
@@ -87,7 +81,6 @@ jobs:
       # 10. Setup App Store Connect API key (.p8 file)
       - name: Setup API Key
         run: |
-          # Decode the Base64 secret and save it as AuthKey.p8
           echo "${APP_STORE_CONNECT_API_KEY_BASE64}" | base64 --decode > AuthKey.p8
         env:
           APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
@@ -98,20 +91,18 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_REPO_SSH_PRIVATE_KEY }}
 
-      # 12. Fetch certificates & provisioning profiles using match
+      # 12. Fetch signing credentials
       - name: Fetch signing credentials
         run: |
           fastlane match appstore \
             --type appstore \
             --app_identifier com.managerxpro \
             --api_key_path AuthKey.p8 \
-            --readonly \
-            --git_url ${{ secrets.FASTLANE_MATCH_GIT_URL }}
+            --git_url ${{ secrets.FASTLANE_MATCH_GIT_URL }} # <-- REMOVED --readonly
         env:
           FASTLANE_MATCH_GIT_URL: ${{ secrets.FASTLANE_MATCH_GIT_URL }}
-          # HARDCODED PASSWORD: This will pass the password directly to fastlane
-          MATCH_PASSWORD: Rashmal@1993
-
+          MATCH_PASSWORD: Rashmal@1993 
+          
       # 13. Build & sign iOS IPA
       - name: Build & Sign iOS
         run: |
