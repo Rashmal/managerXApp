@@ -28,13 +28,13 @@ jobs:
           sed -i '' 's/, InjectFlags//' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
           sed -i '' 's/| InjectFlags//g' node_modules/primeng/dynamicdialog/dynamicdialog-injector.d.ts || true
 
-      # 5. Build Ionic and sync iOS
+      # 5. Build Ionic & sync iOS
       - name: Build Ionic iOS
         run: |
           npm run build
           npx cap sync ios
 
-      # 6. Install CocoaPods and generate valid workspace
+      # 6. Install CocoaPods
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
@@ -42,7 +42,7 @@ jobs:
           pod repo update
           pod install --verbose
 
-      # 7. Detect actual .xcworkspace
+      # 7. Detect workspace
       - name: Detect workspace
         run: |
           WORKSPACE=$(find ios/App -maxdepth 1 -name "*.xcworkspace" -type d | head -n 1)
@@ -53,13 +53,13 @@ jobs:
           echo "Workspace detected: $WORKSPACE"
           echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
 
-      # 8. Verify workspace has the App scheme
+      # 8. Verify scheme
       - name: Verify workspace scheme
         run: |
           cd ios/App
-          SCHEME="App"  # Hardcoded scheme
+          SCHEME="App"
           if ! xcodebuild -list -workspace "$(basename $WORKSPACE)" | grep -q "$SCHEME"; then
-            echo "Error: Scheme '$SCHEME' not found in workspace"
+            echo "Error: Scheme '$SCHEME' not found"
             exit 1
           fi
           echo "Scheme '$SCHEME' verified"
@@ -74,14 +74,23 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane -v 2.228.0
 
-      # 10. Setup App Store Connect API key (decoded from base64)
+      # 10. Setup App Store Connect API key
       - name: Setup API Key
         run: |
           echo "${APP_STORE_CONNECT_API_KEY_BASE64}" | base64 --decode > AuthKey.p8
         env:
           APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
 
-      # 11. Build & sign iOS
+      # 11. Fetch certificates & provisioning profiles using match
+      - name: Fetch signing credentials
+        run: |
+          fastlane match appstore \
+            --type appstore \
+            --app_identifier com.managerxpro \
+            --api_key_path AuthKey.p8 \
+            --readonly
+
+      # 12. Build & sign iOS
       - name: Build & Sign iOS
         run: |
           mkdir -p build/ios
@@ -89,10 +98,9 @@ jobs:
             workspace:"ios/App/App.xcworkspace" \
             scheme:"App" \
             export_method:"app-store" \
-            output_directory:"build/ios" \
-            xcargs:"DEVELOPMENT_TEAM=NPXC63W394 -allowProvisioningUpdates"
+            output_directory:"build/ios"
 
-      # 12. Upload IPA artifact
+      # 13. Upload IPA artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
